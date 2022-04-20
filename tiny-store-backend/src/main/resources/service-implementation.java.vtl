@@ -1,0 +1,113 @@
+package ${service.type.packageName};
+
+import java.util.List;
+
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+#if(!$service.imports.empty)
+
+#foreach($type in $service.imports)
+import ${type.qualifiedName};
+#end
+#end
+
+/**
+ * Implementation for ${service.type.simpleName} interface.
+#if($service.description)
+ * 
+ * ${service.description}.
+#end 
+ *
+ * @author ${service.author}
+ */
+public class ${service.type.name} implements I${service.type.name} {
+	private final EntityManager em;
+
+	@Inject
+	public ${service.type.name}(EntityManager em) {
+		this.em = em;
+	}
+
+##
+## operation description
+## ---------------------
+#foreach($operation in $service.operations)
+	/**
+#if($operation.description)	
+	 * ${operation.description}
+	 *
+#end	 
+#foreach($param in $operation.parameters)
+	 * @param ${param.name}#if($param.description) ${param.description}#end#if($foreach.hasNext),#else.#end
+	 
+#end
+#if($operation.value.description)	 
+	 * @return ${operation.value.description}.
+#end
+#foreach($exception in $operation.exceptions)
+	 * @throws ${exception.type.simpleName} if ${exception.cause}.
+#end
+	 */
+##	 
+## operation body
+## --------------	 
+	@Override 
+	public ${operation.value.type.name}#*
+	*# ${operation.name}(#foreach($param in $operation.parameters)$param.type.name $param.name#if($foreach.hasNext), #end#end)#*
+	*# #if(!$operation.exceptions.empty)throws #foreach($exception in $operation.exceptions)${exception.type.name}#if($foreach.hasNext), #end#end #end{
+#if($operation.jpql)
+## ---------------------------
+		TypedQuery query = em.createQuery("${operation.jpql}", ${operation.value.type.simpleName}.class);
+#foreach($param in $operation.parameters)
+#if($param.flag == "MAX_RESULTS")
+		query.setMaxResults(${param.name});
+#elseif($param.flag == "FIRST_RESULT")
+		query.setFirstResult(${param.name});
+#else
+		query.setParameter(${velocityCount}, ${param.name});
+#end		
+#end
+##
+## if operation return type is void we have an update query
+## otherwise it is a retrieve query treated as such:
+## - if operation return type is a collection returns query result list
+## - otherwise operation return type should be an entity:
+##   - get results list limited to 1
+##   - if results is not empty return its single entity
+##   - otherwise return null
+##   	
+#if($operation.value.type.void)
+		query.executeUpdate();
+#else	
+#if($operation.value.type.collection)
+		return query.getResultList();
+#else		
+		query.setMaxResults(1);
+		List<${operation.value.type.simpleName}> results = query.getResultList();
+		return results.isEmpty()? null: results.get(0);
+#end		
+#end
+#elseif($operation.databaseOpcode == "CREATE")
+## ---------------------------------
+		em.persist(${operation.parameter.name});
+#elseif($operation.databaseOpcode == "READ")
+## -------------------------------
+		return em.find(${operation.value.type.simpleName}.class, ${operation.parameter.name});
+#elseif($operation.databaseOpcode == "UPDATE")
+## ---------------------------------
+		em.merge(${operation.parameter.name});
+#elseif($operation.databaseOpcode == "DELETE")
+## ---------------------------------
+#if($operation.parameter.type.primitive)
+		Object entity = em.find(${operation.parameter.type.simpleName}.class, ${operation.parameter.name});
+		if(entity != null) {
+			em.remove(entity);
+		}
+#else
+		em.remove(${operation.parameter.name});
+#end 
+#end		
+	}
+#end
+}

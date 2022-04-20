@@ -1,0 +1,75 @@
+package ${service.type.packageName};
+
+import jakarta.annotation.ManagedBean;
+import jakarta.annotation.security.PermitAll;
+import jakarta.ejb.Remote;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+
+import js.transaction.Immutable;
+import js.transaction.Mutable;
+import js.transaction.Transactional;
+#if(!$service.imports.empty)
+
+#foreach($type in $service.imports)
+import ${type.qualifiedName};
+#end
+#end
+
+/**
+ * ${service.type.simpleName} remote interface.
+#if($service.description)
+ * 
+ * ${service.description}
+#end 
+ *
+ * @author ${service.author}
+ */
+@ManagedBean
+@ApplicationScoped
+@Remote
+@PermitAll
+@Produces("application/json")
+#if(${service.restPath})
+@Path("/${service.restPath}")
+#end
+@Transactional(schema = "${service.repositoryName}")
+@Immutable
+public interface I${service.type.simpleName} {
+
+#foreach($operation in $service.operations)
+	/**
+#if($operation.description)	
+	 * ${operation.description}
+	 *
+#end	 
+#foreach($param in $operation.parameters)
+	 * @param ${param.name}#if($param.description) ${param.description}#end#if($foreach.hasNext),#else.#end
+	 
+#end
+#if($operation.value.description)	 
+	 * @return ${operation.value.description}.
+#end
+#foreach($exception in $operation.exceptions)
+	 * @throws ${exception.type.simpleName} if ${exception.cause}.
+#end
+	 */
+	@${operation.restMethod}
+	@Path("/${operation.restPath}#foreach($param in $operation.parameters)#if($param.restParamType)/{${param.restParamName}}#end#end")
+#if($operation.databaseOpcode != "READ")
+	@Mutable
+#end
+	${operation.value.type.name}#*
+	*# ${operation.name}(#foreach($param in $operation.parameters)#if($param.restParamType)@${param.restParamType}("${param.restParamName}")#*
+	*# #end$param.type.name $param.name#if($foreach.hasNext), #end#end)#*
+	*##if(!$operation.exceptions.empty) throws #foreach($exception in $operation.exceptions)${exception.type.name}#if($foreach.hasNext), #end#end#end;
+#end
+
+}

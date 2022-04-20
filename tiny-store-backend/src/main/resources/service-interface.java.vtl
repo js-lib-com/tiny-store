@@ -1,0 +1,33 @@
+$package("${service.type.packageName}");
+
+#foreach($import in $service.imports)
+import ${import};
+#end
+
+/**
+ * ${service.type.simpleName} interface. ${service.description}
+ *
+ * @author ${service.author}
+ */
+public interface I${service.type.simpleName} {
+
+#foreach($operation in $service.operations)
+	/**
+	 * ${operation.description}
+	 *
+#foreach($param in $operation.parameters)
+	 * @param ${param.name} ${param.description}, 
+#end
+#if(!$operation.value.void)	 
+	 * @return ${operation.value.description}
+#end
+#foreach($exception in $operation.exceptions)
+	 * @throws ${exception.type.simpleName} if ${exception.cause}.
+#end
+	 */
+	${operation.value.type.name}#*
+	*# ${operation.name}(#foreach($param in $operation.parameters)$param.type.name $param.name#if($foreach.hasNext), #end#end)#if($operation.exceptions)#*
+	*# throws #foreach($exception in $operation.exceptions)${exception.type.name}#if($foreach.hasNext), #end#end#end;
+#end
+
+}

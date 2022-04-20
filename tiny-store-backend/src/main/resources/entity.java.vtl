@@ -1,0 +1,63 @@
+package ${entity.type.packageName};
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+#if($entity.identity.generated)
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+#end
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+#if(!$entity.imports.empty)
+
+#foreach($type in $entity.imports)
+import ${type.qualifiedName};
+#end
+#end
+
+/**
+#if($entity.description)
+ * ${entity.description}
+ *
+#end
+ * @author ${entity.author}
+ */
+@Entity
+#if($entity.alias)
+@Table(name = "${entity.alias}")
+#end
+public class ${entity.type.simpleName} {
+#if($entity.identity)	
+	@Id
+#if($entity.identity.generated)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+#end	
+#if($entity.identity.alias)	
+	@Column(name = "${entity.identity.alias}")
+#end	
+	private ${entity.identity.type.name} ${entity.identity.name};
+#end	
+
+#foreach($field in $entity.fields)
+#if($field.alias)	
+	@Column(name = "${field.alias}")
+#end	
+	private ${field.type.name} ${field.name};
+#end
+#if($entity.identity)
+
+	public ${entity.identity.type.name} get${entity.identity.title}() {
+		return ${entity.identity.name};
+	}	
+#end
+#foreach($field in $entity.fields)
+
+	public void set${field.title}(${field.type.name} ${field.name}) {
+		this.${field.name} = ${field.name};
+	}
+
+	public ${field.type.name} get${field.title}() {
+		return ${field.name};
+	}	
+#end
+}
