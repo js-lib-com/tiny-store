@@ -17,13 +17,12 @@ public class WorkspaceTest {
 	public void beforeTest() throws Exception {
 		workspace = new Workspace();
 
-		Classes.setFieldValue(workspace, "BASE_DIR", "D:\\\\runtime\\\\tiny-store\\workspace");
+		Classes.setFieldValue(workspace, "WORKSPACE_DIR", "D:\\runtime\\tiny-store\\workspace");
 		Classes.setFieldValue(workspace, "META_DIR", ".meta");
 		Classes.setFieldValue(workspace, "PROJECT_FILE", "project.json");
+		Classes.setFieldValue(workspace, "RUNTIME_DIR", "D:\\runtime\\tiny-store\\");
 
 		Classes.setFieldValue(workspace, "json", new JsonImpl());
-		
-		Classes.invoke(workspace, "postConstruct");
 	}
 	
 	@Test

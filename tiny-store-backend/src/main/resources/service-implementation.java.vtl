@@ -13,7 +13,7 @@ import ${type.qualifiedName};
 #end
 
 /**
- * Implementation for ${service.type.simpleName} interface.
+ * Implementation for ${service.type.name} interface.
 #if($service.description)
  * 
  * ${service.description}.
@@ -46,7 +46,7 @@ public class ${service.type.name} implements I${service.type.name} {
 	 * @return ${operation.value.description}.
 #end
 #foreach($exception in $operation.exceptions)
-	 * @throws ${exception.type.simpleName} if ${exception.cause}.
+	 * @throws ${exception.type.name} if ${exception.cause}.
 #end
 	 */
 ##	 
@@ -84,7 +84,7 @@ public class ${service.type.name} implements I${service.type.name} {
 		return query.getResultList();
 #else		
 		query.setMaxResults(1);
-		List<${operation.value.type.simpleName}> results = query.getResultList();
+		List<${operation.value.type.name}> results = query.getResultList();
 		return results.isEmpty()? null: results.get(0);
 #end		
 #end
@@ -93,14 +93,14 @@ public class ${service.type.name} implements I${service.type.name} {
 		em.persist(${operation.parameter.name});
 #elseif($operation.databaseOpcode == "READ")
 ## -------------------------------
-		return em.find(${operation.value.type.simpleName}.class, ${operation.parameter.name});
+		return em.find(${operation.value.type.name}.class, ${operation.parameter.name});
 #elseif($operation.databaseOpcode == "UPDATE")
 ## ---------------------------------
 		em.merge(${operation.parameter.name});
 #elseif($operation.databaseOpcode == "DELETE")
 ## ---------------------------------
 #if($operation.parameter.type.primitive)
-		Object entity = em.find(${operation.parameter.type.simpleName}.class, ${operation.parameter.name});
+		Object entity = em.find(${operation.parameter.type.name}.class, ${operation.parameter.name});
 		if(entity != null) {
 			em.remove(entity);
 		}

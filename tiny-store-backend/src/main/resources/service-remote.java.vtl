@@ -24,7 +24,7 @@ import ${type.qualifiedName};
 #end
 
 /**
- * ${service.type.simpleName} remote interface.
+ * ${service.type.name} remote interface.
 #if($service.description)
  * 
  * ${service.description}
@@ -42,7 +42,7 @@ import ${type.qualifiedName};
 #end
 @Transactional(schema = "${service.repositoryName}")
 @Immutable
-public interface I${service.type.simpleName} {
+public interface I${service.type.name} {
 
 #foreach($operation in $service.operations)
 	/**
@@ -58,7 +58,7 @@ public interface I${service.type.simpleName} {
 	 * @return ${operation.value.description}.
 #end
 #foreach($exception in $operation.exceptions)
-	 * @throws ${exception.type.simpleName} if ${exception.cause}.
+	 * @throws ${exception.type.name} if ${exception.cause}.
 #end
 	 */
 	@${operation.restMethod}

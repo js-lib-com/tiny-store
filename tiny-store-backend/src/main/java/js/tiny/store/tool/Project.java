@@ -23,7 +23,8 @@ import js.tiny.store.meta.RepositoryEntity;
 import js.tiny.store.meta.RepositoryService;
 
 public class Project {
-	private static final String SOURCE_DIR = "src";
+	private static final String SERVER_SOURCE_DIR = "server";
+	private static final String CLIENT_SOURCE_DIR = "client";
 	private static final String OUTPUT_DIR = "bin";
 	private static final String CLASSES_DIR = OUTPUT_DIR + "/WEB-INF/classes";
 
@@ -33,7 +34,8 @@ public class Project {
 	private String author;
 	private Repository[] repositories;
 
-	private transient File sourceDir;
+	private transient File serverSourceDir;
+	private transient File clientSourceDir;
 	private transient File outputDir;
 	private transient File classesDir;
 	private transient File warFile;
@@ -41,10 +43,15 @@ public class Project {
 
 	public void init(File projectDir, File runtimeDir) throws IOException {
 		this.runtimeDir = runtimeDir;
-		this.sourceDir = new File(projectDir, SOURCE_DIR);
 
-		if (!this.sourceDir.exists() && !this.sourceDir.mkdirs()) {
-			throw new IOException("Fail to create source directory " + this.sourceDir);
+		this.serverSourceDir = new File(projectDir, SERVER_SOURCE_DIR);
+		if (!this.serverSourceDir.exists() && !this.serverSourceDir.mkdirs()) {
+			throw new IOException("Fail to create source directory " + this.serverSourceDir);
+		}
+
+		this.clientSourceDir = new File(projectDir, CLIENT_SOURCE_DIR);
+		if (!this.clientSourceDir.exists() && !this.clientSourceDir.mkdirs()) {
+			throw new IOException("Fail to create client source directory " + this.clientSourceDir);
 		}
 
 		this.outputDir = new File(projectDir, OUTPUT_DIR);
@@ -80,14 +87,16 @@ public class Project {
 		for (Repository repository : repositories) {
 			for (RepositoryEntity entity : repository.getEntities()) {
 				entity.setAuthor(author);
-				generate("/entity.java.vtl", Files.sourceFile(sourceDir, entity.getType()), "entity", entity);
+				generate("/entity.java.vtl", Files.sourceFile(serverSourceDir, entity.getType()), "entity", entity);
+				generate("/model.java.vtl", Files.sourceFile(clientSourceDir, entity.getType()), "entity", entity);
 			}
 
 			for (RepositoryService service : repository.getServices()) {
 				service.setRepositoryName(repository.getName());
 				service.setAuthor(author);
-				generate("/service-remote.java.vtl", Files.sourceFile(sourceDir, service.getType(), true), "service", service);
-				generate("/service-implementation.java.vtl", Files.sourceFile(sourceDir, service.getType()), "service", service);
+				generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getType(), true), "service", service);
+				generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getType()), "service", service);
+				generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getType(), true), "service", service);
 			}
 
 			generate("/web.xml.vtl", Files.webDescriptorFile(outputDir), "project", this);
@@ -106,7 +115,7 @@ public class Project {
 
 	public void compileSources() throws IOException {
 		List<File> sourceFiles = new ArrayList<>();
-		Files.scanSources(sourceDir, sourceFiles);
+		Files.scanSources(serverSourceDir, sourceFiles);
 
 		File librariesDir = new File(runtimeDir, "libx");
 		List<File> libraries = new ArrayList<>();
