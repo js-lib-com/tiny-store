@@ -33,8 +33,8 @@ import js.util.Strings;
 public class Project {
 	private static final String SERVER_SOURCE_DIR = "server";
 	private static final String CLIENT_SOURCE_DIR = "client";
-	private static final String OUTPUT_DIR = "bin";
-	private static final String CLASSES_DIR = OUTPUT_DIR + "/WEB-INF/classes";
+	private static final String TARGET_DIR = "target";
+	private static final String WAR_CLASSES_DIR = "/WEB-INF/classes";
 	private static final String CLIENT_CLASSES_DIR = "target/client-classes";
 
 	private String name;
@@ -45,50 +45,30 @@ public class Project {
 	private String author;
 	private Repository[] repositories;
 
-	private transient File serverSourceDir;
-	private transient File outputDir;
-	private transient File classesDir;
-	private transient File warFile;
+	private transient final HttpClientBuilder clientBuilder;
+
+	private transient File projectDir;
 	private transient File runtimeDir;
+
+	private transient File targetDir;
+
+	private transient File serverSourceDir;
+	private transient File warDir;
+	private transient File warFile;
+	private transient File warClassesDir;
 
 	private transient File clientSourceDir;
 	private transient File clientClassesDir;
 	private transient File clientJarFile;
 
-	private transient HttpClientBuilder clientBuilder;
-
-	public void init(File projectDir, File runtimeDir) throws IOException {
-		this.runtimeDir = runtimeDir;
-
-		this.serverSourceDir = new File(projectDir, SERVER_SOURCE_DIR);
-		if (!this.serverSourceDir.exists() && !this.serverSourceDir.mkdirs()) {
-			throw new IOException("Fail to create source directory " + this.serverSourceDir);
-		}
-
-		this.clientSourceDir = new File(projectDir, CLIENT_SOURCE_DIR);
-		if (!this.clientSourceDir.exists() && !this.clientSourceDir.mkdirs()) {
-			throw new IOException("Fail to create client source directory " + this.clientSourceDir);
-		}
-
-		this.outputDir = new File(projectDir, OUTPUT_DIR);
-		if (!this.outputDir.exists() && !this.outputDir.mkdirs()) {
-			throw new IOException("Fail to create output directory " + this.outputDir);
-		}
-
-		this.classesDir = new File(projectDir, CLASSES_DIR);
-		if (!this.classesDir.exists() && !this.classesDir.mkdirs()) {
-			throw new IOException("Fail to create classes directory " + this.classesDir);
-		}
-
-		this.clientClassesDir = new File(projectDir, CLIENT_CLASSES_DIR);
-		if (!this.clientClassesDir.exists() && !this.clientClassesDir.mkdirs()) {
-			throw new IOException("Fail to create client classes directory " + this.clientClassesDir);
-		}
-
-		this.warFile = new File(projectDir, Strings.concat("target/", name, '#', version, ".war"));
-		this.clientJarFile = new File(projectDir, Strings.concat("target/", name, "-store-", version, ".jar"));
-
+	public Project() {
 		this.clientBuilder = HttpClientBuilder.create();
+	}
+	
+	public void init(File projectDir, File runtimeDir) throws IOException {
+		this.projectDir = projectDir;
+		this.runtimeDir = runtimeDir;
+		createFileSystem();
 	}
 
 	public String getName() {
@@ -107,6 +87,47 @@ public class Project {
 		return repositories;
 	}
 
+	public void clean() throws IOException {
+		Files.removeFilesHierarchy(serverSourceDir);
+		Files.removeFilesHierarchy(clientSourceDir);
+		Files.removeFilesHierarchy(targetDir);
+		createFileSystem();
+	}
+	
+	private void createFileSystem() throws IOException {
+		this.serverSourceDir = new File(projectDir, SERVER_SOURCE_DIR);
+		if (!this.serverSourceDir.exists() && !this.serverSourceDir.mkdirs()) {
+			throw new IOException("Fail to create source directory " + this.serverSourceDir);
+		}
+
+		this.clientSourceDir = new File(projectDir, CLIENT_SOURCE_DIR);
+		if (!this.clientSourceDir.exists() && !this.clientSourceDir.mkdirs()) {
+			throw new IOException("Fail to create client source directory " + this.clientSourceDir);
+		}
+
+		this.targetDir = new File(projectDir, TARGET_DIR);
+		this.warDir = new File(targetDir, name);
+		if (!this.warDir.exists() && !this.warDir.mkdirs()) {
+			throw new IOException("Fail to create output directory " + this.warDir);
+		}
+
+		this.warClassesDir = new File(warDir, WAR_CLASSES_DIR);
+		if (!this.warClassesDir.exists() && !this.warClassesDir.mkdirs()) {
+			throw new IOException("Fail to create classes directory " + this.warClassesDir);
+		}
+
+		this.clientClassesDir = new File(projectDir, CLIENT_CLASSES_DIR);
+		if (!this.clientClassesDir.exists() && !this.clientClassesDir.mkdirs()) {
+			throw new IOException("Fail to create client classes directory " + this.clientClassesDir);
+		}
+
+		// Tomcat uses pound (#) for multi-level context path 
+		// it is replaced with path separator: app#1.0 -> app/1.0 used as http://api.server/app/1.0/service/operation
+		this.warFile = new File(targetDir, Strings.concat(name, '#', version, ".war"));
+		// client jar uses 'store' suffix: app-store-1.0.jar
+		this.clientJarFile = new File(targetDir, Strings.concat(name, "-store-", version, ".jar"));
+	}
+
 	public void generateSources() throws IOException {
 		for (Repository repository : repositories) {
 			for (RepositoryEntity entity : repository.getEntities()) {
@@ -123,10 +144,10 @@ public class Project {
 				generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getType(), true), "service", service);
 			}
 
-			generate("/web.xml.vtl", Files.webDescriptorFile(outputDir), "project", this);
-			generate("/app.xml.vtl", Files.appDescriptorFile(outputDir), "project", this);
-			generate("/context.xml.vtl", Files.contextFile(outputDir), "project", this);
-			generate("/persistence.xml.vtl", Files.persistenceFile(outputDir), "project", this);
+			generate("/web.xml.vtl", Files.webDescriptorFile(warDir), "project", this);
+			generate("/app.xml.vtl", Files.appDescriptorFile(warDir), "project", this);
+			generate("/context.xml.vtl", Files.contextFile(warDir), "project", this);
+			generate("/persistence.xml.vtl", Files.persistenceFile(warDir), "project", this);
 		}
 	}
 
@@ -149,7 +170,7 @@ public class Project {
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
 			fileManager.setLocation(StandardLocation.CLASS_PATH, libraries);
-			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(classesDir));
+			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(warClassesDir));
 
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
 			compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
@@ -163,7 +184,7 @@ public class Project {
 		manifest.getMainAttributes().putValue("Created-By", "Tiny Store");
 
 		try (JarOutputStream war = new JarOutputStream(new FileOutputStream(warFile), manifest)) {
-			addArchiveEntries(war, outputDir, outputDir);
+			addArchiveEntries(war, warDir, warDir);
 		}
 	}
 
