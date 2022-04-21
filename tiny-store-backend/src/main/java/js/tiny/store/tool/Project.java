@@ -25,6 +25,7 @@ import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import js.tiny.store.meta.ProjectMeta;
 import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.RepositoryEntity;
 import js.tiny.store.meta.RepositoryService;
@@ -37,50 +38,58 @@ public class Project {
 	private static final String WAR_CLASSES_DIR = "/WEB-INF/classes";
 	private static final String CLIENT_CLASSES_DIR = "target/client-classes";
 
-	private String name;
-	private String display;
-	private String description;
-	private String groupId;
-	private String version;
-	private String author;
-	private Repository[] repositories;
+	private final HttpClientBuilder clientBuilder;
+	private final ProjectMeta meta;
+	private final Repository[] repositories;
 
-	private transient final HttpClientBuilder clientBuilder;
+	private final File projectDir;
+	private final File runtimeDir;
 
-	private transient File projectDir;
-	private transient File runtimeDir;
+	private final File targetDir;
+	private final File serverSourceDir;
+	private final File clientSourceDir;
 
-	private transient File targetDir;
+	private final File warFile;
+	private final File clientJarFile;
 
-	private transient File serverSourceDir;
-	private transient File warDir;
-	private transient File warFile;
-	private transient File warClassesDir;
+	private File warDir;
+	private File warClassesDir;
 
-	private transient File clientSourceDir;
-	private transient File clientClassesDir;
-	private transient File clientJarFile;
+	private File clientClassesDir;
 
-	public Project() {
+	public Project(File projectDir, File runtimeDir, ProjectMeta meta) throws IOException {
 		this.clientBuilder = HttpClientBuilder.create();
-	}
-	
-	public void init(File projectDir, File runtimeDir) throws IOException {
+		this.meta = meta;
+		this.repositories = new Repository[meta.getRepositories().length];
+		for (int i = 0; i < this.repositories.length; ++i) {
+			this.repositories[i] = new Repository(new File(projectDir, ".meta"), meta.getRepositories()[i]);
+		}
+
 		this.projectDir = projectDir;
 		this.runtimeDir = runtimeDir;
+
+		this.targetDir = new File(projectDir, TARGET_DIR);
+		if (!this.targetDir.exists() && !this.targetDir.mkdirs()) {
+			throw new IOException("Fail to create target directory " + this.targetDir);
+		}
+
+		this.serverSourceDir = new File(projectDir, SERVER_SOURCE_DIR);
+		if (!this.serverSourceDir.exists() && !this.serverSourceDir.mkdirs()) {
+			throw new IOException("Fail to create source directory " + this.serverSourceDir);
+		}
+
+		this.clientSourceDir = new File(projectDir, CLIENT_SOURCE_DIR);
+		if (!this.clientSourceDir.exists() && !this.clientSourceDir.mkdirs()) {
+			throw new IOException("Fail to create client source directory " + this.clientSourceDir);
+		}
+
+		// Tomcat uses pound (#) for multi-level context path
+		// it is replaced with path separator: app#1.0 -> app/1.0 used as http://api.server/app/1.0/service/operation
+		this.warFile = new File(targetDir, Strings.concat(meta.getName(), '#', meta.getVersion(), ".war"));
+		// client jar uses 'store' suffix: app-store-1.0.jar
+		this.clientJarFile = new File(targetDir, Strings.concat(meta.getName(), "-store-", meta.getVersion(), ".jar"));
+
 		createFileSystem();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getDisplay() {
-		return display;
-	}
-
-	public String getDescription() {
-		return description;
 	}
 
 	public Repository[] getRepositories() {
@@ -93,20 +102,9 @@ public class Project {
 		Files.removeFilesHierarchy(targetDir);
 		createFileSystem();
 	}
-	
+
 	private void createFileSystem() throws IOException {
-		this.serverSourceDir = new File(projectDir, SERVER_SOURCE_DIR);
-		if (!this.serverSourceDir.exists() && !this.serverSourceDir.mkdirs()) {
-			throw new IOException("Fail to create source directory " + this.serverSourceDir);
-		}
-
-		this.clientSourceDir = new File(projectDir, CLIENT_SOURCE_DIR);
-		if (!this.clientSourceDir.exists() && !this.clientSourceDir.mkdirs()) {
-			throw new IOException("Fail to create client source directory " + this.clientSourceDir);
-		}
-
-		this.targetDir = new File(projectDir, TARGET_DIR);
-		this.warDir = new File(targetDir, name);
+		this.warDir = new File(targetDir, meta.getName());
 		if (!this.warDir.exists() && !this.warDir.mkdirs()) {
 			throw new IOException("Fail to create output directory " + this.warDir);
 		}
@@ -120,25 +118,19 @@ public class Project {
 		if (!this.clientClassesDir.exists() && !this.clientClassesDir.mkdirs()) {
 			throw new IOException("Fail to create client classes directory " + this.clientClassesDir);
 		}
-
-		// Tomcat uses pound (#) for multi-level context path 
-		// it is replaced with path separator: app#1.0 -> app/1.0 used as http://api.server/app/1.0/service/operation
-		this.warFile = new File(targetDir, Strings.concat(name, '#', version, ".war"));
-		// client jar uses 'store' suffix: app-store-1.0.jar
-		this.clientJarFile = new File(targetDir, Strings.concat(name, "-store-", version, ".jar"));
 	}
 
 	public void generateSources() throws IOException {
 		for (Repository repository : repositories) {
 			for (RepositoryEntity entity : repository.getEntities()) {
-				entity.setAuthor(author);
+				entity.setAuthor(meta.getAuthor());
 				generate("/entity.java.vtl", Files.sourceFile(serverSourceDir, entity.getType()), "entity", entity);
 				generate("/model.java.vtl", Files.sourceFile(clientSourceDir, entity.getType()), "entity", entity);
 			}
 
 			for (RepositoryService service : repository.getServices()) {
 				service.setRepositoryName(repository.getName());
-				service.setAuthor(author);
+				service.setAuthor(meta.getAuthor());
 				generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getType(), true), "service", service);
 				generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getType()), "service", service);
 				generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getType(), true), "service", service);
@@ -217,7 +209,7 @@ public class Project {
 	}
 
 	public void deployClientJar() throws IOException {
-		String url = String.format("https://maven.js-lib.com/%s/%s-store/%s/%s", groupId.replace('.', '/'), name, version, clientJarFile.getName());
+		String url = String.format("https://maven.js-lib.com/%s/%s-store/%s/%s", meta.getGroupId().replace('.', '/'), meta.getName(), meta.getVersion(), clientJarFile.getName());
 		try (CloseableHttpClient client = clientBuilder.build()) {
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.setHeader("Content-Type", "application/octet-stream");

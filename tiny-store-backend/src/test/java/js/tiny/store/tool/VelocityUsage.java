@@ -1,6 +1,7 @@
 package js.tiny.store.tool;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -26,7 +27,7 @@ public class VelocityUsage {
 	}
 
 	@Test
-	public void createServiceRemote() {
+	public void createServiceRemote() throws IOException {
 		Repository repository = repository();
 		context.put("repository", repository);
 		for (RepositoryService service : repository.getServices()) {
@@ -40,14 +41,14 @@ public class VelocityUsage {
 		}
 	}
 
-	private static Repository repository() {
-		Repository repository = new Repository();
-		repository.setName("OMS Expert");
+	private static Repository repository() throws IOException {
+		Repository repository = new Repository(null, null);
+		// repository.setName("OMS Expert");
 
 		RepositoryService service = new RepositoryService();
 
 		RepositoryService[] services = new RepositoryService[] { service };
-		repository.setServices(services);
+		// repository.setServices(services);
 
 		service.setType(new TypeDef("ro.gnotis.omsx.CallData"));
 		service.setDescription("Data related to customer call history.");

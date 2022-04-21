@@ -9,6 +9,7 @@ import jakarta.annotation.Resource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.json.Json;
+import js.tiny.store.meta.ProjectMeta;
 import js.util.Strings;
 
 @ApplicationScoped
@@ -19,7 +20,7 @@ public class Workspace {
 	@Resource(name = "meta.dir")
 	private String META_DIR;
 
-	@Resource(name = "project.file")
+	@Resource(name = "project.meta.file")
 	private String PROJECT_FILE;
 
 	@Resource(name = "runtime.dir")
@@ -46,21 +47,21 @@ public class Workspace {
 		}
 
 		try (Reader reader = new FileReader(projectMetaFile)) {
-			Project project = json.parse(reader, Project.class);
-			project.init(projectDir, new File(RUNTIME_DIR));
+			ProjectMeta projectMeta = json.parse(reader, ProjectMeta.class);
+			Project project = new Project(projectDir, new File(RUNTIME_DIR), projectMeta);
 			return project;
 		}
 	}
 
-	public File getRepositoryDir(String repositoryName) {
+	public File getRepositoryDirEOL(String repositoryName) {
 		return new File(repositoryName);
 	}
 
-	public File sourceFile(File repositoryDir, String className) {
+	public File sourceFileEOL(File repositoryDir, String className) {
 		return new File(repositoryDir, Strings.concat("src", File.separatorChar, className.replace('.', File.separatorChar), ".java"));
 	}
 
-	public File classFile(File repositoryDir, String className) {
+	public File classFileEOL(File repositoryDir, String className) {
 		return new File(repositoryDir, Strings.concat("bin", File.separatorChar, className.replace('.', File.separatorChar), ".class"));
 	}
 
