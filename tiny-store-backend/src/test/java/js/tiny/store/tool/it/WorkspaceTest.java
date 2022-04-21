@@ -29,8 +29,13 @@ public class WorkspaceTest {
 	public void buildProject() throws IOException {
 		Project project = workspace.getProject("omsx");
 		project.generateSources();
+		
 		project.compileSources();
 		project.buildWar();
 		project.deployWar();
+		
+		project.compileClientSources();
+		project.buildClientJar();
+		project.deployClientJar();
 	}
 }
