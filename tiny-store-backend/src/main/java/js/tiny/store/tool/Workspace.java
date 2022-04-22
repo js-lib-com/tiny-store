@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.json.Json;
+import js.tiny.store.ProjectItem;
 import js.tiny.store.meta.ProjectMeta;
-import js.util.Strings;
 
 @ApplicationScoped
 public class Workspace {
@@ -29,8 +33,29 @@ public class Workspace {
 	@Inject
 	private Json json;
 
+	private File workspaceDir;
+
+	@PostConstruct
+	void postConstruct() {
+		workspaceDir = new File(WORKSPACE_DIR);
+	}
+
+	public Set<ProjectItem> getProjects() throws IOException {
+		File[] projectDirs = workspaceDir.listFiles();
+		if (projectDirs == null) {
+			return Collections.emptySet();
+		}
+		Set<ProjectItem> projects = new HashSet<ProjectItem>();
+		for (File projectDir : projectDirs) {
+			File metaDir = new File(projectDir, META_DIR);
+			try(Reader reader = new FileReader(new File(metaDir, PROJECT_FILE))) {
+				projects.add(json.parse(reader, ProjectItem.class));
+			}
+		}
+		return projects;
+	}
+
 	public Project getProject(String repositoryName) throws IOException {
-		File workspaceDir = new File(WORKSPACE_DIR);
 		File projectDir = new File(workspaceDir, repositoryName);
 		if (!projectDir.exists() && !projectDir.mkdirs()) {
 			throw new IOException("Fail to create project directory " + projectDir);
@@ -52,17 +77,4 @@ public class Workspace {
 			return project;
 		}
 	}
-
-	public File getRepositoryDirEOL(String repositoryName) {
-		return new File(repositoryName);
-	}
-
-	public File sourceFileEOL(File repositoryDir, String className) {
-		return new File(repositoryDir, Strings.concat("src", File.separatorChar, className.replace('.', File.separatorChar), ".java"));
-	}
-
-	public File classFileEOL(File repositoryDir, String className) {
-		return new File(repositoryDir, Strings.concat("bin", File.separatorChar, className.replace('.', File.separatorChar), ".class"));
-	}
-
 }

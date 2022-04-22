@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dimen>
+    <icon-size>48px</icon-size>
+    <aside-width>@dimen/header-height</aside-width>
+    <menu-width>auto</menu-width>
+    <menu-item-width>200px</menu-item-width>
+    <menu-item-height>3rem</menu-item-height>
+    <header-height>48px</header-height>
+    <caption-height>128px</caption-height>
+    <nav-height>@dimen/header-height</nav-height>
+    <footer-height>@dimen/header-height</footer-height>
+</dimen>

@@ -1,0 +1,17 @@
+.icon {
+    display: inline-block;
+    width: @dimen/icon-size;
+    height: @dimen/icon-size;
+    line-height: @dimen/icon-size;
+    cursor: pointer;
+    text-align: center;
+}
+
+.icon:hover {
+}
+
+.icon img {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 auto;
+}

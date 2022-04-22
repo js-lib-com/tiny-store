@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<name>tiny-strore</name>
+	<technology>js-lib</technology>
+	<package></package>
+	<operators>DATA_ATTR</operators>
+	<asset-dir>asset</asset-dir>
+	<theme-dir>theme</theme-dir>
+	<build-dir>target/site</build-dir>
+	<exclude-dirs>target/</exclude-dirs>
+
+	<authors>Iulian Rotaru</authors>
+	<display>Tiny Store</display>
+	<description>On premise, no-code portal for persistence API.</description>
+
+	<favicon>asset/favicon.ico</favicon>
+	<locale>en</locale>
+
+	<media-queries>
+		<media-query alias="portrait" expression="orientation: portrait" />
+		<media-query alias="lgd" expression="min-width: 1200px" />
+		<media-query alias="mdd" expression="max-width: 992px" />
+		<media-query alias="smd" expression="max-width: 768px" />
+		<media-query alias="xsd" expression="max-width: 560px" />
+		<media-query alias="h700" expression="max-height: 700px" />
+	</media-queries>
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE"></meta>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"></meta>
+		
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
+	</head>
+</project>

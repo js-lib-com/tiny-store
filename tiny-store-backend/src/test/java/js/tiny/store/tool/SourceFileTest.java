@@ -98,7 +98,7 @@ public class SourceFileTest {
 		when(operation.getRestPath()).thenReturn("coordinates");
 		when(operation.getDescription()).thenReturn("Reads coordinates for call performed from given phone number or null if phone number not found.");
 		when(operation.getParameters()).thenReturn(Arrays.asList(parameter1, parameter2));
-		when(operation.getParameter()).thenReturn(parameter1);
+		// when(operation.getParameter()).thenReturn(parameter1);
 		when(operation.getValue()).thenReturn(value);
 		when(operation.getExceptions()).thenReturn(Arrays.asList(exception1, exception2));
 
@@ -133,7 +133,7 @@ public class SourceFileTest {
 	@Test
 	public void GivenServiceRemote_WhenGenerateSource_Then() {
 		// given
-		SourceFile sourceFile = new SourceFile("/service-remote.vtl");
+		SourceFile sourceFile = new SourceFile("/service-remote.java.vtl");
 
 		// when
 		sourceFile.generate("service", service, writer);
@@ -145,7 +145,7 @@ public class SourceFileTest {
 	@Test
 	public void GivenServiceInterface_WhenGenerateSource_Then() {
 		// given
-		SourceFile sourceFile = new SourceFile("/service-interface.vtl");
+		SourceFile sourceFile = new SourceFile("/service-interface.java.vtl");
 
 		// when
 		sourceFile.generate("service", service, writer);
@@ -157,7 +157,7 @@ public class SourceFileTest {
 	@Test
 	public void GivenServiceImplementation_WhenGenerateSource_Then() {
 		// given
-		SourceFile sourceFile = new SourceFile("/service-implementation.vtl");
+		SourceFile sourceFile = new SourceFile("/service-implementation.java.vtl");
 
 		// when
 		sourceFile.generate("service", service, writer);
@@ -169,7 +169,7 @@ public class SourceFileTest {
 	@Test
 	public void GivenEntity_WhenGenerateSource_Then() {
 		// given
-		SourceFile sourceFile = new SourceFile("/entity.vtl");
+		SourceFile sourceFile = new SourceFile("/entity.java.vtl");
 
 		// when
 		sourceFile.generate("entity", entity, writer);

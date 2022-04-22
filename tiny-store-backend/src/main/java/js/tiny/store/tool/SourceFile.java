@@ -20,6 +20,11 @@ public class SourceFile {
 		this.engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		this.engine.init();
 		this.context = new VelocityContext();
+
+		// to load template from file do no set above engine properties and use next lines
+		// in this case template name is the actual file path
+		// File file = new File("src/main/resources/service-remote.java.vtl");
+		// Template template = engine.getTemplate(file.getPath());
 	}
 	
 	public void generate(String contextName, Object contextValue, Writer writer) {

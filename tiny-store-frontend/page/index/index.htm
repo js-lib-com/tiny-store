@@ -1,0 +1,42 @@
+<div data-template="template/page">
+	<div data-content="caption">
+		<div class="logo"></div>
+		<h1>Contact Center</h1>
+	</div>
+
+	<ul data-content="menu">
+		<li>Home</li>
+		<li class="selected">Phone Cashing Code</li>
+		<li>Minority Report</li>
+		<li>Yellow Pages</li>
+	</ul>
+
+	<ul data-content="nav">
+		<li id="create-project"><img src="@image/action/add" /><label>Create Project</label></li>
+		<li id="delete-project"><img src="@image/action/delete" /><label>Delete Project</label></li>
+		<li id="edit-project"><img src="@image/action/edit" /><label>Edit Project</label></li>
+	</ul>
+
+	<section data-content="section">
+		<table>
+			<thead>
+				<tr>
+					<th>Project</th>
+					<th>Description</th>
+					<th>Package</th>
+					<th>Version</th>
+					<th>Author</th>
+				</tr>
+			</thead>
+			<tbody id="projects-list-view" data-list=".">
+				<tr>
+					<td data-text="name">OMS Expert</td>
+					<td data-text="description">Collect real time call data from contact center and display caller on Google Maps.</td>
+					<td data-text="groupId">ro.gnotis.omsx</td>
+					<td data-text="version">1.1</td>
+					<td data-text="author">Iulian Rotaru</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+</div>

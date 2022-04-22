@@ -1,0 +1,33 @@
+form {
+    margin: 0 40px;
+}
+
+form label {
+	display: block;
+	width: 200px;
+	font-size: 14px;
+    margin-top: 40px;
+    color: cadetblue;
+    color: black;
+}
+
+xform input {
+	display: block;
+	width: 600px;
+	max-width: 700px;
+	line-height: 22px;
+	padding: 10px;
+	margin-top: 0px;
+	background: 0;
+	border: 0;
+	border-bottom: solid 1px cadetblue;
+	font-size: 14px;
+}
+
+xform input.invalid {
+    border-bottom-color: red;
+}
+
+xform input:focus {
+    outline: none;
+}

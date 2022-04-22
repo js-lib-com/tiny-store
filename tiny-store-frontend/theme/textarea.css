@@ -1,0 +1,10 @@
+textarea {
+	width: 75%;
+	border: solid 1px lightgray;
+	resize: none;
+	font-size: 14px;
+}
+
+textarea:focus {
+	outline: none;
+}

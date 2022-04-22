@@ -1,0 +1,59 @@
+<div data-template="template/page">
+	<div data-content="caption">
+		<div class="logo"></div>
+		<h1>Contact Center</h1>
+	</div>
+
+	<ul data-content="menu">
+		<li>Home</li>
+		<li class="selected">Phone Cashing Code</li>
+		<li>Minority Report</li>
+		<li>Yellow Pages</li>
+	</ul>
+
+	<ul data-content="nav">
+		<li id="search-phone"><img src="@image/action/search" /><label>Search Phone</label></li>
+		<li id="update-cashing-code"><img src="@image/action/check" /><label>Update Cashing Code</label></li>
+		<li id="delete-cashing-code"><img src="@image/action/delete" /><label>Delete Cashing Code</label></li>
+		<li id="create-cashing-code"><img src="@image/action/add" /><label>Create Cashing Code</label></li>
+		<li id="clear-input"><img src="@image/action/clear" /><label>Clear Input</label></li>
+	</ul>
+
+	<section data-content="section">
+		<form id="phone-mapping-form">
+			<label>Phone Number</label>
+			<input name="phoneNumber" />
+			
+			<label>Existing Cashing Code</label>
+			<input name="existingCashingCode" />
+			
+			<label>New Cashing Code</label>
+			<input name="cashingCode" />
+		</form>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Phone Number</th>
+					<th>Cashing Code</th>
+					<th>Interactions</th>
+					<th>Customer Name</th>
+					<th>County</th>
+					<th>Locality</th>
+					<th>Street</th>
+				</tr>
+			</thead>
+			<tbody id="search-list-view" data-list=".">
+				<tr>
+					<td data-text="phoneNumber">770555666</td>
+					<td data-text="cashingCode" class="cashingCode accent">2133445566</td>
+					<td data-text="interactionsCount">2</td>
+					<td data-text="customerName">John Doe</td>
+					<td data-text="county">Iasi</td>
+					<td data-text="locality">Iasi</td>
+					<td data-text="street">Stefan cel Mare</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+</div>

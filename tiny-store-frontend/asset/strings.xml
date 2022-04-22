@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<string>
+    <app-name>Gnotis Self Service</app-name>
+    <app-short-name>Self Service</app-short-name>
+    <app-description>Gnotis self service portal for internal clients.</app-description>
+    <app-rights>Copyright &#169; 2021- @string/app-name. Internal use only, all rights reserved.</app-rights>
+
+    <login-principal>User Name</login-principal>
+    <login-password>Password</login-password>
+    <login-submit>Submit</login-submit>
+    <login-reset>Reset</login-reset>
+</string>

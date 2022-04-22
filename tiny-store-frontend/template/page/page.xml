@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<template>
+	<display>Page Template</display>
+	<description>Page template description.</description>
+
+	<head>
+		<script src="lib/js-lib/js-lib.js"></script>
+	</head>
+</template>

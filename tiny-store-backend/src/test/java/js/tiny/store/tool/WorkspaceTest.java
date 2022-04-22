@@ -1,4 +1,4 @@
-package js.tiny.store.tool.it;
+package js.tiny.store.tool;
 
 import java.io.IOException;
 
@@ -6,8 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import js.json.impl.JsonImpl;
-import js.tiny.store.tool.Project;
-import js.tiny.store.tool.Workspace;
 import js.util.Classes;
 
 public class WorkspaceTest {
@@ -23,6 +21,7 @@ public class WorkspaceTest {
 		Classes.setFieldValue(workspace, "RUNTIME_DIR", "D:\\runtime\\tiny-store\\");
 
 		Classes.setFieldValue(workspace, "json", new JsonImpl());
+		workspace.postConstruct();
 	}
 	
 	@Test

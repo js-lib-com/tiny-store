@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compo>
+	<groupId>com.js-lib.web</groupId>
+	<artifactId>js-lib</artifactId>
+	<version>1.3.7</version>
+	<description>j(s)-script library used by rich clients running in browsers.</description>
+</compo>
