@@ -9,12 +9,11 @@
 		auth="Container" 
 		type="com.mchange.v2.c3p0.ComboPooledDataSource"
 
-		driverClass="${database.driverClass}"
-		jdbcUrl="${database.jdbcUrl}"
+		jdbcUrl="${database.url}"
 		user="${database.user}" 
-		password="${database.password}" />
+		password="${database.password}"
+	/>
 		
 #end
-	<Environment name="greetings" type="java.lang.String" value="Hallo" />
 
 </Context>

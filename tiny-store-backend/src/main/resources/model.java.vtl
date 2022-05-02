@@ -1,42 +1,40 @@
-package ${entity.type.packageName};
+package ${entity.packageName};
 #if(!$entity.imports.empty)
 
-#foreach($type in $entity.imports)
-import ${type.qualifiedName};
+#foreach($import in $entity.imports)
+import ${import};
 #end
 #end
 
-/**
 #if($entity.description)
+/**
  * ${entity.description}
- *
-#end
- * @author ${entity.author}
  */
-public class ${entity.type.name} {
+#end
+public class ${entity.className} {
 #if($entity.identity)	
-	private ${entity.identity.type.name} ${entity.identity.name};
+	private ${entity.identity.type} ${entity.identity.name};
 #end	
 #foreach($field in $entity.fields)
-	private ${field.type.name} ${field.name};
+	private ${field.type} ${field.name};
 #end
 #if($entity.identity)
 
-	public void set${entity.identity.title}(${entity.identity.type.name} ${entity.identity.name}) {
+	public void set${entity.identity.title}(${entity.identity.type} ${entity.identity.name}) {
 		this.${entity.identity.name} = ${entity.identity.name};
 	}
 
-	public ${entity.identity.type.name} get${entity.identity.title}() {
+	public ${entity.identity.type} get${entity.identity.title}() {
 		return ${entity.identity.name};
 	}	
 #end
 #foreach($field in $entity.fields)
 
-	public void set${field.title}(${field.type.name} ${field.name}) {
+	public void set${field.title}(${field.type} ${field.name}) {
 		this.${field.name} = ${field.name};
 	}
 
-	public ${field.type.name} get${field.title}() {
+	public ${field.type} get${field.title}() {
 		return ${field.name};
 	}	
 #end

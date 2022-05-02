@@ -3,7 +3,7 @@
 
 #foreach($repository in $project.repositories)
 #foreach($service in $repository.services)
-	<bindind bind="${service.type.interfaceName}" to="${service.type.qualifiedName}" />
+	<bindind bind="${service.interfaceName}" to="${service.className}" />
 #end	
 #end	
 </app>

@@ -1,4 +1,4 @@
-package ${entity.type.packageName};
+package ${entity.packageName};
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,26 +8,29 @@ import jakarta.persistence.GenerationType;
 #end
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-#if(!$entity.imports.empty)
+#if($entity.imports)
 
-#foreach($type in $entity.imports)
-import ${type.qualifiedName};
+#foreach($import in $entity.imports)
+import ${import};
 #end
 #end
 
-/**
 #if($entity.description)
+/**
  * ${entity.description}
- *
-#end
- * @author ${entity.author}
  */
+#end
 @Entity
 #if($entity.alias)
 @Table(name = "${entity.alias}")
 #end
-public class ${entity.type.name} {
+public class ${entity.className} {
 #if($entity.identity)	
+#if($entity.identity.description)
+	/**
+	 * ${entity.identity.description}
+	 */
+#end
 	@Id
 #if($entity.identity.generated)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,28 +38,33 @@ public class ${entity.type.name} {
 #if($entity.identity.alias)	
 	@Column(name = "${entity.identity.alias}")
 #end	
-	private ${entity.identity.type.name} ${entity.identity.name};
-#end	
+	private ${entity.identity.type} ${entity.identity.name};
 
+#end	
 #foreach($field in $entity.fields)
+#if($field.description)
+	/**
+	 * ${field.description}
+	 */
+#end
 #if($field.alias)	
 	@Column(name = "${field.alias}")
 #end	
-	private ${field.type.name} ${field.name};
+	private ${field.type} ${field.name};
 #end
 #if($entity.identity)
 
-	public ${entity.identity.type.name} get${entity.identity.title}() {
+	public ${entity.identity.type} get${entity.identity.title}() {
 		return ${entity.identity.name};
 	}	
 #end
 #foreach($field in $entity.fields)
 
-	public void set${field.title}(${field.type.name} ${field.name}) {
+	public void set${field.title}(${field.type} ${field.name}) {
 		this.${field.name} = ${field.name};
 	}
 
-	public ${field.type.name} get${field.title}() {
+	public ${field.type} get${field.title}() {
 		return ${field.name};
 	}	
 #end

@@ -25,11 +25,11 @@ import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import js.tiny.store.meta.ProjectMeta;
-import js.tiny.store.meta.Repository;
-import js.tiny.store.meta.RepositoryEntity;
-import js.tiny.store.meta.RepositoryService;
-import js.util.Strings;
+import js.tiny.store.dao.IDAO;
+import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.Store;
+import js.tiny.store.meta.StoreEntity;
+import js.tiny.store.template.SourceTemplate;
 
 public class Project {
 	private static final String SERVER_SOURCE_DIR = "server";
@@ -39,8 +39,8 @@ public class Project {
 	private static final String CLIENT_CLASSES_DIR = "target/client-classes";
 
 	private final HttpClientBuilder clientBuilder;
-	private final ProjectMeta meta;
-	private final Repository[] repositories;
+	private final Store store;
+	private final IDAO dao;
 
 	private final File projectDir;
 	private final File runtimeDir;
@@ -57,13 +57,10 @@ public class Project {
 
 	private File clientClassesDir;
 
-	public Project(File projectDir, File runtimeDir, ProjectMeta meta) throws IOException {
+	public Project(File projectDir, File runtimeDir, Store store, IDAO dao) throws IOException {
 		this.clientBuilder = HttpClientBuilder.create();
-		this.meta = meta;
-		this.repositories = new Repository[meta.getRepositories().length];
-		for (int i = 0; i < this.repositories.length; ++i) {
-			this.repositories[i] = new Repository(new File(projectDir, ".meta"), meta.getRepositories()[i]);
-		}
+		this.store = store;
+		this.dao = dao;
 
 		this.projectDir = projectDir;
 		this.runtimeDir = runtimeDir;
@@ -85,15 +82,12 @@ public class Project {
 
 		// Tomcat uses pound (#) for multi-level context path
 		// it is replaced with path separator: app#1.0 -> app/1.0 used as http://api.server/app/1.0/service/operation
-		this.warFile = new File(targetDir, Strings.concat(meta.getName(), '#', meta.getVersion(), ".war"));
+		String storeName = Strings.getSimpleName(store.getPackageName());
+		this.warFile = new File(targetDir, Strings.concat(storeName, '#', store.getVersion(), ".war"));
 		// client jar uses 'store' suffix: app-store-1.0.jar
-		this.clientJarFile = new File(targetDir, Strings.concat(meta.getName(), "-store-", meta.getVersion(), ".jar"));
+		this.clientJarFile = new File(targetDir, Strings.concat(storeName, "-store-", store.getVersion(), ".jar"));
 
 		createFileSystem();
-	}
-
-	public Repository[] getRepositories() {
-		return repositories;
 	}
 
 	public void clean() throws IOException {
@@ -104,7 +98,7 @@ public class Project {
 	}
 
 	private void createFileSystem() throws IOException {
-		this.warDir = new File(targetDir, meta.getName());
+		this.warDir = new File(targetDir, Strings.getSimpleName(store.getPackageName()));
 		if (!this.warDir.exists() && !this.warDir.mkdirs()) {
 			throw new IOException("Fail to create output directory " + this.warDir);
 		}
@@ -121,30 +115,40 @@ public class Project {
 	}
 
 	public void generateSources() throws IOException {
-		for (Repository repository : repositories) {
-			for (RepositoryEntity entity : repository.getEntities()) {
-				entity.setAuthor(meta.getAuthor());
-				generate("/entity.java.vtl", Files.sourceFile(serverSourceDir, entity.getType()), "entity", entity);
-				generate("/model.java.vtl", Files.sourceFile(clientSourceDir, entity.getType()), "entity", entity);
-			}
+		for (StoreEntity entity : dao.findEntitiesByStore(store.getPackageName())) {
+			generate("/entity.java.vtl", serverSourceDir, entity);
+			generate("/model.java.vtl", clientSourceDir, entity);
+		}
 
-			for (RepositoryService service : repository.getServices()) {
-				service.setRepositoryName(repository.getName());
-				service.setAuthor(meta.getAuthor());
-				generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getType(), true), "service", service);
-				generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getType()), "service", service);
-				generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getType(), true), "service", service);
-			}
+		for (DataService service : dao.findServicesByStore(store.getPackageName())) {
+			generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), service);
+			generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), service);
+			generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), service);
+		}
 
-			generate("/web.xml.vtl", Files.webDescriptorFile(warDir), "project", this);
-			generate("/app.xml.vtl", Files.appDescriptorFile(warDir), "project", this);
-			generate("/context.xml.vtl", Files.contextFile(warDir), "project", this);
-			generate("/persistence.xml.vtl", Files.persistenceFile(warDir), "project", this);
+		generate("/web.xml.vtl", Files.webDescriptorFile(warDir), "project", this);
+		generate("/app.xml.vtl", Files.appDescriptorFile(warDir), "project", this);
+		generate("/context.xml.vtl", Files.contextFile(warDir), "project", this);
+		generate("/persistence.xml.vtl", Files.persistenceFile(warDir), "project", this);
+	}
+
+	private static void generate(String template, File targetDir, StoreEntity entity) throws IOException {
+		SourceTemplate sourceTemplate = new SourceTemplate(template);
+		File sourceFile = Files.sourceFile(targetDir, entity.getClassName());
+		try (Writer writer = new FileWriter(sourceFile)) {
+			sourceTemplate.generate(entity, writer);
+		}
+	}
+
+	private static void generate(String template, File targetFile, DataService service) throws IOException {
+		SourceTemplate sourceFile = new SourceTemplate(template);
+		try (Writer writer = new FileWriter(targetFile)) {
+			sourceFile.generate(service, writer);
 		}
 	}
 
 	private static void generate(String template, File targetFile, String contextName, Object contextValue) throws IOException {
-		SourceFile sourceFile = new SourceFile(template);
+		SourceTemplate sourceFile = new SourceTemplate(template);
 		try (Writer writer = new FileWriter(targetFile)) {
 			sourceFile.generate(contextName, contextValue, writer);
 		}
@@ -209,7 +213,7 @@ public class Project {
 	}
 
 	public void deployClientJar() throws IOException {
-		String url = String.format("https://maven.js-lib.com/%s/%s-store/%s/%s", meta.getGroupId().replace('.', '/'), meta.getName(), meta.getVersion(), clientJarFile.getName());
+		String url = String.format("https://maven.js-lib.com/%s-store/%s/%s", store.getPackageName().replace('.', '/'), store.getVersion(), clientJarFile.getName());
 		try (CloseableHttpClient client = clientBuilder.build()) {
 			HttpPost httpPost = new HttpPost(url);
 			httpPost.setHeader("Content-Type", "application/octet-stream");

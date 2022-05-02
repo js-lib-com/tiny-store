@@ -1,0 +1,6 @@
+<template>
+    <groupId>com.js-lib.web</groupId>
+    <artifactId>table-view</artifactId>
+    <version>1.0</version>
+    <description>Table view.</description>
+</template>

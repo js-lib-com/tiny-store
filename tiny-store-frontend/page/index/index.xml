@@ -3,5 +3,5 @@
 	<title>Index Page</title>
 	<description>Index page description.</description>
 
-	<script src="gen/js/tiny/store/Service.js" />
+	<script src="gen/js/tiny/store/WorkspaceService.js" />
 </page>

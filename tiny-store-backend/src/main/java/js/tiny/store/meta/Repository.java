@@ -1,51 +1,68 @@
 package js.tiny.store.meta;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-
-import js.json.Json;
-import js.util.Classes;
-
 public class Repository {
-	private final String name;
-	private final Database database;
-	private final RepositoryService[] services;
-	private final RepositoryEntity[] entities;
+	private String storePackage;
+	private String name;
+	private String display;
+	private String description;
 
-	public Repository(File metaDir, RepositoryMeta meta) throws IOException {
-		this.name = meta.getName();
-		this.database = meta.getDatabase();
-		this.services = new RepositoryService[meta.getServices().length];
-		this.entities = new RepositoryEntity[meta.getEntities().length];
+	private String connectionString;
+	private String user;
+	private String password;
 
-		Json json = Classes.loadService(Json.class);
-		for (int i = 0; i < this.services.length; ++i) {
-			try (Reader reader = new FileReader(new File(metaDir, meta.getServices()[i] + ".json"))) {
-				this.services[i] = json.parse(reader, RepositoryService.class);
-			}
-		}
-		for (int i = 0; i < this.entities.length; ++i) {
-			try (Reader reader = new FileReader(new File(metaDir, meta.getEntities()[i] + ".json"))) {
-				this.entities[i] = json.parse(reader, RepositoryEntity.class);
-			}
-		}
+	public String getStorePackage() {
+		return storePackage;
+	}
+
+	public void setStorePackage(String storePackage) {
+		this.storePackage = storePackage;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Database getDatabase() {
-		return database;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public RepositoryService[] getServices() {
-		return services;
+	public String getDisplay() {
+		return display;
 	}
 
-	public RepositoryEntity[] getEntities() {
-		return entities;
+	public void setDisplay(String display) {
+		this.display = display;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getConnectionString() {
+		return connectionString;
+	}
+
+	public void setConnectionString(String connectionString) {
+		this.connectionString = connectionString;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

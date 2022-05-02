@@ -1,5 +1,5 @@
 package js.tiny.store.meta;
 
-public enum DatabaseOpcode {
+public enum DataOpcode {
 	CREATE, READ, UPDATE, DELETE
 }

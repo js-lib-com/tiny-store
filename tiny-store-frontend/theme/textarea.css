@@ -1,10 +1,16 @@
 textarea {
-	width: 75%;
+	width: 90%;
 	border: solid 1px lightgray;
 	resize: none;
+	margin-top: 40px;
+	padding: 4px;
 	font-size: 14px;
 }
 
 textarea:focus {
 	outline: none;
+}
+
+textarea.invalid {
+    border-color: red;
 }

@@ -11,6 +11,7 @@
 	<modules>
 		<module>tiny-store-backend</module>
 		<module>tiny-store-frontend</module>
+		<module>tiny-store-war</module>
 	</modules>
 
 	<properties>

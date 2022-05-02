@@ -2,109 +2,51 @@ package js.tiny.store.meta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import js.json.JsonLifeCycle;
-import js.util.Strings;
-
-public class TypeDef implements JsonLifeCycle, Comparable<TypeDef> {
-	private TypeDef collection;
-	private String qualifiedName;
-
-	/** Parameterized name, e.g. List<String> or String */
-	private transient String name;
-	private transient String packageName;
-	private transient String simpleName;
+public class TypeDef {
+	/** Optional qualified name for collection class, null if type is not a collection. */
+	private String collection;
+	/** Qualified class name. */
+	private String name;
 
 	public TypeDef() {
 	}
 
-	public TypeDef(String qualifiedName) {
-		this(null, qualifiedName);
+	public TypeDef(String name) {
+		this(null, name);
 	}
 
-	public TypeDef(TypeDef collection, String qualifiedName) {
+	public TypeDef(String collection, String name) {
 		this.collection = collection;
-
-		this.qualifiedName = qualifiedName;
-		int lastDotSeparatorPosition = qualifiedName.lastIndexOf('.');
-		if (lastDotSeparatorPosition != -1) {
-			// package can be missing for primitive type, e.g. int.class
-			this.packageName = qualifiedName.substring(0, lastDotSeparatorPosition);
-			this.simpleName = qualifiedName.substring(lastDotSeparatorPosition + 1);
-		} else {
-			this.packageName = null;
-			this.simpleName = qualifiedName;
-		}
-
-		if (collection != null) {
-			this.name = Strings.concat(collection.simpleName, '<', this.simpleName, '>');
-		} else {
-			this.name = this.simpleName;
-		}
+		this.name = name;
 	}
 
-	public TypeDef(Class<?> type) {
-		this(null, type);
+	public void setCollection(String collection) {
+		this.collection = collection;
 	}
 
-	public TypeDef(TypeDef collection, Class<?> type) {
-		this(collection, type.getCanonicalName());
-	}
-
-	@Override
-	public void preStringify() {
-	}
-
-	@Override
-	public void postParse() {
-		int lastDotSeparatorPosition = qualifiedName.lastIndexOf('.');
-		if (lastDotSeparatorPosition != -1) {
-			// package can be missing for primitive type, e.g. int.class
-			packageName = qualifiedName.substring(0, lastDotSeparatorPosition);
-			simpleName = qualifiedName.substring(lastDotSeparatorPosition + 1);
-		} else {
-			packageName = null;
-			simpleName = qualifiedName;
-		}
-
-		if (collection != null) {
-			name = Strings.concat(collection.simpleName, '<', simpleName, '>');
-		} else {
-			name = simpleName;
-		}
-	}
-
-	public TypeDef getCollection() {
+	public String getCollection() {
 		return collection;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public String getQualifiedName() {
-		return qualifiedName;
-	}
-
-	public String getPackageName() {
-		return packageName;
-	}
-
-	public String getSimpleName() {
-		return simpleName;
-	}
-
-	public String getInterfaceName() {
-		return Strings.concat(packageName, '.', "I", simpleName);
-	}
-
 	public boolean isDefaultPackage() {
-		return "java.lang".equals(packageName);
+		return name.startsWith("java.lang.");
 	}
 
 	public boolean isVoid() {
-		return "void".equalsIgnoreCase(simpleName);
+		return "void".equalsIgnoreCase(name);
+	}
+
+	public boolean isCollection() {
+		return collection != null;
 	}
 
 	private static final List<String> PRIMITIVES = new ArrayList<>();
@@ -115,42 +57,21 @@ public class TypeDef implements JsonLifeCycle, Comparable<TypeDef> {
 		PRIMITIVES.add("long");
 		PRIMITIVES.add("double");
 		PRIMITIVES.add("float");
-		PRIMITIVES.add("Byte");
-		PRIMITIVES.add("Short");
-		PRIMITIVES.add("Integer");
-		PRIMITIVES.add("Long");
-		PRIMITIVES.add("Double");
-		PRIMITIVES.add("Float");
-		PRIMITIVES.add("String");
+		PRIMITIVES.add("java.lang.Byte");
+		PRIMITIVES.add("java.lang.Short");
+		PRIMITIVES.add("java.lang.Integer");
+		PRIMITIVES.add("java.lang.Long");
+		PRIMITIVES.add("java.lang.Double");
+		PRIMITIVES.add("java.lang.Float");
+		PRIMITIVES.add("java.lang.String");
 	}
 
 	public boolean isPrimitive() {
-		return PRIMITIVES.contains(simpleName);
-	}
-
-	public boolean isCollection() {
-		return collection != null;
+		return PRIMITIVES.contains(name);
 	}
 
 	@Override
-	public int compareTo(TypeDef other) {
-		return this.qualifiedName.compareTo(other.qualifiedName);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(qualifiedName);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TypeDef other = (TypeDef) obj;
-		return Objects.equals(qualifiedName, other.qualifiedName);
+	public String toString() {
+		return "TypeDef [collection=" + collection + ", name=" + name + "]";
 	}
 }

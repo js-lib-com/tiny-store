@@ -3,6 +3,7 @@
     <icon-size>48px</icon-size>
     <aside-width>@dimen/header-height</aside-width>
     <menu-width>auto</menu-width>
+    <side-form-width>500px</side-form-width>
     <menu-item-width>200px</menu-item-width>
     <menu-item-height>3rem</menu-item-height>
     <header-height>48px</header-height>

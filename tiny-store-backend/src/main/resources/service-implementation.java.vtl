@@ -1,4 +1,4 @@
-package ${service.type.packageName};
+package ${service.implementationPackage};
 
 import java.util.List;
 
@@ -7,25 +7,23 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 #if(!$service.imports.empty)
 
-#foreach($type in $service.imports)
-import ${type.qualifiedName};
+#foreach($import in $service.imports)
+import ${import};
 #end
 #end
 
 /**
- * Implementation for ${service.type.name} interface.
+ * Implementation for ${service.interfaceName} interface.
 #if($service.description)
  * 
  * ${service.description}.
 #end 
- *
- * @author ${service.author}
  */
-public class ${service.type.name} implements I${service.type.name} {
+public class ${service.implementationName} implements ${service.interfaceName} {
 	private final EntityManager em;
 
 	@Inject
-	public ${service.type.name}(EntityManager em) {
+	public ${service.implementationName}(EntityManager em) {
 		this.em = em;
 	}
 
@@ -46,19 +44,19 @@ public class ${service.type.name} implements I${service.type.name} {
 	 * @return ${operation.value.description}.
 #end
 #foreach($exception in $operation.exceptions)
-	 * @throws ${exception.type.name} if ${exception.cause}.
+	 * @throws ${exception.type} if ${exception.cause}.
 #end
 	 */
 ##	 
 ## operation body
 ## --------------	 
 	@Override 
-	public ${operation.value.type.name}#*
-	*# ${operation.name}(#foreach($param in $operation.parameters)$param.type.name $param.name#if($foreach.hasNext), #end#end)#*
-	*# #if(!$operation.exceptions.empty)throws #foreach($exception in $operation.exceptions)${exception.type.name}#if($foreach.hasNext), #end#end #end{
-#if($operation.jpql)
+	public ${operation.value.type}#*
+	*# ${operation.name}(#foreach($param in $operation.parameters)$param.type $param.name#if($foreach.hasNext), #end#end)#*
+	*# #if(!$operation.exceptions.empty)throws #foreach($exception in $operation.exceptions)${exception.type}#if($foreach.hasNext), #end#end #end{
+#if($operation.query)
 ## ---------------------------
-		TypedQuery query = em.createQuery("${operation.jpql}", ${operation.value.type.simpleName}.class);
+		TypedQuery query = em.createQuery("${operation.query}", ${operation.value.rawType}.class);
 #foreach($param in $operation.parameters)
 #if($param.flag == "MAX_RESULTS")
 		query.setMaxResults(${param.name});
@@ -77,30 +75,30 @@ public class ${service.type.name} implements I${service.type.name} {
 ##   - if results is not empty return its single entity
 ##   - otherwise return null
 ##   	
-#if($operation.value.type.void)
+#if($operation.value.void)
 		query.executeUpdate();
 #else	
-#if($operation.value.type.collection)
+#if($operation.value.collection)
 		return query.getResultList();
 #else		
 		query.setMaxResults(1);
-		List<${operation.value.type.name}> results = query.getResultList();
+		List<${operation.value.type}> results = query.getResultList();
 		return results.isEmpty()? null: results.get(0);
 #end		
 #end
-#elseif($operation.databaseOpcode == "CREATE")
+#elseif($operation.dataOpcode == "CREATE")
 ## ---------------------------------
 		em.persist(${operation.parameter.name});
-#elseif($operation.databaseOpcode == "READ")
+#elseif($operation.dataOpcode == "READ")
 ## -------------------------------
-		return em.find(${operation.value.type.name}.class, ${operation.parameter.name});
-#elseif($operation.databaseOpcode == "UPDATE")
+		return em.find(${operation.value.type}.class, ${operation.parameter.name});
+#elseif($operation.dataOpcode == "UPDATE")
 ## ---------------------------------
 		em.merge(${operation.parameter.name});
-#elseif($operation.databaseOpcode == "DELETE")
+#elseif($operation.dataOpcode == "DELETE")
 ## ---------------------------------
-#if($operation.parameter.type.primitive)
-		Object entity = em.find(${operation.parameter.type.name}.class, ${operation.parameter.name});
+#if($operation.parameter.primitive)
+		Object entity = em.find(${operation.parameter.type}.class, ${operation.parameter.name});
 		if(entity != null) {
 			em.remove(entity);
 		}

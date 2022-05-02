@@ -7,7 +7,7 @@
 		<shared-cache-mode>NONE</shared-cache-mode>
 
 #foreach($entity in $repository.entities)
-		<class>${entity.type.qualifiedName}</class>
+		<class>${entity.className}</class>
 #end
 
 		<properties>

@@ -5,38 +5,51 @@
 	</div>
 
 	<ul data-content="menu">
-		<li>Home</li>
-		<li class="selected">Phone Cashing Code</li>
-		<li>Minority Report</li>
-		<li>Yellow Pages</li>
+		<li id="data-source-tab" data-tab="data-source">Data Sources</li>
+		<li id="store-tab" class="selected" data-tab="store">Stores</li>
 	</ul>
 
-	<ul data-content="nav">
-		<li id="create-project"><img src="@image/action/add" /><label>Create Project</label></li>
-		<li id="delete-project"><img src="@image/action/delete" /><label>Delete Project</label></li>
-		<li id="edit-project"><img src="@image/action/edit" /><label>Edit Project</label></li>
+	<ul data-content="nav" data-name="data-source" class="hidden">
+		<li id="create-data-source"><img src="@image/action/add" /><label>Create Data Source</label></li>
+		<li id="edit-data-source"><img src="@image/action/edit" /><label>Edit Data Source</label></li>
+		<li id="delete-data-source"><img src="@image/action/delete" /><label>Delete Data Source</label></li>
 	</ul>
 
-	<section data-content="section">
-		<table>
-			<thead>
-				<tr>
-					<th>Project</th>
-					<th>Description</th>
-					<th>Package</th>
-					<th>Version</th>
-					<th>Author</th>
-				</tr>
-			</thead>
-			<tbody id="projects-list-view" data-list=".">
-				<tr>
-					<td data-text="name">OMS Expert</td>
-					<td data-text="description">Collect real time call data from contact center and display caller on Google Maps.</td>
-					<td data-text="groupId">ro.gnotis.omsx</td>
-					<td data-text="version">1.1</td>
-					<td data-text="author">Iulian Rotaru</td>
-				</tr>
-			</tbody>
-		</table>
+	<ul data-content="nav" data-name="store">
+		<li id="create-store"><img src="@image/action/add" /><label>Create Store</label></li>
+		<li id="define-store" class="hidden"><img src="@image/action/add" /><label>Define Store Resources</label>
+		</li>
+		<li id="edit-store" class="hidden"><img src="@image/action/edit" /><label>Edit Store</label></li>
+		<li id="delete-store" class="hidden"><img src="@image/action/delete" /><label>Delete Store</label></li>
+	</ul>
+
+	<section data-content="section" data-name="data-source" class="hidden">
+		<table-view data-compo="page/index/data-source-list"></table-view>
+	</section>
+
+	<section data-content="section" data-name="store">
+		<table-view data-compo="page/index/store-list"></table-view>
+	</section>
+
+	<section data-content="side-form" class="hidden">
+	</section>
+
+	<section id="store-form-section" data-content="side-form" class="hidden">
+		<h2>Create Store</h2>
+		<form id="store-form" data-compo="page/index/store-form"></form>
+		<div>
+			<button id="save-store" type="button">Save</button>
+			<button id="cancel-store" type="button">Cancel</button>
+		</div>
+	</section>
+
+	<section id="data-source-form-section" data-content="side-form" class="hidden">
+		<h2>Create Data Source</h2>
+		<form id="data-source-form" data-compo="page/index/data-source-form"></form>
+		<div>
+			<button id="test-data-source" type="button">Test</button>
+			<button id="save-data-source" type="button">Save</button>
+			<button id="cancel-data-source" type="button">Cancel</button>
+		</div>
 	</section>
 </div>

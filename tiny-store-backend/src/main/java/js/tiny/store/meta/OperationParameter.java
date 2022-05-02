@@ -4,8 +4,7 @@ public class OperationParameter {
 	private TypeDef type;
 	private String name;
 	private String description;
-	private String restParamType;
-	private String restParamName;
+	private boolean pathParam;
 	private ParameterFlag flag;
 
 	public TypeDef getType() {
@@ -32,20 +31,12 @@ public class OperationParameter {
 		this.description = description;
 	}
 
-	public String getRestParamType() {
-		return restParamType;
+	public boolean isPathParam() {
+		return pathParam;
 	}
 
-	public void setRestParamType(String restParamType) {
-		this.restParamType = restParamType;
-	}
-
-	public String getRestParamName() {
-		return restParamName;
-	}
-
-	public void setRestParamName(String restParamName) {
-		this.restParamName = restParamName;
+	public void setPathParam(boolean pathParam) {
+		this.pathParam = pathParam;
 	}
 
 	public ParameterFlag getFlag() {

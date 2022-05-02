@@ -5,5 +5,9 @@ body {
 
 body * {
 	font-family: "Segoe UI";
-	color: rgb(50, 49, 48);	
+	color: rgb(50, 49, 48);
+}
+
+.hidden {
+	display: none !important;
 }

@@ -1,22 +1,19 @@
 package js.tiny.store.meta;
 
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class ServiceOperation {
 	private String name;
 	private String restMethod;
 	private String restPath;
 	private String description;
+	
 	private List<OperationParameter> parameters;
 	private OperationValue value;
 	private List<OperationException> exceptions;
 
-	private DatabaseOpcode databaseOpcode;
-	private String jpql;
-
-	private SortedSet<TypeDef> imports;
+	private DataOpcode dataOpcode;
+	private String query;
 
 	public String getName() {
 		return name;
@@ -78,46 +75,19 @@ public class ServiceOperation {
 		this.exceptions = exceptions;
 	}
 
-	public DatabaseOpcode getDatabaseOpcode() {
-		return databaseOpcode;
+	public DataOpcode getDataOpcode() {
+		return dataOpcode;
 	}
 
-	public void setDatabaseOpcode(DatabaseOpcode databaseOpcode) {
-		this.databaseOpcode = databaseOpcode;
+	public void setDataOpcode(DataOpcode databaseOpcode) {
+		this.dataOpcode = databaseOpcode;
 	}
 
-	public String getJpql() {
-		return jpql;
+	public String getQuery() {
+		return query;
 	}
 
-	public void setJpql(String jpql) {
-		this.jpql = jpql;
-	}
-
-	public void setImports(SortedSet<TypeDef> imports) {
-		this.imports = imports;
-	}
-
-	public SortedSet<TypeDef> getImports() {
-		if (imports == null) {
-			imports = new TreeSet<>();
-			parameters.forEach(parameter -> addImport(parameter.getType()));
-			addImport(value.getType());
-			exceptions.forEach(exception -> exception.getType());
-		}
-		return imports;
-	}
-
-	private void addImport(TypeDef typedef) {
-		if (typedef.isCollection()) {
-			imports.add(typedef.getCollection());
-		}
-		if (typedef.isDefaultPackage()) {
-			return;
-		}
-		if(typedef.isPrimitive()) {
-			return;
-		}
-		imports.add(typedef);
+	public void setQuery(String query) {
+		this.query = query;
 	}
 }

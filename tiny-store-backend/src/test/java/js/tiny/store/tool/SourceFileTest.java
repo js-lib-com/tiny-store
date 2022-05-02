@@ -19,11 +19,11 @@ import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.Identity;
 import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
-import js.tiny.store.meta.DatabaseOpcode;
+import js.tiny.store.meta.DataOpcode;
 import js.tiny.store.meta.OperationValue;
 import js.tiny.store.meta.Repository;
-import js.tiny.store.meta.RepositoryEntity;
-import js.tiny.store.meta.RepositoryService;
+import js.tiny.store.meta.StoreEntity;
+import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.TypeDef;
 
@@ -32,7 +32,7 @@ public class SourceFileTest {
 	@Mock
 	private Repository repository;
 	@Mock
-	private RepositoryService service;
+	private DataService service;
 
 	@Mock
 	private ServiceOperation operation;
@@ -48,7 +48,7 @@ public class SourceFileTest {
 	private OperationException exception2;
 
 	@Mock
-	private RepositoryEntity entity;
+	private StoreEntity entity;
 	@Mock
 	private Identity identity;
 	@Mock
@@ -62,14 +62,11 @@ public class SourceFileTest {
 	public void beforeTest() {
 		writer = new StringWriter();
 
-		TypeDef collection = new TypeDef(Set.class);
-
-		when(entity.getType()).thenReturn(new TypeDef("ro.gnotis.omsx.model.CallCoordinates"));
+		when(entity.getClassName()).thenReturn("ro.gnotis.omsx.model.CallCoordinates");
 		when(entity.getAlias()).thenReturn("customer_data");
 		when(entity.getDescription()).thenReturn("Data related to customer call history.");
 		when(entity.getIdentity()).thenReturn(identity);
 		when(entity.getFields()).thenReturn(Arrays.asList(field1, field2));
-		when(entity.getAuthor()).thenReturn("Iulian Rotaru");
 
 		when(identity.getName()).thenReturn("id");
 		when(identity.getTitle()).thenReturn("Id");
@@ -78,7 +75,7 @@ public class SourceFileTest {
 
 		when(field1.getName()).thenReturn("userName");
 		when(field1.getTitle()).thenReturn("UserName");
-		when(field1.getType()).thenReturn(new TypeDef(collection, String.class));
+		when(field1.getType()).thenReturn(new TypeDef(Set.class.getCanonicalName(), String.class.getCanonicalName()));
 		when(field1.getAlias()).thenReturn("user_name");
 
 		when(field2.getName()).thenReturn("phoneNumber");
@@ -87,11 +84,11 @@ public class SourceFileTest {
 		when(field2.getType()).thenReturn(new TypeDef("ro.gnotis.omsx.model.CallCoordinates"));
 		when(field2.getAlias()).thenReturn("phone_number");
 
-		when(service.getType()).thenReturn(new TypeDef("ro.gnotis.omsx.CallDataService"));
+		//when(service.getClassName()).thenReturn("ro.gnotis.omsx.CallDataService");
+		when(service.getInterfaceName()).thenReturn("ro.gnotis.omsx.ICallDataService");
 		when(service.getRestPath()).thenReturn("call");
 		when(service.getDescription()).thenReturn("Data related to customer call history.");
 		when(service.getOperations()).thenReturn(Arrays.asList(operation));
-		when(service.getAuthor()).thenReturn("Iulian Rotaru");
 
 		when(operation.getName()).thenReturn("readCallCoordinates");
 		when(operation.getRestMethod()).thenReturn("GET");
@@ -102,32 +99,30 @@ public class SourceFileTest {
 		when(operation.getValue()).thenReturn(value);
 		when(operation.getExceptions()).thenReturn(Arrays.asList(exception1, exception2));
 
-		when(operation.getDatabaseOpcode()).thenReturn(DatabaseOpcode.READ);
-		when(operation.getJpql()).thenReturn("select e from CallEvent e where e.latitude=?0 and e.longitude=?1");
+		when(operation.getDataOpcode()).thenReturn(DataOpcode.READ);
+		when(operation.getQuery()).thenReturn("select e from CallEvent e where e.latitude=?0 and e.longitude=?1");
 
-		when(value.getType()).thenReturn(new TypeDef(collection, "ro.gnotis.omsx.model.CallCoordinates"));
+		when(value.getType()).thenReturn(new TypeDef(Set.class.getCanonicalName(), "ro.gnotis.omsx.model.CallCoordinates"));
 		when(value.getType()).thenReturn(new TypeDef("ro.gnotis.omsx.model.CallCoordinates"));
 		// when(value.getType()).thenReturn(new TypeName(void.class));
 		when(value.getDescription()).thenReturn("geographical coordinates for source call location.");
 
-		when(exception1.getType()).thenReturn(new TypeDef(IOException.class));
+		when(exception1.getType()).thenReturn(new TypeDef(IOException.class.getCanonicalName()));
 		when(exception1.getCause()).thenReturn("coordinates reading fails");
 
-		when(exception2.getType()).thenReturn(new TypeDef(FileNotFoundException.class));
+		when(exception2.getType()).thenReturn(new TypeDef(FileNotFoundException.class.getCanonicalName()));
 		when(exception2.getCause()).thenReturn("file is missing");
 
 		// when(parameter1.getType()).thenReturn(new TypeName(String.class.getCanonicalName()));
 		when(parameter1.getType()).thenReturn(new TypeDef("ro.gnotis.omsx.model.CallCoordinates"));
 		when(parameter1.getName()).thenReturn("phoneNumber");
 		when(parameter1.getDescription()).thenReturn("customer phone number");
-		when(parameter1.getRestParamType()).thenReturn("PathParam");
-		when(parameter1.getRestParamName()).thenReturn("phone");
+		when(parameter1.isPathParam()).thenReturn(true);
 
 		when(parameter2.getType()).thenReturn(new TypeDef(String.class.getCanonicalName()));
 		when(parameter2.getName()).thenReturn("userName");
 		when(parameter2.getDescription()).thenReturn("user name");
-		when(parameter2.getRestParamType()).thenReturn("PathParam");
-		when(parameter2.getRestParamName()).thenReturn("user");
+		when(parameter2.isPathParam()).thenReturn(true);
 	}
 
 	@Test

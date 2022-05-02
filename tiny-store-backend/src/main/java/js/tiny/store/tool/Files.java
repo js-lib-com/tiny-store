@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import js.tiny.store.meta.TypeDef;
-
 public class Files extends js.util.Files {
 	private static final String META_INF_DIR = "META-INF";
 	private static final String WEB_INF_DIR = "WEB-INF";
@@ -34,16 +32,13 @@ public class Files extends js.util.Files {
 		}
 	}
 
-	public static File sourceFile(File targetDir, TypeDef type, boolean... isInterface) throws IOException {
-		File packageDir = new File(targetDir, type.getPackageName().replace('.', File.separatorChar));
+	public static File sourceFile(File targetDir, String qualifiedName) throws IOException {
+		File packageDir = new File(targetDir, Strings.getPackageName(qualifiedName).replace('.', File.separatorChar));
 		if (!packageDir.exists() && !packageDir.mkdirs()) {
 			throw new IOException("Fail to create package directory " + packageDir);
 		}
 
-		String className = type.getSimpleName();
-		if (isInterface.length == 1 && isInterface[0]) {
-			className = "I" + className;
-		}
+		String className = Strings.getSimpleName(qualifiedName);
 		return new File(packageDir, className + ".java");
 	}
 

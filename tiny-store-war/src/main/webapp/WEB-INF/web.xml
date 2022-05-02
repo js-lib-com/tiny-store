@@ -1,0 +1,16 @@
+<web-app>
+	<listener>
+		<listener-class>js.tiny.container.servlet.TinyContainer</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>rmi-servlet</servlet-name>
+		<servlet-class>js.tiny.container.rmi.HttpRmiServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>rmi-servlet</servlet-name>
+		<url-pattern>*.rmi</url-pattern>
+	</servlet-mapping>
+</web-app>

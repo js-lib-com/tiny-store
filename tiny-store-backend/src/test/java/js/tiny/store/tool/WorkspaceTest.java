@@ -5,7 +5,9 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import js.json.impl.JsonImpl;
+import js.tiny.store.dao.DaoFacade;
+import js.tiny.store.dao.IDAO;
+import js.tiny.store.dao.MongoDB;
 import js.util.Classes;
 
 public class WorkspaceTest {
@@ -13,20 +15,21 @@ public class WorkspaceTest {
 
 	@Before
 	public void beforeTest() throws Exception {
-		workspace = new Workspace();
+		MongoDB mongo = new MongoDB();
+		IDAO dao = new DaoFacade(mongo);
+		workspace = new Workspace(dao);
 
 		Classes.setFieldValue(workspace, "WORKSPACE_DIR", "D:\\runtime\\tiny-store\\workspace");
 		Classes.setFieldValue(workspace, "META_DIR", ".meta");
 		Classes.setFieldValue(workspace, "PROJECT_FILE", "project.json");
 		Classes.setFieldValue(workspace, "RUNTIME_DIR", "D:\\runtime\\tiny-store\\");
 
-		Classes.setFieldValue(workspace, "json", new JsonImpl());
 		workspace.postConstruct();
 	}
 	
 	@Test
 	public void buildProject() throws IOException {
-		Project project = workspace.getProject("omsx");
+		Project project = workspace.getStore("ro.gnotis.omsx");
 		project.clean();
 		project.generateSources();
 		
