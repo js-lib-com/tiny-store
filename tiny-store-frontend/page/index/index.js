@@ -1,11 +1,3 @@
-/**
- * Index page class.
- * 
- * @author Iulian Rotaru
- * @since 1.0
- * 
- * @constructor Construct an instance of home page class.
- */
 Index = function () {
 	this.$super();
 
@@ -42,7 +34,6 @@ Index = function () {
 	this.getById("save-data-source").on("click", this._onSaveDataSource, this);
 	this.getById("cancel-data-source").on("click", this._onCancelDataSource, this);
 
-	WorkspaceService.getDataSources(dataSources => this._dataSourcesListView.setItems(dataSources));
 	WorkspaceService.getStores(stores => this._storesListView.setItems(stores));
 };
 

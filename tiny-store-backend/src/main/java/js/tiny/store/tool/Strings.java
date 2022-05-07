@@ -1,5 +1,8 @@
 package js.tiny.store.tool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import js.tiny.store.meta.TypeDef;
 
 public class Strings extends js.util.Strings {
@@ -27,5 +30,34 @@ public class Strings extends js.util.Strings {
 			return getSimpleName(type.getName());
 		}
 		return concat(getSimpleName(type.getCollection()), '<', getSimpleName(type.getName()), '>');
+	}
+
+	public static boolean isDefaultPackage(String qualifiedName) {
+		return qualifiedName.startsWith("java.lang.");
+	}
+
+	public static boolean isVoid(String name) {
+		return "void".equalsIgnoreCase(name);
+	}
+
+	private static final List<String> PRIMITIVES = new ArrayList<>();
+	static {
+		PRIMITIVES.add("byte");
+		PRIMITIVES.add("short");
+		PRIMITIVES.add("int");
+		PRIMITIVES.add("long");
+		PRIMITIVES.add("double");
+		PRIMITIVES.add("float");
+		PRIMITIVES.add("java.lang.Byte");
+		PRIMITIVES.add("java.lang.Short");
+		PRIMITIVES.add("java.lang.Integer");
+		PRIMITIVES.add("java.lang.Long");
+		PRIMITIVES.add("java.lang.Double");
+		PRIMITIVES.add("java.lang.Float");
+		PRIMITIVES.add("java.lang.String");
+	}
+
+	public static boolean isPrimitive(String name) {
+		return PRIMITIVES.contains(name);
 	}
 }

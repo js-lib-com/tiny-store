@@ -15,12 +15,6 @@ public class Workspace {
 	@Resource(name = "workspace.dir")
 	private String WORKSPACE_DIR;
 
-	@Resource(name = "meta.dir")
-	private String META_DIR;
-
-	@Resource(name = "project.meta.file")
-	private String PROJECT_FILE;
-
 	@Resource(name = "runtime.dir")
 	private String RUNTIME_DIR;
 
@@ -43,11 +37,6 @@ public class Workspace {
 		File projectDir = new File(workspaceDir, projectName);
 		if (!projectDir.exists() && !projectDir.mkdirs()) {
 			throw new IOException("Fail to create project directory " + projectDir);
-		}
-
-		File metaDir = new File(projectDir, META_DIR);
-		if (!metaDir.exists() && !metaDir.mkdirs()) {
-			throw new IOException("Fail to create project meta directory " + metaDir);
 		}
 
 		Store store = dao.getStoreByPackage(packageName);

@@ -14,11 +14,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import jakarta.annotation.PreDestroy;
-import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@Startup
 public class MongoDB {
 	private static final String MONGO_URL = "mongodb://10.138.44.35:27017";
 	private static final String MONG_DB = "tiny_store";

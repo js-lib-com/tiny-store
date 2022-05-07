@@ -20,8 +20,6 @@ public class WorkspaceTest {
 		workspace = new Workspace(dao);
 
 		Classes.setFieldValue(workspace, "WORKSPACE_DIR", "D:\\runtime\\tiny-store\\workspace");
-		Classes.setFieldValue(workspace, "META_DIR", ".meta");
-		Classes.setFieldValue(workspace, "PROJECT_FILE", "project.json");
 		Classes.setFieldValue(workspace, "RUNTIME_DIR", "D:\\runtime\\tiny-store\\");
 
 		workspace.postConstruct();

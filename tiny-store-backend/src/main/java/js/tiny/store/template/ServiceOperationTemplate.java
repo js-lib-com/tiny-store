@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import js.tiny.store.meta.DataOpcode;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.TypeDef;
+import js.tiny.store.tool.Strings;
 
 public class ServiceOperationTemplate {
 	private final ServiceOperation serviceOperation;
@@ -57,13 +58,13 @@ public class ServiceOperationTemplate {
 	}
 
 	private void addImport(TypeDef typedef) {
-		if (typedef.isCollection()) {
+		if (typedef.getCollection() != null) {
 			imports.add(typedef.getCollection());
 		}
-		if (typedef.isDefaultPackage()) {
+		if (Strings.isDefaultPackage(typedef.getName())) {
 			return;
 		}
-		if (typedef.isPrimitive()) {
+		if (Strings.isPrimitive(typedef.getName())) {
 			return;
 		}
 		imports.add(typedef.getName());

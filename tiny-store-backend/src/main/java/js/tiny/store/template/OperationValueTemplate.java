@@ -14,7 +14,7 @@ public class OperationValueTemplate {
 			this.type = Strings.getParameterizedName(operationValue.getType());
 			this.rawType = Strings.getSimpleName(operationValue.getType().getName());
 			this.description = operationValue.getDescription();
-			this.collection = operationValue.getType().isCollection();
+			this.collection = operationValue.getType().getCollection() != null;
 		} else {
 			this.type = "void";
 			this.rawType = null;

@@ -17,6 +17,7 @@ import js.log.LogFactory;
 import js.tiny.store.dao.IDAO;
 import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.Store;
+import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.tool.Project;
 import js.tiny.store.tool.Workspace;
 
@@ -82,5 +83,9 @@ public class WorkspaceService {
 
 		// no-sql data source
 		return false;
+	}
+
+	public List<StoreEntity> getStoreEntities(String storePackage) {
+		return dao.findEntitiesByStore(storePackage);
 	}
 }

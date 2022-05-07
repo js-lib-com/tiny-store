@@ -15,16 +15,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.Identity;
 import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
-import js.tiny.store.meta.DataOpcode;
 import js.tiny.store.meta.OperationValue;
 import js.tiny.store.meta.Repository;
-import js.tiny.store.meta.StoreEntity;
-import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -99,7 +98,7 @@ public class SourceFileTest {
 		when(operation.getValue()).thenReturn(value);
 		when(operation.getExceptions()).thenReturn(Arrays.asList(exception1, exception2));
 
-		when(operation.getDataOpcode()).thenReturn(DataOpcode.READ);
+		//when(operation.getDataOpcode()).thenReturn(DataOpcode.READ);
 		when(operation.getQuery()).thenReturn("select e from CallEvent e where e.latitude=?0 and e.longitude=?1");
 
 		when(value.getType()).thenReturn(new TypeDef(Set.class.getCanonicalName(), "ro.gnotis.omsx.model.CallCoordinates"));

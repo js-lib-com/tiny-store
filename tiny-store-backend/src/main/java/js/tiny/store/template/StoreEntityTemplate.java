@@ -28,13 +28,13 @@ public class StoreEntityTemplate {
 		SortedSet<String> imports = new TreeSet<>();
 		for (EntityField field : storeEntity.getFields()) {
 			final TypeDef type = field.getType();
-			if (type.isCollection()) {
+			if (type.getCollection() != null) {
 				imports.add(type.getCollection());
 			}
-			if (type.isDefaultPackage()) {
+			if (Strings.isDefaultPackage(type.getName())) {
 				continue;
 			}
-			if (type.isPrimitive()) {
+			if (Strings.isPrimitive(type.getName())) {
 				continue;
 			}
 			imports.add(type.getName());
@@ -46,7 +46,7 @@ public class StoreEntityTemplate {
 		} else {
 			this.identity = null;
 		}
-		
+
 		this.fields = new ArrayList<>();
 		storeEntity.getFields().forEach(field -> this.fields.add(new EntityFieldTemplate(field)));
 	}
