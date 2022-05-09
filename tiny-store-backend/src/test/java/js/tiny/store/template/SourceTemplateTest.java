@@ -74,7 +74,7 @@ public class SourceTemplateTest {
 		value.setDescription("customer caller ID");
 		
 		OperationException exception = new OperationException();
-		exception.setType(new TypeDef(IOException.class.getCanonicalName()));
+		exception.setType(IOException.class.getCanonicalName());
 		exception.setCause("user file read fails");
 		
 		ServiceOperation operation = new ServiceOperation();
@@ -85,10 +85,9 @@ public class SourceTemplateTest {
 		operation.setExceptions(Arrays.asList(exception));
 		operation.setDataOpcode(DataOpcode.READ);
 
-		service.setOperations(Arrays.asList(operation));
 		
 		// when
-		sourceTemplate.generate(service, writer);
+		sourceTemplate.generate(service, Arrays.asList(operation), writer);
 		
 		// then
 		System.out.println(writer);

@@ -140,9 +140,7 @@ body>.content {
     grid-row: 4;
 }
 
-body>.side-form {
-    display: flex;
-    flex-direction: column;
+body>.side-dialog {
     grid-column: 4;
     grid-row: 2/5;
     border-left: solid 1px lightgray;
@@ -150,7 +148,12 @@ body>.side-form {
     padding: 20px;
 }
 
-body>.side-form form {
+body>.side-dialog side-dialog {
+    display: flex;
+    flex-direction: column;
+}
+
+body>.side-dialog .fill {
     flex-grow: 1;
 }
 

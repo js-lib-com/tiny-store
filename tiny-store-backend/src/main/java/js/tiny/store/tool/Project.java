@@ -27,6 +27,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import js.tiny.store.dao.IDAO;
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.template.SourceTemplate;
@@ -140,10 +141,11 @@ public class Project {
 		}
 	}
 
-	private static void generate(String template, File targetFile, DataService service) throws IOException {
+	private void generate(String template, File targetFile, DataService service) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
+		List<ServiceOperation> operations = dao.findServiceOperations(service.getInterfaceName());
 		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(service, writer);
+			sourceFile.generate(service, operations, writer);
 		}
 	}
 

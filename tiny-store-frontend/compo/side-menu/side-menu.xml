@@ -1,0 +1,6 @@
+<template>
+    <groupId>com.js-lib.web</groupId>
+    <artifactId>side-menu</artifactId>
+    <version>1.0</version>
+    <description>Side menu.</description>
+</template>

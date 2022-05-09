@@ -5,35 +5,25 @@
 	</div>
 
 	<ul data-content="menu">
-		<li id="data-source-tab" data-tab="data-source">Data Sources</li>
-		<li id="store-tab" class="selected" data-tab="store">Stores</li>
-	</ul>
-
-	<ul data-content="nav" data-name="data-source" class="hidden">
-		<li id="create-data-source"><img src="@image/action/add" /><label>Create Data Source</label></li>
-		<li id="edit-data-source"><img src="@image/action/edit" /><label>Edit Data Source</label></li>
-		<li id="delete-data-source"><img src="@image/action/delete" /><label>Delete Data Source</label></li>
+		<side-menu>
+            <li data-link="store.htm?${this._storesListView.getSelectedItem().packageName}" class="selected">Store</li>
+		</side-menu>
 	</ul>
 
 	<ul data-content="nav" data-name="store">
 		<li id="create-store"><img src="@image/action/add" /><label>Create Store</label></li>
-		<li id="define-store" class="hidden"><img src="@image/action/add" /><label>Define Store Resources</label></li>
 		<li id="edit-store" class="hidden"><img src="@image/action/edit" /><label>Edit Store</label></li>
 		<li id="delete-store" class="hidden"><img src="@image/action/delete" /><label>Delete Store</label></li>
 	</ul>
 
-	<section data-content="section" data-name="data-source" class="hidden">
-		<table-view data-compo="page/index/data-source-list"></table-view>
-	</section>
-
-	<section data-content="section" data-name="store">
+	<section data-content="section">
 		<table-view data-compo="page/index/store-list"></table-view>
 	</section>
 
-	<section data-content="side-form" class="hidden">
+	<section data-content="side-dialog" class="hidden">
 	</section>
 
-	<section id="store-form-section" data-content="side-form" class="hidden">
+	<section id="store-form-section" data-content="side-dialog" class="hidden">
 		<h2>Create Store</h2>
 		<form id="store-form" data-compo="page/index/store-form"></form>
 		<div>
@@ -42,7 +32,7 @@
 		</div>
 	</section>
 
-	<section id="data-source-form-section" data-content="side-form" class="hidden">
+	<section id="data-source-form-section" data-content="side-dialog" class="hidden">
 		<h2>Create Data Source</h2>
 		<form id="data-source-form" data-compo="page/index/data-source-form"></form>
 		<div>

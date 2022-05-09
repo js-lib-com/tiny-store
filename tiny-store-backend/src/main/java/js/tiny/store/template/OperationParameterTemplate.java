@@ -24,8 +24,8 @@ public class OperationParameterTemplate {
 		return operationParameter.getDescription();
 	}
 
-	public boolean isPathParam() {
-		return operationParameter.isPathParam();
+	public boolean isEntityParam() {
+		return operationParameter.isEntityParam();
 	}
 
 	public ParameterFlag getFlag() {

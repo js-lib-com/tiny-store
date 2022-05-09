@@ -1,6 +1,7 @@
 package js.tiny.store.template;
 
 import java.io.Writer;
+import java.util.List;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -8,8 +9,9 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
-import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.StoreEntity;
 
 public class SourceTemplate {
 	private final String templateName;
@@ -38,8 +40,8 @@ public class SourceTemplate {
 		template.merge(context, writer);
 	}
 	
-	public void generate(DataService service, Writer writer) {
-		DataServiceTemplate serviceTemplate = new DataServiceTemplate(service);
+	public void generate(DataService service, List<ServiceOperation> operations, Writer writer) {
+		DataServiceTemplate serviceTemplate = new DataServiceTemplate(service, operations);
 		context.put("service", serviceTemplate);
 		
 		Template template = engine.getTemplate(templateName);

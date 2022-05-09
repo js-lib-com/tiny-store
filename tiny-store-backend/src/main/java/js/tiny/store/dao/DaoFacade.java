@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.Repository;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
@@ -15,6 +16,7 @@ public class DaoFacade implements IDAO {
 	private DAO<Repository> repositoryDAO;
 	private DAO<StoreEntity> entityDAO;
 	private DAO<DataService> serviceDAO;
+	private DAO<ServiceOperation> operationDAO;
 
 	@Inject
 	public DaoFacade(MongoDB mongo) {
@@ -22,6 +24,7 @@ public class DaoFacade implements IDAO {
 		this.repositoryDAO = new DAO<>(mongo, Repository.class);
 		this.entityDAO = new DAO<>(mongo, StoreEntity.class);
 		this.serviceDAO = new DAO<>(mongo, DataService.class);
+		this.operationDAO = new DAO<>(mongo, ServiceOperation.class);
 	}
 
 	@Override
@@ -55,7 +58,32 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public List<Repository> findRepositoryByStore(String storePackage) {
+	public List<DataService> findServicesByRepository(String repositoryName) {
+		return serviceDAO.find("repositoryName", repositoryName);
+	}
+
+	@Override
+	public List<Repository> findRepositoriesByStore(String storePackage) {
 		return repositoryDAO.find("storePackage", storePackage);
+	}
+
+	@Override
+	public Repository getRepository(String name) {
+		return repositoryDAO.get("name", name);
+	}
+
+	@Override
+	public StoreEntity getStoreEntity(String className) {
+		return entityDAO.get("className", className);
+	}
+
+	@Override
+	public DataService getDataService(String interfaceName) {
+		return serviceDAO.get("interfaceName", interfaceName);
+	}
+
+	@Override
+	public List<ServiceOperation> findServiceOperations(String serviceInterface) {
+		return operationDAO.find("serviceInterface", serviceInterface);
 	}
 }

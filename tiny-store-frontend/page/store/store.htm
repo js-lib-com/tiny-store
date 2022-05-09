@@ -1,38 +1,37 @@
 <div data-template="template/page">
-	<div data-content="caption">
+	<div id="page-caption" data-content="caption">
 		<div class="logo"></div>
-		<h1>OMS Expert 1.1</h1>
-		<p>Collect real time call data from contact center and display caller on Google Maps.</p>
+		<h1><span data-text="display"></span> <span data-text="version"></span></h1>
+		<p data-text="description"></p>
 	</div>
 
-	<ul data-content="menu">
-		<li class="selected">Home</li>
-	</ul>
+	<div data-content="menu">
+		<side-menu>
+			<li data-link="index.htm" class="selected">Home</li>
+			<li data-link="repository.htm?${this._repositoriesListView.getSelectedItem().name}">Repository</li>
+			<li data-link="entity.htm?${this._entitiesListView.getSelectedItem().className}">Entity</li>
+		</side-menu>
+	</div>
 
 	<ul data-content="nav">
+		<li id="create-repository"><img src="@image/action/add" /><label>Create Repository</label></li>
+		<li id="edit-repository" class="hidden"><img src="@image/action/edit" /><label>Edit Repository</label></li>
+		<li id="delete-repository" class="hidden"><img src="@image/action/delete" /><label>Delete Repository</label></li>
 		<li id="create-entity"><img src="@image/action/add" /><label>Create Entity</label></li>
-		<li id="edit-entity"><img src="@image/action/edit" /><label>Edit Entity</label></li>
-		<li id="delete-entity"><img src="@image/action/delete" /><label>Delete Entity</label></li>
+		<li id="edit-entity" class="hidden"><img src="@image/action/edit" /><label>Edit Entity</label></li>
+		<li id="delete-entity" class="hidden"><img src="@image/action/delete" /><label>Delete Entity</label></li>
 	</ul>
 
 	<section data-content="section">
-		<table-view id="entities-list-view">
-			<table>
-				<thead>
-					<tr>
-						<th>Class</th>
-						<th>Alias</th>
-						<th>Description</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td data-text="className"></td>
-						<td data-text="alias"></td>
-						<td data-text="description"></td>
-					</tr>
-				</tbody>
-			</table>
-		</table-view>
+		<table-view data-compo="page/store/repositories-list"></table-view>
+		<table-view data-compo="page/store/entities-list"></table-view>
 	</section>
+
+	<section data-content="side-dialog">
+		<side-dialog data-compo="page/store/repository-form"></side-dialog>
+		<side-dialog data-compo="page/store/repository-delete"></side-dialog>
+		<side-dialog data-compo="page/store/entity-form"></side-dialog>
+		<side-dialog data-compo="page/store/entity-delete"></side-dialog>
+	</section>
+
 </div>

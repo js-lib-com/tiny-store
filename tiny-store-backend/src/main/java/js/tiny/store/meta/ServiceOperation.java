@@ -3,10 +3,11 @@ package js.tiny.store.meta;
 import java.util.List;
 
 public class ServiceOperation {
+	private String serviceInterface;
 	private String name;
+	private String description;
 	private String restMethod;
 	private String restPath;
-	private String description;
 	
 	private List<OperationParameter> parameters;
 	private OperationValue value;
@@ -15,12 +16,28 @@ public class ServiceOperation {
 	private DataOpcode dataOpcode;
 	private String query;
 
+	public String getServiceInterface() {
+		return serviceInterface;
+	}
+
+	public void setServiceInterface(String serviceInterface) {
+		this.serviceInterface = serviceInterface;
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getRestMethod() {
@@ -37,14 +54,6 @@ public class ServiceOperation {
 
 	public void setRestPath(String restPath) {
 		this.restPath = restPath;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public OperationParameter getParameter() {

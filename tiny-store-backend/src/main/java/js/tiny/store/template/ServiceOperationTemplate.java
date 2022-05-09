@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import js.tiny.store.meta.DataOpcode;
+import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.TypeDef;
 import js.tiny.store.tool.Strings;
@@ -20,29 +21,27 @@ public class ServiceOperationTemplate {
 	 * Flag true only if this operation has an entity parameter. An entity parameter is a parameter not annotated
 	 * with @PathParam in which case parameter value is loaded from request body - also know as HTTP entity.
 	 */
-	private final boolean entityParameter;
+	private final boolean entityParam;
 	private final OperationValueTemplate value;
-	private final List<OperationExceptionTemplate> exceptions;
 
 	public ServiceOperationTemplate(ServiceOperation serviceOperation) {
 		this.serviceOperation = serviceOperation;
 
 		this.imports = new TreeSet<>();
 		this.parameters = new ArrayList<>();
-		this.exceptions = new ArrayList<>();
 		this.value = new OperationValueTemplate(serviceOperation.getValue());
 
-		final AtomicBoolean entityParameter = new AtomicBoolean(false);
+		final AtomicBoolean entityParam = new AtomicBoolean(false);
 		if (serviceOperation.getParameters() != null) {
 			serviceOperation.getParameters().forEach(parameter -> {
 				addImport(parameter.getType());
 				this.parameters.add(new OperationParameterTemplate(parameter));
-				if (!parameter.isPathParam()) {
-					entityParameter.set(true);
+				if (parameter.isEntityParam()) {
+					entityParam.set(true);
 				}
 			});
 		}
-		this.entityParameter = entityParameter.get();
+		this.entityParam = entityParam.get();
 
 		if (serviceOperation.getValue() != null) {
 			addImport(serviceOperation.getValue().getType());
@@ -51,23 +50,25 @@ public class ServiceOperationTemplate {
 		if (serviceOperation.getExceptions() != null) {
 			serviceOperation.getExceptions().forEach(exception -> {
 				addImport(exception.getType());
-				this.exceptions.add(new OperationExceptionTemplate(exception));
 			});
 		}
-
 	}
 
 	private void addImport(TypeDef typedef) {
 		if (typedef.getCollection() != null) {
-			imports.add(typedef.getCollection());
+			addImport(typedef.getCollection());
 		}
-		if (Strings.isDefaultPackage(typedef.getName())) {
+		addImport(typedef.getName());
+	}
+
+	private void addImport(String className) {
+		if (Strings.isDefaultPackage(className)) {
 			return;
 		}
-		if (Strings.isPrimitive(typedef.getName())) {
+		if (Strings.isPrimitive(className)) {
 			return;
 		}
-		imports.add(typedef.getName());
+		imports.add(className);
 	}
 
 	public String getName() {
@@ -84,6 +85,10 @@ public class ServiceOperationTemplate {
 
 	public String getDescription() {
 		return serviceOperation.getDescription();
+	}
+
+	public List<OperationException> getExceptions() {
+		return serviceOperation.getExceptions();
 	}
 
 	public DataOpcode getDataOpcode() {
@@ -106,15 +111,11 @@ public class ServiceOperationTemplate {
 		return parameters;
 	}
 
-	public boolean isEntityParameter() {
-		return entityParameter;
+	public boolean isEntityParam() {
+		return entityParam;
 	}
 
 	public OperationValueTemplate getValue() {
 		return value;
-	}
-
-	public List<OperationExceptionTemplate> getExceptions() {
-		return exceptions;
 	}
 }

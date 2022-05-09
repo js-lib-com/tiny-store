@@ -111,6 +111,195 @@ js.tiny.store.WorkspaceService = {
 	},
 
 	/**
+	 * Get store.
+	 *
+	 * @param java.lang.String packageName,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return js.tiny.store.meta.Store
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getStore: function(packageName) {
+		$assert(typeof packageName !== "undefined", "js.tiny.store.WorkspaceService#getStore", "Package name argument is undefined.");
+		$assert(packageName === null || js.lang.Types.isString(packageName), "js.tiny.store.WorkspaceService#getStore", "Package name argument is not a string.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.tiny.store.WorkspaceService#getStore", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.tiny.store.WorkspaceService#getStore", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.tiny.store.WorkspaceService", "getStore");
+		rmi.setParameters(packageName);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Get repositories.
+	 *
+	 * @param java.lang.String storePackage,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return java.util.List<js.tiny.store.meta.Repository>
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getRepositories: function(storePackage) {
+		$assert(typeof storePackage !== "undefined", "js.tiny.store.WorkspaceService#getRepositories", "Store package argument is undefined.");
+		$assert(storePackage === null || js.lang.Types.isString(storePackage), "js.tiny.store.WorkspaceService#getRepositories", "Store package argument is not a string.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.tiny.store.WorkspaceService#getRepositories", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.tiny.store.WorkspaceService#getRepositories", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.tiny.store.WorkspaceService", "getRepositories");
+		rmi.setParameters(storePackage);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Get repository.
+	 *
+	 * @param java.lang.String name,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return js.tiny.store.meta.Repository
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getRepository: function(name) {
+		$assert(typeof name !== "undefined", "js.tiny.store.WorkspaceService#getRepository", "Name argument is undefined.");
+		$assert(name === null || js.lang.Types.isString(name), "js.tiny.store.WorkspaceService#getRepository", "Name argument is not a string.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.tiny.store.WorkspaceService#getRepository", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.tiny.store.WorkspaceService#getRepository", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.tiny.store.WorkspaceService", "getRepository");
+		rmi.setParameters(name);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Get services.
+	 *
+	 * @param java.lang.String repositoryName,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return java.util.List<js.tiny.store.meta.DataService>
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getServices: function(repositoryName) {
+		$assert(typeof repositoryName !== "undefined", "js.tiny.store.WorkspaceService#getServices", "Repository name argument is undefined.");
+		$assert(repositoryName === null || js.lang.Types.isString(repositoryName), "js.tiny.store.WorkspaceService#getServices", "Repository name argument is not a string.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.tiny.store.WorkspaceService#getServices", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.tiny.store.WorkspaceService#getServices", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.tiny.store.WorkspaceService", "getServices");
+		rmi.setParameters(repositoryName);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Get entity.
+	 *
+	 * @param java.lang.String className,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return js.tiny.store.meta.StoreEntity
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getEntity: function(className) {
+		$assert(typeof className !== "undefined", "js.tiny.store.WorkspaceService#getEntity", "Class name argument is undefined.");
+		$assert(className === null || js.lang.Types.isString(className), "js.tiny.store.WorkspaceService#getEntity", "Class name argument is not a string.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.tiny.store.WorkspaceService#getEntity", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.tiny.store.WorkspaceService#getEntity", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.tiny.store.WorkspaceService", "getEntity");
+		rmi.setParameters(className);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Get service.
+	 *
+	 * @param java.lang.String interfaceName,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return js.tiny.store.meta.DataService
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getService: function(interfaceName) {
+		$assert(typeof interfaceName !== "undefined", "js.tiny.store.WorkspaceService#getService", "Interface name argument is undefined.");
+		$assert(interfaceName === null || js.lang.Types.isString(interfaceName), "js.tiny.store.WorkspaceService#getService", "Interface name argument is not a string.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.tiny.store.WorkspaceService#getService", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.tiny.store.WorkspaceService#getService", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.tiny.store.WorkspaceService", "getService");
+		rmi.setParameters(interfaceName);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
+	 * Get operations.
+	 *
+	 * @param java.lang.String serviceInterface,
+	 * @param Function callback function to invoke on RMI completion,
+	 * @param Object scope optional callback run-time scope, default to global scope.
+	 * @return java.util.List<js.tiny.store.meta.ServiceOperation>
+	 * @assert callback is a {@link Function} and scope is an {@link Object}.
+	 */
+	 getOperations: function(serviceInterface) {
+		$assert(typeof serviceInterface !== "undefined", "js.tiny.store.WorkspaceService#getOperations", "Service interface argument is undefined.");
+		$assert(serviceInterface === null || js.lang.Types.isString(serviceInterface), "js.tiny.store.WorkspaceService#getOperations", "Service interface argument is not a string.");
+
+		var __callback__ = arguments[1];
+		$assert(js.lang.Types.isFunction(__callback__), "js.tiny.store.WorkspaceService#getOperations", "Callback is not a function.");
+		var __scope__ = arguments[2];
+		$assert(typeof __scope__ === "undefined" || js.lang.Types.isObject(__scope__), "js.tiny.store.WorkspaceService#getOperations", "Scope is not an object.");
+		if(!js.lang.Types.isObject(__scope__)) {
+			__scope__ = window;
+		}
+
+		var rmi = new js.net.RMI();
+		rmi.setMethod("js.tiny.store.WorkspaceService", "getOperations");
+		rmi.setParameters(serviceInterface);
+		rmi.exec(__callback__, __scope__);
+	},
+
+	/**
 	 * Test data source.
 	 *
 	 * @param js.tiny.store.meta.Repository meta,

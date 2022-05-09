@@ -18,18 +18,29 @@
         }
 
         setItems(items) {
-            this._tbody.innerHTML = '';
+            this.clear();
+            this.addItems(items);
+        }
 
+        addItems(items) {
             items.forEach(item => {
-                const row = this._rowTemplate.cloneNode(true);
-                let cell = row.firstElementChild;
-                while (cell) {
-                    cell.textContent = item[cell.getAttribute("data-text")];
-                    cell = cell.nextElementSibling;
-                }
-                row.__item__ = item;
-                this._tbody.appendChild(row);
+                this.addItem(item);
             });
+        }
+
+        addItem(item) {
+            const row = this._rowTemplate.cloneNode(true);
+            let cell = row.firstElementChild;
+            while (cell) {
+                cell.textContent = item.__value__(cell.getAttribute("data-text"));
+                cell = cell.nextElementSibling;
+            }
+            row.__item__ = item;
+            this._tbody.appendChild(row);
+        }
+
+        clear() {
+            this._tbody.innerHTML = '';
         }
 
         /**

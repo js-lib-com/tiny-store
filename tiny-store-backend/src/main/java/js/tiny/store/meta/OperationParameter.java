@@ -4,7 +4,7 @@ public class OperationParameter {
 	private TypeDef type;
 	private String name;
 	private String description;
-	private boolean pathParam;
+	private boolean entityParam;
 	private ParameterFlag flag;
 
 	public TypeDef getType() {
@@ -31,12 +31,12 @@ public class OperationParameter {
 		this.description = description;
 	}
 
-	public boolean isPathParam() {
-		return pathParam;
+	public boolean isEntityParam() {
+		return entityParam;
 	}
 
-	public void setPathParam(boolean pathParam) {
-		this.pathParam = pathParam;
+	public void setEntityParam(boolean entityParam) {
+		this.entityParam = entityParam;
 	}
 
 	public ParameterFlag getFlag() {

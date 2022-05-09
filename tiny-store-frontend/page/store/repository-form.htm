@@ -1,0 +1,16 @@
+<side-dialog id="repository-form" class="hidden">
+    <h2>Create Repository</h2>
+    <form class="fill">
+        <input name="name" placeholder="name" />
+        <input name="display" placeholder="display" />
+        <textarea name="description" placeholder="description" class="optional"></textarea>
+        <input name="connectionString" placeholder="database connection" />
+        <input name="user" placeholder="database user" />
+        <input name="password" placeholder="database password" />
+    </form>
+    <div>
+        <button id="test-connection" type="button">Test</button>
+        <button id="save-store" type="button">Save</button>
+        <button id="cancel-store" type="button">Cancel</button>
+    </div>
+</side-dialog>

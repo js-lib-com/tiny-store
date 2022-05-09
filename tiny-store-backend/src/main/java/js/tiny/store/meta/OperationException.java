@@ -1,14 +1,14 @@
 package js.tiny.store.meta;
 
 public class OperationException {
-	private TypeDef type;
+	private String type;
 	private String cause;
 
-	public TypeDef getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(TypeDef type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

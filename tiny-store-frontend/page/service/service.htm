@@ -1,0 +1,47 @@
+<div data-template="template/page">
+    <div id="page-caption" data-content="caption">
+        <div class="logo"></div>
+        <h1 data-text="className"></h1>
+        <p data-text="description"></p>
+    </div>
+
+    <div data-content="menu">
+        <side-menu>
+            <li data-link="store.htm?${this._service.storePackage}" class="selected">Store</li>
+            <li data-link="operation.htm?${this._service.interfaceName}#${this._operationsListView.getSelectedItem().name}">Operation</li>
+        </side-menu>
+    </div>
+
+    <ul data-content="nav">
+        <li id="create-operation"><img src="@image/action/add" /><label>Create Field</label></li>
+        <li id="edit-operation"><img src="@image/action/edit" /><label>Edit Field</label></li>
+        <li id="delete-operation"><img src="@image/action/delete" /><label>Delete Field</label></li>
+    </ul>
+
+    <section data-content="section">
+        <table-view id="operations-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Parameters</th>
+                        <th>Value</th>
+                        <th>Exceptions</th>
+                        <th>REST Method</th>
+                        <th>REST Path</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-text="name"></td>
+                        <td data-text="parameters" data-format="ParametersFormat"></td>
+                        <td data-text="value.type.name"></td>
+                        <td data-text="exceptionsList"></td>
+                        <td data-text="restMethod"></td>
+                        <td data-text="restPath"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </table-view>
+    </section>
+</div>

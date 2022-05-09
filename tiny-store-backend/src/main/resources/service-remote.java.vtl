@@ -61,14 +61,14 @@ public interface ${service.interfaceName} {
 	 */
 	@${operation.restMethod}
 	@Path("/${operation.restPath}#foreach($param in $operation.parameters)#if($param.pathParam)/{${param.name}}#end#end")
-#if($operation.entityParameter)
+#if($operation.entityParam)
 	@Consumes("application/json")
 #end	
 #if($operation.databaseOpcode != "READ")
 	@Mutable
 #end
 	${operation.value.type}#*
-	*# ${operation.name}(#foreach($param in $operation.parameters)#if($param.pathParam)@PathParam("${param.name}")#*
+	*# ${operation.name}(#foreach($param in $operation.parameters)#if(!$param.entityParam)@PathParam("${param.name}")#*
 	*# #end$param.type $param.name#if($foreach.hasNext), #end#end)#*
 	*##if(!$operation.exceptions.empty) throws #foreach($exception in $operation.exceptions)${exception.type}#if($foreach.hasNext), #end#end#end;
 #end

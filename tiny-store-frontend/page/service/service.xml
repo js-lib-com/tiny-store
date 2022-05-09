@@ -1,0 +1,7 @@
+<page>
+    <title>Service Page</title>
+    <description>Service page description.</description>
+
+    <script src="gen/js/tiny/store/WorkspaceService.js" />
+    <script src="page/service/format.js" />
+</page>

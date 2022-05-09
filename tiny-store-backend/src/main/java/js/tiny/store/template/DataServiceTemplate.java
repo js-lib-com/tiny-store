@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.tool.Strings;
 
 public class DataServiceTemplate {
@@ -18,7 +19,7 @@ public class DataServiceTemplate {
 	private final SortedSet<String> imports;
 	private final List<ServiceOperationTemplate> operations;
 
-	public DataServiceTemplate(DataService dataService) {
+	public DataServiceTemplate(DataService dataService, List<ServiceOperation> operations) {
 		this.dataService = dataService;
 
 		this.implementationPackage = Strings.getPackageName(dataService.getClassName());
@@ -27,9 +28,7 @@ public class DataServiceTemplate {
 		this.interfaceName = Strings.getSimpleName(dataService.getInterfaceName());
 
 		this.operations = new ArrayList<>();
-		if (dataService.getOperations() != null) {
-			dataService.getOperations().forEach(operation -> this.operations.add(new ServiceOperationTemplate(operation)));
-		}
+		operations.forEach(operation -> this.operations.add(new ServiceOperationTemplate(operation)));
 
 		this.imports = new TreeSet<>();
 		this.operations.forEach(operation -> imports.addAll(operation.getImports()));

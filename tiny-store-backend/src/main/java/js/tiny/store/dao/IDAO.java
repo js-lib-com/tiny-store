@@ -4,6 +4,7 @@ import java.util.List;
 
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.Repository;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
@@ -20,7 +21,17 @@ public interface IDAO {
 	void deleteStore(String packageName);
 
 	List<DataService> findServicesByStore(String storePackage);
+
+	List<DataService> findServicesByRepository(String repositoryName);
 	
-	List<Repository> findRepositoryByStore(String storePackage);
+	List<Repository> findRepositoriesByStore(String storePackage);
+
+	Repository getRepository(String name);
+
+	StoreEntity getStoreEntity(String className);
+
+	DataService getDataService(String interfaceName);
+
+	List<ServiceOperation> findServiceOperations(String serviceInterface);
 	
 }

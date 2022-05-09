@@ -15,7 +15,9 @@ import jakarta.inject.Inject;
 import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.store.dao.IDAO;
+import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.Repository;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.tool.Project;
@@ -61,6 +63,34 @@ public class WorkspaceService {
 
 	public List<Store> getStores() throws IOException {
 		return dao.findStoresByOwner("irotaru");
+	}
+
+	public Store getStore(String packageName) {
+		return dao.getStoreByPackage(packageName);
+	}
+
+	public List<Repository> getRepositories(String storePackage) {
+		return dao.findRepositoriesByStore(storePackage);
+	}
+
+	public Repository getRepository(String name) {
+		return dao.getRepository(name);
+	}
+
+	public List<DataService> getServices(String repositoryName) {
+		return dao.findServicesByRepository(repositoryName);
+	}
+
+	public StoreEntity getEntity(String className) {
+		return dao.getStoreEntity(className);
+	}
+
+	public DataService getService(String interfaceName) {
+		return dao.getDataService(interfaceName);
+	}
+
+	public List<ServiceOperation> getOperations(String serviceInterface) {
+		return dao.findServiceOperations(serviceInterface);
 	}
 
 	public boolean testDataSource(Repository meta) throws PropertyVetoException {

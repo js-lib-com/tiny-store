@@ -13,6 +13,7 @@ import com.mongodb.client.MongoCollection;
 
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.Repository;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
@@ -59,5 +60,6 @@ class DAO<T> {
 		COLLECTIONS.put(Repository.class, "repository");
 		COLLECTIONS.put(StoreEntity.class, "entity");
 		COLLECTIONS.put(DataService.class, "service");
+		COLLECTIONS.put(ServiceOperation.class, "operation");
 	}
 }
