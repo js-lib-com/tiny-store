@@ -1,5 +1,6 @@
 package js.tiny.store.dao;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import com.mongodb.client.MongoCollection;
@@ -30,6 +32,14 @@ class DAO<T> {
 
 	public T get(String name, Object value) {
 		return collection.find(eq(name, value)).first();
+	}
+
+	public T filterAnd(Map<String, String> parameters) {
+		List<Bson> filters = new ArrayList<>();
+		for (Map.Entry<String, String> entry : parameters.entrySet()) {
+			filters.add(eq(entry.getKey(), entry.getValue()));
+		}
+		return collection.find(and(filters)).first();
 	}
 
 	public List<T> find(String name, Object value) {

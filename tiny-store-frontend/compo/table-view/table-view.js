@@ -32,7 +32,11 @@
             const row = this._rowTemplate.cloneNode(true);
             let cell = row.firstElementChild;
             while (cell) {
-                cell.textContent = item.__value__(cell.getAttribute("data-text"));
+                let value = item.__value__(cell.getAttribute("data-text"));
+                if (cell.hasAttribute("data-format")) {
+                    value = FormatFactory.get(cell.getAttribute("data-format")).format(value);
+                }
+                cell.textContent = value;
                 cell = cell.nextElementSibling;
             }
             row.__item__ = item;

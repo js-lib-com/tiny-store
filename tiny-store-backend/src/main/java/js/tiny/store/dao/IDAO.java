@@ -33,5 +33,7 @@ public interface IDAO {
 	DataService getDataService(String interfaceName);
 
 	List<ServiceOperation> findServiceOperations(String serviceInterface);
+
+	ServiceOperation getServiceOperation(String serviceInterface, String methodName);
 	
 }

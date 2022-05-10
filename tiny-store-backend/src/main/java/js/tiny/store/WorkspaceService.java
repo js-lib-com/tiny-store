@@ -93,6 +93,10 @@ public class WorkspaceService {
 		return dao.findServiceOperations(serviceInterface);
 	}
 
+	public ServiceOperation getOperation(String serviceInterface, String methodName) {
+		return dao.getServiceOperation(serviceInterface, methodName);
+	}
+
 	public boolean testDataSource(Repository meta) throws PropertyVetoException {
 		if (meta.getConnectionString().startsWith("jdbc:")) {
 			// jdbc data source

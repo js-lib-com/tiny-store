@@ -54,8 +54,7 @@ Object.prototype.__value__ = function (propertyPath) {
 	const parts = propertyPath.split('.');
 	let value = this;
 	for (let i = 0; i < parts.length; ++i) {
-		const property = value[parts[i]];
-		value = typeof property == "function" ? property() : property;
+		value = value[parts[i]];
 	}
 	return value;
 };

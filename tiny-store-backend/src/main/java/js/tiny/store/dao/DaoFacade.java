@@ -1,6 +1,8 @@
 package js.tiny.store.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -85,5 +87,13 @@ public class DaoFacade implements IDAO {
 	@Override
 	public List<ServiceOperation> findServiceOperations(String serviceInterface) {
 		return operationDAO.find("serviceInterface", serviceInterface);
+	}
+
+	@Override
+	public ServiceOperation getServiceOperation(String serviceInterface, String name) {
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("serviceInterface", serviceInterface);
+		parameters.put("name", name);
+		return operationDAO.filterAnd(parameters);
 	}
 }
