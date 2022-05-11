@@ -34,12 +34,12 @@ class DAO<T> {
 		return collection.find(eq(name, value)).first();
 	}
 
-	public T filterAnd(Map<String, String> parameters) {
-		List<Bson> filters = new ArrayList<>();
-		for (Map.Entry<String, String> entry : parameters.entrySet()) {
-			filters.add(eq(entry.getKey(), entry.getValue()));
+	public T filterAnd(Map<String, String> filters) {
+		List<Bson> equalExpressions = new ArrayList<>();
+		for (Map.Entry<String, String> entry : filters.entrySet()) {
+			equalExpressions.add(eq(entry.getKey(), entry.getValue()));
 		}
-		return collection.find(and(filters)).first();
+		return collection.find(and(equalExpressions)).first();
 	}
 
 	public List<T> find(String name, Object value) {
@@ -52,8 +52,12 @@ class DAO<T> {
 		collection.insertOne(t);
 	}
 
-	public void update(T t) {
-
+	public void update(Map<String, String> filters, T t) {
+		List<Bson> equalExpressions = new ArrayList<>();
+		for (Map.Entry<String, String> entry : filters.entrySet()) {
+			equalExpressions.add(eq(entry.getKey(), entry.getValue()));
+		}
+		collection.replaceOne(and(equalExpressions), t);
 	}
 
 	public void delete(String id) {

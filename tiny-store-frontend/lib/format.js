@@ -3,6 +3,7 @@ FormatFactory = {
         switch (className) {
             case "ParametersFormat": return ParametersFormat;
             case "TypeFormat": return TypeFormat;
+            case "BooleanFormat": return BooleanFormat;
             default: throw `Not defined formatter class ${className}.`;
         }
     }
@@ -20,5 +21,15 @@ TypeFormat = {
             return type.name;
         }
         return `${type.collection}<${type.name}>`;
+    }
+}
+
+BooleanFormat = {
+    format(object) {
+
+    },
+
+    parse(string) {
+
     }
 }

@@ -4,24 +4,55 @@
         constructor() {
             super();
 
-            let elements = this.getElementsByName("positive");
-            if (elements.length === 0) {
+            this._titleView = this.getElementsByTagName("h2")[0];
+            this._form = this.getElementsByTagName("object-form")[0];
+
+            let positiveButton = this.querySelector("[name=positive]");
+            if (!positiveButton) {
                 throw "Invalid side dialog. Missing positive button.";
             }
-            elements[0].addEventListener("click", this._onPositiveButton.bind(this));
+            positiveButton.addEventListener("click", this._onPositiveButton.bind(this));
 
-            elements = this.getElementsByName("negative");
-            if (elements.length === 0) {
+            let negativeButton = this.querySelector("[name=negative]");
+            if (!negativeButton) {
                 throw "Invalid side dialog. Missing negative button.";
             }
-            elements[0].addEventListener("click", this._onNegativeButton.bind(this));
+            negativeButton.addEventListener("click", this._onNegativeButton.bind(this));
+        }
+
+        setTitle(title) {
+            this._titleView.textContent = title;
         }
 
         open(callback) {
+            this.classList.remove("hidden");
+            this._callback = callback;
 
+            if (this._form) {
+                this._form.reset();
+            }
+        }
+
+        edit(object, callback) {
+            this.classList.remove("hidden");
+            this._callback = callback;
+
+            if (!this._form) {
+                throw "Invalid side dialog. Missing form.";
+            }
+            this._form.setObject(object);
         }
 
         _onPositiveButton() {
+            if (this._form) {
+                if (!this._form.isValid()) {
+                    return;
+                }
+                this._callback(this._form.getObject());
+            }
+            else {
+                this._callback();
+            }
             this.classList.add("hidden");
         }
 

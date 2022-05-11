@@ -1,0 +1,24 @@
+<side-dialog id="parameter-form" class="hidden">
+    <h2>Parameter Entity</h2>
+    
+    <object-form class="fill">
+        <input name="type.name" placeholder="type" />
+        <input name="type.collection" placeholder="collection" class="optional" />
+        <input name="name" placeholder="name" />
+        <textarea name="description" placeholder="description" class="optional"></textarea>
+        <select name="entityParam" data-format="BooleanFormat">
+            <option value="false">Path Parameter</option>
+            <option value="true">Entity Parameter</option>
+        </select>
+        <select name="flag" class="optional">
+            <option></option>
+            <option value="FIRST_RESULT">First Result</option>
+            <option value="MAX_RESULTS">Max Results</option>
+        </select>
+    </object-form>
+
+    <div>
+        <button type="button" name="positive">Save</button>
+        <button type="button" name="negative">Cancel</button>
+    </div>
+</side-dialog>

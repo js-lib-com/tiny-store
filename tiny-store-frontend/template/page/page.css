@@ -151,6 +151,7 @@ body>.side-dialog {
 body>.side-dialog side-dialog {
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 body>.side-dialog .fill {

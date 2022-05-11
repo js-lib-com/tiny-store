@@ -12,31 +12,24 @@
     </div>
 
     <ul data-content="nav">
-        <li id="create-parameter"><img src="@image/action/add" /><label>Create Parameter</label></li>
-        <li id="edit-parameter"><img src="@image/action/edit" /><label>Edit Parameter</label></li>
-        <li id="delete-parameter"><img src="@image/action/delete" /><label>Delete Parameter</label></li>
+        <li id="add-parameter"><img src="@image/action/add" /><label>Add Parameter</label></li>
+        <li id="edit-parameter" class="hidden"><img src="@image/action/edit" /><label>Edit Parameter</label></li>
+        <li id="delete-parameter" class="hidden"><img src="@image/action/delete" /><label>Delete Parameter</label></li>
+        <li id="add-exception"><img src="@image/action/add" /><label>Add Exception</label></li>
+        <li id="edit-exception" class="hidden"><img src="@image/action/edit" /><label>Edit Exception</label></li>
+        <li id="delete-exception" class="hidden"><img src="@image/action/delete" /><label>Delete Exception</label></li>
     </ul>
 
     <section data-content="section">
-        <table-view id="parameters-list">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Entity Param</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-text="type" data-format="TypeFormat"></td>
-                        <td data-text="name"></td>
-                        <td data-text="description"></td>
-                        <td data-text="entityParam"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </table-view>
+        <table-view data-compo="page/operation/parameters-list"></table-view>
+        <table-view data-compo="page/operation/exceptions-list"></table-view>
     </section>
+
+	<section data-content="side-dialog">
+		<side-dialog data-compo="page/operation/parameter-form"></side-dialog>
+		<side-dialog data-compo="page/operation/parameter-delete"></side-dialog>
+		<side-dialog data-compo="page/operation/exception-form"></side-dialog>
+		<side-dialog data-compo="page/operation/exception-delete"></side-dialog>
+	</section>
+
 </div>

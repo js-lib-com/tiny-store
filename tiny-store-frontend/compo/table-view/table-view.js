@@ -30,16 +30,7 @@
 
         addItem(item) {
             const row = this._rowTemplate.cloneNode(true);
-            let cell = row.firstElementChild;
-            while (cell) {
-                let value = item.__value__(cell.getAttribute("data-text"));
-                if (cell.hasAttribute("data-format")) {
-                    value = FormatFactory.get(cell.getAttribute("data-format")).format(value);
-                }
-                cell.textContent = value;
-                cell = cell.nextElementSibling;
-            }
-            row.__item__ = item;
+            this._setRowItem(row, item);
             this._tbody.appendChild(row);
         }
 
@@ -57,6 +48,40 @@
 
         getSelectedItem() {
             return this._selectedRow != null ? this._selectedRow.__item__ : null;
+        }
+
+        setSelectedItem(item) {
+            if (this._selectedRow == null) {
+                throw "Illegal state: no row selected.";
+            }
+            this._setRowItem(this._selectedRow, item);
+        }
+
+        _setRowItem(row, item) {
+            let cell = row.firstElementChild;
+            while (cell) {
+                let value = OPP.get(item, cell.getAttribute("data-text"));
+                if (cell.hasAttribute("data-format")) {
+                    value = FormatFactory.get(cell.getAttribute("data-format")).format(value);
+                }
+                cell.textContent = value;
+                cell = cell.nextElementSibling;
+            }
+            row.__item__ = item;
+        }
+
+        getSelectedIndex() {
+            if (this._selectedRow == null) {
+                return -1;
+            }
+            return Array.prototype.indexOf.call(this._tbody.children, this._selectedRow);
+        }
+
+        deleteSelectedRow() {
+            if (this._selectedRow) {
+                this._select(this._selectedRow, false);
+                this._selectedRow.parentElement.removeChild(this._selectedRow);
+            }
         }
 
         _onClick(event) {

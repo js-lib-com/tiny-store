@@ -34,6 +34,8 @@ public interface IDAO {
 
 	List<ServiceOperation> findServiceOperations(String serviceInterface);
 
-	ServiceOperation getServiceOperation(String serviceInterface, String methodName);
+	ServiceOperation getServiceOperation(String serviceInterface, String name);
+
+	void saveServiceOperation(ServiceOperation operation);
 	
 }

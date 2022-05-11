@@ -91,9 +91,17 @@ public class DaoFacade implements IDAO {
 
 	@Override
 	public ServiceOperation getServiceOperation(String serviceInterface, String name) {
-		Map<String, String> parameters = new HashMap<>();
-		parameters.put("serviceInterface", serviceInterface);
-		parameters.put("name", name);
-		return operationDAO.filterAnd(parameters);
+		Map<String, String> filters = new HashMap<>();
+		filters.put("serviceInterface", serviceInterface);
+		filters.put("name", name);
+		return operationDAO.filterAnd(filters);
+	}
+
+	@Override
+	public void saveServiceOperation(ServiceOperation operation) {
+		Map<String, String> filters = new HashMap<>();
+		filters.put("serviceInterface", operation.getServiceInterface());
+		filters.put("name", operation.getName());
+		operationDAO.update(filters, operation);
 	}
 }

@@ -93,8 +93,12 @@ public class WorkspaceService {
 		return dao.findServiceOperations(serviceInterface);
 	}
 
-	public ServiceOperation getOperation(String serviceInterface, String methodName) {
-		return dao.getServiceOperation(serviceInterface, methodName);
+	public ServiceOperation getOperation(String serviceInterface, String name) {
+		return dao.getServiceOperation(serviceInterface, name);
+	}
+
+	public void saveOperation(ServiceOperation operation) {
+		dao.saveServiceOperation(operation);
 	}
 
 	public boolean testDataSource(Repository meta) throws PropertyVetoException {
