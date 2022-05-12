@@ -1,0 +1,6 @@
+<template>
+    <groupId>com.js-lib.web</groupId>
+    <artifactId>js-select</artifactId>
+    <version>1.0</version>
+    <description>j(s) Select.</description>
+</template>

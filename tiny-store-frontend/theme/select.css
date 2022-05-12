@@ -1,0 +1,36 @@
+select {
+    display: block;
+    min-width: 50%;
+    margin-top: 40px;
+    background: white;
+    border: none;
+    border-bottom: solid 1px cadetblue;
+    padding: 4px 20px 4px 4px;
+    font-size: 14px;
+}
+
+select.invalid {
+    border-bottom-color: red;
+}
+
+select:focus {
+    outline: none;
+}
+
+select:invalid {
+    color: lightgray;
+}
+
+select:hover {
+    background: white;
+}
+
+option {
+    background: white;
+    border: solid 1px lightgray;
+    padding: 2px;
+}
+
+option:hover {
+    background: white;
+}
