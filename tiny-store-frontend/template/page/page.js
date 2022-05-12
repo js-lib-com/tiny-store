@@ -1,14 +1,7 @@
-Page = class extends js.ua.Page {
+class Page {
 	constructor() {
-		super();
-
 		const sideMenu = document.getElementsByTagName("side-menu")[0];
 		sideMenu.bind(this);
-	}
-
-	onServerFail(er) {
-		$error("Page#onServerFail", "%s: %s", er.cause, er.message);
-		js.ua.System.error("Server error. Please contact administrator.");
 	}
 
 	_menu(id, listener, scope) {
@@ -30,7 +23,7 @@ Page = class extends js.ua.Page {
 	_inject(element, object) {
 		const propertyPath = element.getAttribute("data-text");
 		if (propertyPath) {
-			element.textContent = object.__value__(propertyPath);
+			element.textContent = OPP.get(object, propertyPath);
 			return;
 		}
 		let childElement = element.firstElementChild;
@@ -50,11 +43,8 @@ Page = class extends js.ua.Page {
 	}
 };
 
-Object.prototype.__value__ = function (propertyPath) {
-	const parts = propertyPath.split('.');
-	let value = this;
-	for (let i = 0; i < parts.length; ++i) {
-		value = value[parts[i]];
+WinMain = {
+	createPage(pageClass) {
+		document.addEventListener("DOMContentLoaded", event => this._page = new pageClass());
 	}
-	return value;
-};
+}

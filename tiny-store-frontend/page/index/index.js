@@ -5,29 +5,25 @@ IndexPage = class extends Page {
 		this._storesListView = document.getElementById("stores-list-view");
 		this._storesListView.addEventListener("select", this._onStoreItemSelect.bind(this));
 
-		this._storeFormSection = this.getById("store-form-section");
-		this._storeForm = this.getById("store-form");
+		this._storeForm = document.getElementById("store-form");
 
-		this._editStoreAction = this.getById("edit-store");
-		this._deleteStoreAction = this.getById("delete-store");
-
-		this.getById("create-store").on("click", this._onCreateStore, this);
-		this._editStoreAction.on("click", this._onEditStore, this);
-		this._deleteStoreAction.on("click", this._onDeleteStore, this);
-		this.getById("save-store").on("click", this._onSaveStore, this);
-		this.getById("cancel-store").on("click", this._onCancelStore, this);
+		this._menu("create-store", this._onCreateStore, this);
+		this._menu("edit-store", this._onEditStore, this);
+		this._menu("delete-store", this._onDeleteStore, this);
+		this._menu("save-store", this._onSaveStore, this);
+		this._menu("cancel-store", this._onCancelStore, this);
 
 		WorkspaceService.getStores(stores => this._storesListView.setItems(stores));
 	}
 
 	_onCreateStore(ev) {
 		console.log(`${this}#_onCreateStore(ev)`);
-		this._storeFormSection.show();
+		this._show("store-form-section", true);
 	}
 
 	_onEditStore(ev) {
 		console.log(`${this}#_onEditStore(ev)`);
-		this._storeFormSection.show();
+		this._show("store-form-section", true);
 	}
 
 	_onDeleteStore(ev) {
@@ -48,7 +44,7 @@ IndexPage = class extends Page {
 			WorkspaceService.createStore(store, stores => {
 				this._storeForm.reset();
 				this._storesListView.setItems(stores);
-				this._storeFormSection.hide();
+				this._show("store-form-section", false);
 			});
 		}
 	}
@@ -56,7 +52,7 @@ IndexPage = class extends Page {
 	_onCancelStore(ev) {
 		console.log(`${this}#_onCancelStore(ev)`);
 		this._storeForm.reset();
-		this._storeFormSection.hide();
+		this._show("store-form-section", false);
 	}
 
 	_onStoreItemSelect(event) {
@@ -65,8 +61,9 @@ IndexPage = class extends Page {
 	}
 
 	_showActions(show) {
-		this._editStoreAction.show(show);
-		this._deleteStoreAction.show(show);
+		this._show("edit-store", show);
+		this._show("delete-store", show);
+
 	}
 
 	// ------------------------------------------------------------------------
