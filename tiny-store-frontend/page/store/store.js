@@ -23,8 +23,7 @@ StorePage = class extends Page {
 
 	_onStoreLoaded(store) {
 		this._store = store;
-		const pageCaption = document.getElementById("page-caption");
-		this._inject(pageCaption, store);
+		this._setObject(store);
 	}
 
 	_onRepositorySelect(event) {

@@ -24,10 +24,7 @@ OperationPage = class extends Page {
 
     _onOperationLoaded(operation) {
         this._operation = operation;
-        const pageCaption = document.getElementById("page-caption");
-        this._inject(pageCaption, operation);
-        this._parametersListView.setItems(operation.parameters);
-        this._exceptionsListView.setItems(operation.exceptions);
+        this._setObject(operation);
     }
 
     // --------------------------------------------------------------------

@@ -1,0 +1,6 @@
+<template>
+    <groupId>com.js-lib.web</groupId>
+    <artifactId>object-view</artifactId>
+    <version>1.0</version>
+    <description>Object View.</description>
+</template>

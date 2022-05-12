@@ -1,4 +1,5 @@
 <div data-template="template/page">
+
     <div id="page-caption" data-content="caption">
         <div class="logo"></div>
         <h1><span data-text="serviceInterface"></span><span>#</span><span data-text="name"></span></h1>
@@ -17,19 +18,31 @@
         <li id="delete-parameter" class="hidden"><img src="@image/action/delete" /><label>Delete Parameter</label></li>
         <li id="add-exception"><img src="@image/action/add" /><label>Add Exception</label></li>
         <li id="edit-exception" class="hidden"><img src="@image/action/edit" /><label>Edit Exception</label></li>
-        <li id="delete-exception" class="hidden"><img src="@image/action/delete" /><label>Delete Exception</label></li>
+        <li id="delete-exception" class="hidden"><img src="@image/action/delete" /><label>Delete Exception</label>
+        </li>
     </ul>
 
-    <section data-content="section">
-        <table-view data-compo="page/operation/parameters-list"></table-view>
-        <table-view data-compo="page/operation/exceptions-list"></table-view>
+    <section data-content="content">
+        <dl>
+            <dt>REST Method</dt>
+            <dd data-text="restMethod"></dd>
+            <dt>REST Path</dt>
+            <dd data-text="restPath"></dd>
+            <dt>Data Opcode</dt>
+            <dd data-text="dataOpcode"></dd>
+            <dt>Query</dt>
+            <dd data-text="query"></dd>
+        </dl>
+
+        <table-view data-compo="page/operation/parameters-list" data-list="parameters"></table-view>
+        <table-view data-compo="page/operation/exceptions-list" data-list="exceptions"></table-view>
     </section>
 
-	<section data-content="side-dialog">
-		<side-dialog data-compo="page/operation/parameter-form"></side-dialog>
-		<side-dialog data-compo="page/operation/parameter-delete"></side-dialog>
-		<side-dialog data-compo="page/operation/exception-form"></side-dialog>
-		<side-dialog data-compo="page/operation/exception-delete"></side-dialog>
-	</section>
+    <section data-content="side-dialog">
+        <side-dialog data-compo="page/operation/parameter-form"></side-dialog>
+        <side-dialog data-compo="page/operation/parameter-delete"></side-dialog>
+        <side-dialog data-compo="page/operation/exception-form"></side-dialog>
+        <side-dialog data-compo="page/operation/exception-delete"></side-dialog>
+    </section>
 
 </div>

@@ -1,7 +1,9 @@
 body {
     display: grid;
     grid-template-columns: @dimen/aside-width @dimen/menu-width 1fr @dimen/side-form-width;
+    grid-template-columns: @dimen/aside-width 1fr @dimen/side-form-width;
     grid-template-rows: @dimen/header-height @dimen/caption-height @dimen/nav-height 1fr @dimen/footer-height;
+    grid-template-rows: @dimen/header-height 1fr @dimen/footer-height;
     width: 100vw;
     height: 100vh;
     margin: 0;
@@ -19,7 +21,7 @@ body > * {
 body>header {
     display: flex;
     flex-direction: row;
-    grid-column: 1/5;
+    grid-column: 1/4;
     grid-row: 1;
     background-color: cornflowerblue;
 }
@@ -40,7 +42,7 @@ body>header .icon:hover {
 
 body>aside {
     grid-column: 1;
-    grid-row: 2/6;
+    grid-row: 2/4;
     border-right: solid 1px lightgray;
     background-color: #F0F0F0;
 }
@@ -55,9 +57,17 @@ body>aside .icon:hover {
     background-color: #E0E0E0;
 }
 
-body>.caption {
-    grid-column: 2/4;
+body>object-view {
+    grid-column: 2;
     grid-row: 2;
+    display: grid;
+    grid-template-columns: @dimen/menu-width 1fr;
+    grid-template-rows: @dimen/caption-height @dimen/nav-height 1fr;
+}
+
+body>object-view>.caption {
+    grid-column: 1/3;
+    grid-row: 1;
     border-bottom: solid 1px lightgray;
     padding-left: 20px;
     padding-top: 20px;
@@ -65,9 +75,9 @@ body>.caption {
     xvertical-align: middle;
 }
 
-body>.menu {
-    grid-column: 2;
-    grid-row: 3/5;
+body>object-view>.menu {
+    grid-column: 1;
+    grid-row: 2/4;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -75,7 +85,7 @@ body>.menu {
     background-color: #ffffff;
 }
 
-body>.menu li {
+body>object-view>.menu li {
     width: @dimen/menu-item-width;
     height: @dimen/menu-item-height;
     line-height: @dimen/menu-item-height;
@@ -84,28 +94,28 @@ body>.menu li {
     border-left: solid 4px transparent;
 }
 
-body>.menu li.selected {
+body>object-view>.menu li.selected {
     background-color: #F0F0F0;
     border-left-color: cornflowerblue;
     color: black;
 }
 
-body>.menu li:hover {
+body>object-view>.menu li:hover {
     border-left-color: cadetblue;
 }
 
-body>nav {
-    grid-column: 3;
-    grid-row: 3;
+body>object-view>nav {
+    grid-column: 2;
+    grid-row: 2;
     border-bottom: solid 1px lightgray;
 }
 
-body>nav ul {
+body>object-view>nav ul {
     list-style: none;
     margin: 0;
 }
 
-body>nav ul li {
+body>object-view>nav ul li {
     display: inline-block;
     line-height: @dimen/nav-height;
     padding-left: 10px;
@@ -113,20 +123,20 @@ body>nav ul li {
     cursor: pointer;
 }
 
-body>nav ul li.disabled {
+body>object-view>nav ul li.disabled {
     opacity: 0.4;
     cursor: default;
 }
 
-body>nav ul li:hover {
+body>object-view>nav ul li:hover {
     background-color: #F0F0F0;
 }
 
-body>nav ul li img {
+body>object-view>nav ul li img {
     vertical-align: middle;
 }
 
-body>nav ul li label {
+body>object-view>nav ul li label {
     color: cornflowerblue;
     cursor: inherit;
 }
@@ -135,14 +145,14 @@ label {
     font-size: 14px;
 }
 
-body>.content {
-    grid-column: 3;
-    grid-row: 4;
+body>object-view>.content {
+    grid-column: 2;
+    grid-row: 3;
 }
 
 body>.side-dialog {
-    grid-column: 4;
-    grid-row: 2/5;
+    grid-column: 3;
+    grid-row: 2;
     border-left: solid 1px lightgray;
     margin: 0 0 0 20px;
     padding: 20px;
@@ -159,8 +169,8 @@ body>.side-dialog .fill {
 }
 
 body>footer {
-    grid-column: 2/5;
-    grid-row: 5;
+    grid-column: 2/4;
+    grid-row: 3;
     line-height: 47px;
     vertical-align: middle;
     padding-left: 20px;

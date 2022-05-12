@@ -4,6 +4,11 @@ class Page {
 		sideMenu.bind(this);
 	}
 
+	_setObject(object) {
+		const pageView = document.getElementById("page-view");
+		pageView.setObject(object);
+	}
+
 	_menu(id, listener, scope) {
 		const element = document.getElementById(id);
 		if (!element) {
@@ -18,19 +23,6 @@ class Page {
 			throw `Missing element with id ${id}.`;
 		}
 		element.classList[show ? "remove" : "add"]("hidden");
-	}
-
-	_inject(element, object) {
-		const propertyPath = element.getAttribute("data-text");
-		if (propertyPath) {
-			element.textContent = OPP.get(object, propertyPath);
-			return;
-		}
-		let childElement = element.firstElementChild;
-		while (childElement) {
-			this._inject(childElement, object);
-			childElement = childElement.nextElementSibling;
-		}
 	}
 
 	/**

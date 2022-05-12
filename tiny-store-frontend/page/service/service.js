@@ -11,8 +11,7 @@ ServicePage = class extends Page {
 
     _onServiceLoaded(service) {
         this._service = service;
-        const pageCaption = document.getElementById("page-caption");
-        this._inject(pageCaption, service);
+        this._setObject(service);
     }
 
     toString() {

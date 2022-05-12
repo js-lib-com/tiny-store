@@ -13,15 +13,17 @@
 		<span class="icon"><img src="@image/action/menu-book" /></span>
 		<span class="icon"><img src="@image/action/info" /></span>
 	</aside>
-	
-	<div class="caption" data-editable="caption"></div>
-	<div class="menu" data-editable="menu"></div>
 
-	<nav>
-		<ul data-editable="nav"></ul>
-	</nav>
-	<section class="content" data-editable="section"></section>
+	<object-view id="page-view">
+		<div class="caption" data-editable="caption"></div>
+		<div class="menu" data-editable="menu" data-exclude="true"></div>
+
+		<nav data-exclude="true">
+			<ul data-editable="nav"></ul>
+		</nav>
+		<section class="content" data-editable="content"></section>
+	</object-view>
+
 	<section class="side-dialog" data-editable="side-dialog"></section>
-	
 	<footer>@string/app-rights</footer>
 </body>

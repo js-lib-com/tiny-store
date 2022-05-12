@@ -10,8 +10,7 @@ EntityPage = class extends Page {
 
     _onEntityLoaded(entity) {
         this._entity = entity;
-        const pageCaption = document.getElementById("page-caption");
-        this._inject(pageCaption, entity);
+        this._setObject(entity);
         this._fieldsListView.addItem(entity.identity);
         this._fieldsListView.addItems(this._entity.fields);
     }

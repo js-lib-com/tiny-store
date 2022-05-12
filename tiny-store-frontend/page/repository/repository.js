@@ -11,8 +11,7 @@ RepositoryPage = class extends Page {
 
     _onRepositoryLoaded(repository) {
         this._repository = repository;
-        const pageCaption = document.getElementById("page-caption");
-        this._inject(pageCaption, repository);
+        this._setObject(repository);
     }
 
     toString() {
