@@ -11,6 +11,12 @@
     --menu-item-width: 200px;
     --menu-item-height: 3rem;
     --icon-size: 48px;
+	--p-space: 20px;
+	--dt-head-space: 4px;
+    --content-padding: 40px;
+    --side-dialog-padding: 20px;
+    --dl-font-size: 1.3rem;
+    --section-space: 40px;
 }
 
 /** colors */

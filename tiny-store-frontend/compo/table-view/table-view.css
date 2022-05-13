@@ -1,7 +1,6 @@
 table {
     border-collapse: collapse;
-    margin-top: 60px;
-    margin-left: 40px;
+    margin-top: var(--section-space);
     margin-right: 20px;
 }
 
@@ -25,7 +24,8 @@ table th {
     color: black;
 }
 
-table th, table td {
+table th,
+table td {
     white-space: nowrap;
     padding: 8px 24px;
     text-align: left;

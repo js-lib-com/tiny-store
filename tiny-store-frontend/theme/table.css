@@ -1,7 +1,6 @@
 table {
     border-collapse: collapse;
-    margin-top: 60px;
-    margin-left: 40px;
+    margin-top: var(--section-space);
     margin-right: 20px;
 }
 

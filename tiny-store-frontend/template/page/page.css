@@ -148,14 +148,15 @@ body>object-view>.content {
     grid-column: 2;
     grid-row: 3;
     overflow-y: auto;
+    padding: var(--content-padding) 0 0 var(--content-padding);
 }
 
 body>.side-dialog {
     grid-column: 3;
     grid-row: 2;
     border-left: solid 1px lightgray;
-    margin: 0 0 0 20px;
-    padding: 20px;
+    margin: 0 0 0 var(--side-dialog-padding);
+    padding: var(--side-dialog-padding);
     overflow: hidden;
 }
 
