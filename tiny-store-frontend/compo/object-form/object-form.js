@@ -21,9 +21,14 @@
             });
         }
 
-        getObject() {
-            let object = {};
-            this._inputs.forEach(input => OPP.set(object, input.getAttribute("name"), input.value.trim()));
+        getObject(object) {
+            if (typeof object === "undefined") {
+                object = {};
+            }
+            this._inputs.forEach(input => {
+                const value = input.value.trim();
+                OPP.set(object, input.getAttribute("name"), value || null);
+            });
             return object;
         }
 

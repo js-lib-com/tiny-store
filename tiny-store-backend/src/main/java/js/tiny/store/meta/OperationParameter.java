@@ -4,7 +4,7 @@ public class OperationParameter {
 	private TypeDef type;
 	private String name;
 	private String description;
-	private boolean entityParam;
+	private RestParameter restParameter;
 	private ParameterFlag flag;
 
 	public TypeDef getType() {
@@ -31,12 +31,12 @@ public class OperationParameter {
 		this.description = description;
 	}
 
-	public boolean isEntityParam() {
-		return entityParam;
+	public RestParameter getRestParameter() {
+		return restParameter;
 	}
 
-	public void setEntityParam(boolean entityParam) {
-		this.entityParam = entityParam;
+	public void setRestParameter(RestParameter restParameter) {
+		this.restParameter = restParameter;
 	}
 
 	public ParameterFlag getFlag() {

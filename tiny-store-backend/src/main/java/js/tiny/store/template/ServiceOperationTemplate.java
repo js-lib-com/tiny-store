@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import js.tiny.store.meta.DataOpcode;
 import js.tiny.store.meta.OperationException;
+import js.tiny.store.meta.RestParameter;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.TypeDef;
 import js.tiny.store.tool.Strings;
@@ -36,7 +37,7 @@ public class ServiceOperationTemplate {
 			serviceOperation.getParameters().forEach(parameter -> {
 				addImport(parameter.getType());
 				this.parameters.add(new OperationParameterTemplate(parameter));
-				if (parameter.isEntityParam()) {
+				if (parameter.getRestParameter() == RestParameter.ENTITY_PARAM) {
 					entityParam.set(true);
 				}
 			});

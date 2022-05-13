@@ -23,6 +23,7 @@ import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
 import js.tiny.store.meta.Repository;
+import js.tiny.store.meta.RestParameter;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
@@ -117,12 +118,12 @@ public class SourceFileTest {
 		when(parameter1.getType()).thenReturn(new TypeDef("ro.gnotis.omsx.model.CallCoordinates"));
 		when(parameter1.getName()).thenReturn("phoneNumber");
 		when(parameter1.getDescription()).thenReturn("customer phone number");
-		when(parameter1.isEntityParam()).thenReturn(true);
+		when(parameter1.getRestParameter()).thenReturn(RestParameter.ENTITY_PARAM);
 
 		when(parameter2.getType()).thenReturn(new TypeDef(String.class.getCanonicalName()));
 		when(parameter2.getName()).thenReturn("userName");
 		when(parameter2.getDescription()).thenReturn("user name");
-		when(parameter2.isEntityParam()).thenReturn(true);
+		when(parameter2.getRestParameter()).thenReturn(RestParameter.ENTITY_PARAM);
 	}
 
 	@Test

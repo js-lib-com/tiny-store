@@ -13,6 +13,8 @@ OperationPage = class extends Page {
         const methodName = methodQualifiedName[1];
         WorkspaceService.getOperation(serviceInterface, methodName, this._onOperationLoaded, this);
 
+        this._menu("edit-operation", this._onEditOperation, this);
+
         this._menu("add-parameter", this._onAddParameter, this);
         this._menu("edit-parameter", this._onEditParameter, this);
         this._menu("delete-parameter", this._onDeleteParameter, this);
@@ -25,6 +27,15 @@ OperationPage = class extends Page {
     _onOperationLoaded(operation) {
         this._operation = operation;
         this._setObject(operation);
+    }
+
+    _onEditOperation(event) {
+        const dialog = document.getElementById("operation-form");
+        // dialog 'update' performs changes on  this._operation instance
+        dialog.update(this._operation, () => {
+            this._setObject(this._operation);
+            this._saveOperation();
+        });
     }
 
     // --------------------------------------------------------------------

@@ -1,0 +1,31 @@
+<side-dialog id="operation-form" class="hidden">
+    <h2>Edit Operation</h2>
+
+    <object-form class="fill">
+        <textarea name="description" placeholder="description" class="optional"></textarea>
+
+        <select name="restMethod">
+            <option selected="selected">GET</option>
+            <option>POST</option>
+            <option>PUT</option>
+            <option>DELETE</option>
+        </select>
+        <input name="restPath" placeholder="REST path" />
+
+        <input name="value.type.name" placeholder="value type" />
+        <input name="value.type.collection" placeholder="value collection" class="optional" />
+
+        <select name="dataOpcode">
+            <option selected="selected">CREATE</option>
+            <option>READ</option>
+            <option>UPDATE</option>
+            <option>DELETE</option>
+        </select>
+        <textarea name="query" placeholder="query" class="optional"></textarea>
+    </object-form>
+    
+    <div>
+        <button type="button" name="positive">Save</button>
+        <button type="button" name="negative">Cancel</button>
+    </div>
+</side-dialog>

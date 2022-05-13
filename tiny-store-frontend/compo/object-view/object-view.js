@@ -13,12 +13,15 @@
             const propertyPath = element.getAttribute("data-text");
             if (propertyPath) {
                 let value = OPP.get(object, propertyPath);
-                if (element.hasAttribute("data-format")) {
-                    value = FormatFactory.get(element.getAttribute("data-format")).format(value);
+                if (value) {
+                    if (element.hasAttribute("data-format")) {
+                        value = FormatFactory.get(element.getAttribute("data-format")).format(value);
+                    }
+                    element.textContent = value;
                 }
-                element.textContent = value;
                 return;
             }
+
             let childElement = element.firstElementChild;
             while (childElement) {
                 if (childElement.hasAttribute("data-exclude")) {

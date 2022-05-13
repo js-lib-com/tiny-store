@@ -36,6 +36,18 @@
         edit(object, callback) {
             this.classList.remove("hidden");
             this._callback = callback;
+            this._object = {};
+
+            if (!this._form) {
+                throw "Invalid side dialog. Missing form.";
+            }
+            this._form.setObject(object);
+        }
+
+        update(object, callback) {
+            this.classList.remove("hidden");
+            this._callback = callback;
+            this._object = object;
 
             if (!this._form) {
                 throw "Invalid side dialog. Missing form.";
@@ -48,7 +60,7 @@
                 if (!this._form.isValid()) {
                     return;
                 }
-                this._callback(this._form.getObject());
+                this._callback(this._form.getObject(this._object));
             }
             else {
                 this._callback();

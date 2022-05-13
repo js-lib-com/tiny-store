@@ -2,6 +2,7 @@ package js.tiny.store.template;
 
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.ParameterFlag;
+import js.tiny.store.meta.RestParameter;
 import js.tiny.store.tool.Strings;
 
 public class OperationParameterTemplate {
@@ -25,7 +26,7 @@ public class OperationParameterTemplate {
 	}
 
 	public boolean isEntityParam() {
-		return operationParameter.isEntityParam();
+		return operationParameter.getRestParameter() == RestParameter.ENTITY_PARAM;
 	}
 
 	public ParameterFlag getFlag() {
