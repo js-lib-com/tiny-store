@@ -1,8 +1,6 @@
 body {
     display: grid;
-    grid-template-columns: @dimen/aside-width @dimen/menu-width 1fr @dimen/side-form-width;
     grid-template-columns: @dimen/aside-width 1fr @dimen/side-form-width;
-    grid-template-rows: @dimen/header-height @dimen/caption-height @dimen/nav-height 1fr @dimen/footer-height;
     grid-template-rows: @dimen/header-height 1fr @dimen/footer-height;
     width: 100vw;
     height: 100vh;
@@ -63,6 +61,7 @@ body>object-view {
     display: grid;
     grid-template-columns: @dimen/menu-width 1fr;
     grid-template-rows: @dimen/caption-height @dimen/nav-height 1fr;
+    overflow-y: hidden;
 }
 
 body>object-view>.caption {
@@ -148,6 +147,7 @@ label {
 body>object-view>.content {
     grid-column: 2;
     grid-row: 3;
+    overflow-y: auto;
 }
 
 body>.side-dialog {
@@ -156,16 +156,19 @@ body>.side-dialog {
     border-left: solid 1px lightgray;
     margin: 0 0 0 20px;
     padding: 20px;
+    overflow: hidden;
 }
 
 body>.side-dialog side-dialog {
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow-y: auto;
 }
 
 body>.side-dialog .fill {
     flex-grow: 1;
+    margin-bottom: 40px;
 }
 
 body>footer {
