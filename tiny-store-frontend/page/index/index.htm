@@ -1,7 +1,9 @@
 <div data-template="template/page">
+
 	<div data-content="caption">
 		<div class="logo"></div>
-		<h1>Contact Center</h1>
+		<h1>Tiny Store</h1>
+        <p>On premise, no-code portal for persistence API.</p>
 	</div>
 
 	<ul data-content="menu">
@@ -10,35 +12,19 @@
 		</side-menu>
 	</ul>
 
-	<ul data-content="nav" data-name="store">
+	<ul data-content="nav">
 		<li id="create-store"><img src="@image/action/add" /><label>Create Store</label></li>
 		<li id="edit-store" class="hidden"><img src="@image/action/edit" /><label>Edit Store</label></li>
 		<li id="delete-store" class="hidden"><img src="@image/action/delete" /><label>Delete Store</label></li>
 	</ul>
 
 	<section data-content="content">
-		<table-view data-compo="page/index/store-list"></table-view>
+		<table-view data-compo="page/index/store-list" />
 	</section>
 
-	<section data-content="side-dialog" class="hidden">
-	</section>
+	<section data-content="side-dialog">
+        <side-dialog data-compo="page/index/store-form" />
+        <side-dialog data-compo="page/index/store-delete" />
+    </section>
 
-	<section id="store-form-section" data-content="side-dialog" class="hidden">
-		<h2>Create Store</h2>
-		<object-form id="store-form" data-compo="page/index/store-form"></object-form>
-		<div>
-			<button id="save-store" type="button">Save</button>
-			<button id="cancel-store" type="button">Cancel</button>
-		</div>
-	</section>
-
-	<section id="data-source-form-section" data-content="side-dialog" class="hidden">
-		<h2>Create Data Source</h2>
-		<form id="data-source-form" data-compo="page/index/data-source-form"></form>
-		<div>
-			<button id="test-data-source" type="button">Test</button>
-			<button id="save-data-source" type="button">Save</button>
-			<button id="cancel-data-source" type="button">Cancel</button>
-		</div>
-	</section>
 </div>

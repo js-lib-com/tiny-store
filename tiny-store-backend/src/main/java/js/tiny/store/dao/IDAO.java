@@ -18,6 +18,8 @@ public interface IDAO {
 
 	void createStore(Store store);
 
+	void saveStore(Store store);
+	
 	void deleteStore(String packageName);
 
 	List<DataService> findServicesByStore(String storePackage);

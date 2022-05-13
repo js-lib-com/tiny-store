@@ -41,12 +41,17 @@ public class WorkspaceService {
 		return dao.findStoresByOwner("irotaru");
 	}
 
-	public List<Store> deleteStore(Store store) throws IOException {
+	public void saveStore(Store store) {
+		store.setOwner("irotaru");
+		dao.saveStore(store);
+	}
+
+	public List<Store> deleteStore(Store store) {
 		dao.deleteStore(store.getPackageName());
 		return dao.findStoresByOwner("irotaru");
 	}
 
-	public void updateStore(String projectName) throws IOException {
+	public void buildProject(String projectName) throws IOException {
 		Project project = workspace.getStore(projectName);
 
 		project.clean();

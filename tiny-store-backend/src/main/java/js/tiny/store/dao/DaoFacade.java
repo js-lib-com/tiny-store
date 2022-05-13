@@ -50,6 +50,11 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
+	public void saveStore(Store store) {
+		storeDAO.update("packageName", store.getPackageName(), store);
+	}
+
+	@Override
 	public void deleteStore(String packageName) {
 		storeDAO.delete("packageName", packageName);
 	}

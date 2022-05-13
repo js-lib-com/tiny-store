@@ -18,6 +18,7 @@ import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
+import js.util.Params;
 
 class DAO<T> {
 	private final MongoCollection<T> collection;
@@ -52,7 +53,12 @@ class DAO<T> {
 		collection.insertOne(t);
 	}
 
+	public void update(String name, String value, T t) {
+		collection.replaceOne(eq(name, value), t);
+	}
+
 	public void update(Map<String, String> filters, T t) {
+		Params.GT(filters.size(), 1, "Filters size");
 		List<Bson> equalExpressions = new ArrayList<>();
 		for (Map.Entry<String, String> entry : filters.entrySet()) {
 			equalExpressions.add(eq(entry.getKey(), entry.getValue()));
