@@ -1,7 +1,7 @@
 body {
     display: grid;
-    grid-template-columns: @dimen/aside-width 1fr @dimen/side-form-width;
-    grid-template-rows: @dimen/header-height 1fr @dimen/footer-height;
+    grid-template-columns: var(--aside-width) 1fr var(--side-form-width);
+    grid-template-rows: var(--header-height) 1fr var(--footer-height);
     width: 100vw;
     height: 100vh;
     margin: 0;
@@ -59,8 +59,8 @@ body>object-view {
     grid-column: 2;
     grid-row: 2;
     display: grid;
-    grid-template-columns: @dimen/menu-width 1fr;
-    grid-template-rows: @dimen/caption-height @dimen/nav-height 1fr;
+    grid-template-columns: var(--menu-width) 1fr;
+    grid-template-rows: var(--caption-height) var(--nav-height) 1fr;
     overflow-y: hidden;
 }
 
@@ -85,9 +85,9 @@ body>object-view>.menu {
 }
 
 body>object-view>.menu li {
-    width: @dimen/menu-item-width;
-    height: @dimen/menu-item-height;
-    line-height: @dimen/menu-item-height;
+    width: var(--menu-item-width);
+    height: var(--menu-item-height);
+    line-height: var(--menu-item-height);
     padding-left: 30px;
     cursor: pointer;
     border-left: solid 4px transparent;
@@ -116,7 +116,7 @@ body>object-view>nav ul {
 
 body>object-view>nav ul li {
     display: inline-block;
-    line-height: @dimen/nav-height;
+    line-height: var(--nav-height);
     padding-left: 10px;
     padding-right: 40px;
     cursor: pointer;

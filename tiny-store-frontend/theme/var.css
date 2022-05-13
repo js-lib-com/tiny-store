@@ -1,0 +1,20 @@
+/** dimmensions */
+
+:root {
+    --header-height: 48px;
+    --footer-height: var(--header-height);
+	--aside-width: var(--header-height);
+    --side-form-width: 500px;
+    --menu-width: auto;
+    --caption-height: 128px;
+    --nav-height: var(--header-height);
+    --menu-item-width: 200px;
+    --menu-item-height: 3rem;
+    --icon-size: 48px;
+}
+
+/** colors */
+
+:root {
+	--danger-color: #d94d48;
+}

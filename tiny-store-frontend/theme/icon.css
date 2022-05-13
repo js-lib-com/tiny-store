@@ -1,8 +1,8 @@
 .icon {
     display: inline-block;
-    width: @dimen/icon-size;
-    height: @dimen/icon-size;
-    line-height: @dimen/icon-size;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    line-height: var(--icon-size);
     cursor: pointer;
     text-align: center;
 }
