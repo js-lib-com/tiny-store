@@ -12,7 +12,11 @@
         _inject(element, object) {
             const propertyPath = element.getAttribute("data-text");
             if (propertyPath) {
-                element.textContent = OPP.get(object, propertyPath);
+                let value = OPP.get(object, propertyPath);
+                if (element.hasAttribute("data-format")) {
+                    value = FormatFactory.get(element.getAttribute("data-format")).format(value);
+                }
+                element.textContent = value;
                 return;
             }
             let childElement = element.firstElementChild;
@@ -23,9 +27,13 @@
                 else if (childElement.hasAttribute("data-list")) {
                     console.debug(`List element ${childElement.tagName}.`);
                     const list = OPP.get(object, childElement.getAttribute("data-list"));
-                    if (list) {
+                    if (list.length) {
                         console.debug(`List property ${list}.`);
+                        childElement.classList.remove("hidden");
                         childElement.setItems(list);
+                    }
+                    else {
+                        childElement.classList.add("hidden");
                     }
                 }
                 else {

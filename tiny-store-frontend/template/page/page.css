@@ -149,6 +149,7 @@ body>object-view>.content {
     grid-row: 3;
     overflow-y: auto;
     padding: var(--content-padding) 0 0 var(--content-padding);
+    padding-top: 0;
 }
 
 body>.side-dialog {

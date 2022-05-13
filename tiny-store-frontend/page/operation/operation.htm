@@ -28,14 +28,21 @@
             <dd data-text="restMethod"></dd>
             <dt>REST Path</dt>
             <dd data-text="restPath"></dd>
+            <dt>Value</dt>
+            <dd data-text="value.type" data-format="TypeFormat"></dd>
+            <dt>Description</dt>
+            <dd data-text="value.description"></dd>
+        </dl>
+
+        <dl class="inline">
             <dt>Data Opcode</dt>
             <dd data-text="dataOpcode"></dd>
             <dt>Query</dt>
             <dd data-text="query"></dd>
         </dl>
 
-        <table-view data-compo="page/operation/parameters-list" data-list="parameters"></table-view>
-        <table-view data-compo="page/operation/exceptions-list" data-list="exceptions"></table-view>
+        <table-view data-compo="page/operation/parameters-list" data-list="parameters" class="hidden" />
+        <table-view data-compo="page/operation/exceptions-list" data-list="exceptions" class="hidden" />
     </section>
 
     <section data-content="side-dialog">

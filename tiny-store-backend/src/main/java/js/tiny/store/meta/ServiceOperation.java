@@ -56,10 +56,6 @@ public class ServiceOperation {
 		this.restPath = restPath;
 	}
 
-	public OperationParameter getParameter() {
-		return parameters.get(0);
-	}
-
 	public List<OperationParameter> getParameters() {
 		return parameters;
 	}
