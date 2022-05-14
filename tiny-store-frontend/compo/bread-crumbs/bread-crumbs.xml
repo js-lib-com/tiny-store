@@ -1,0 +1,6 @@
+<template>
+    <groupId>com.js-lib.web</groupId>
+    <artifactId>bread-crumbs</artifactId>
+    <version>1.0</version>
+    <description>Bread crumbs.</description>
+</template>

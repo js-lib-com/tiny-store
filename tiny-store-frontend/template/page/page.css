@@ -8,7 +8,7 @@ body {
     padding: 0;
 }
 
-body > * {
+body>* {
     box-sizing: border-box;
     width: 100%;
     font-family: "Segoe UI";
@@ -35,7 +35,7 @@ body>header .icon:hover {
 .title {
     flex-grow: 1;
     line-height: 48px;
-    color: black;
+    color: white;
 }
 
 body>aside {
@@ -176,10 +176,19 @@ body>.side-dialog .fill {
 body>footer {
     grid-column: 2/4;
     grid-row: 3;
+    display: flex;
+    flex-direction: row;
     line-height: 47px;
     vertical-align: middle;
-    padding-left: 20px;
+    padding: 0 20px;
     border-top: solid 1px lightgray;
+}
+
+body>footer bread-crumbs {
+    flex: 1;
+}
+
+body>footer .copyright {
     font-size: 12px;
     color: cornflowerblue;
 }

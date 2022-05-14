@@ -1,7 +1,19 @@
 class Page {
+	static PAGE_BREAD_CRUMBS = {
+		"/index.htm": ["home"],
+		"/store.htm": ["home", "store"],
+		"/repository.htm": ["home", "store", "repository"],
+		"/service.htm": ["home", "store", "repository", "service"],
+		"/operation.htm": ["home", "store", "repository", "service", "operation"],
+		"/entity.htm": ["home", "store", "entity"]
+	};
+
 	constructor() {
 		const sideMenu = document.getElementsByTagName("side-menu")[0];
 		sideMenu.bind(this);
+
+		const breadCrumbs = document.getElementsByTagName("bread-crumbs")[0];
+		breadCrumbs.setPath(Page.PAGE_BREAD_CRUMBS[location.pathname]);
 	}
 
 	_setObject(object) {
@@ -23,15 +35,6 @@ class Page {
 			throw `Missing element with id ${id}.`;
 		}
 		element.classList[show ? "remove" : "add"]("hidden");
-	}
-
-	/**
-	 * Class string representation.
-	 * 
-	 * @return {string} this class string representation.
-	 */
-	toString() {
-		return "Page";
 	}
 };
 
