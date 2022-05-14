@@ -20,7 +20,7 @@ IndexPage = class extends Page {
 		this._show("delete-store", event.detail.selected);
 	}
 
-	_onCreateStore(event) {
+	_onCreateStore() {
 		const dialog = document.getElementById("store-form");
 		dialog.setTitle("Create Store");
 
@@ -30,7 +30,7 @@ IndexPage = class extends Page {
 		});
 	}
 
-	_onEditStore(event) {
+	_onEditStore() {
 		const dialog = document.getElementById("store-form");
 		dialog.setTitle("Edit Store");
 
@@ -39,7 +39,7 @@ IndexPage = class extends Page {
 		});
 	}
 
-	_onDeleteStore(event) {
+	_onDeleteStore() {
 		const dialog = document.getElementById("store-delete");
 		dialog.open(() => {
 			const store = this._storesView.getSelectedItem();

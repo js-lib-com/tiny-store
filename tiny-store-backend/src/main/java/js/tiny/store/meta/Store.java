@@ -8,9 +8,9 @@ public class Store implements PersistedObject {
 	private ObjectId id;
 
 	private String owner;
-	private String packageName;
 	private String display;
 	private String description;
+	private String packageName;
 	private String version;
 
 	@Override
@@ -30,14 +30,6 @@ public class Store implements PersistedObject {
 		this.owner = owner;
 	}
 
-	public String getPackageName() {
-		return packageName;
-	}
-
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
-	}
-
 	public String getDisplay() {
 		return display;
 	}
@@ -52,6 +44,14 @@ public class Store implements PersistedObject {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
 	}
 
 	public String getVersion() {

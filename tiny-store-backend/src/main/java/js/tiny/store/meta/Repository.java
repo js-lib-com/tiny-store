@@ -6,8 +6,8 @@ import js.tiny.store.dao.PersistedObject;
 
 public class Repository implements PersistedObject {
 	private ObjectId id;
-
-	private String storePackage;
+	private String storeId;
+	
 	private String name;
 	private String display;
 	private String description;
@@ -25,12 +25,12 @@ public class Repository implements PersistedObject {
 		this.id = id;
 	}
 
-	public String getStorePackage() {
-		return storePackage;
+	public String getStoreId() {
+		return storeId;
 	}
 
-	public void setStorePackage(String storePackage) {
-		this.storePackage = storePackage;
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
 	}
 
 	public String getName() {

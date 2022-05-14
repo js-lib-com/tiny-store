@@ -53,11 +53,11 @@ WorkspaceService = {
 		}
 	},
 
-	 createRepository: function(store, repository) {
+	 createRepository: function(storeId, repository) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/WorkspaceService/createRepository.rmi";
-		var parameters = [store, repository];
+		var parameters = [storeId, repository];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -215,10 +215,10 @@ WorkspaceService = {
 		}
 	},
 
-	 getRepositories: function(storeId) {
+	 getStoreRepositories: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/getRepositories.rmi";
+		var url = "js/tiny/store/WorkspaceService/getStoreRepositories.rmi";
 		var parameters = [storeId];
 
 		var response = fetch(url, {

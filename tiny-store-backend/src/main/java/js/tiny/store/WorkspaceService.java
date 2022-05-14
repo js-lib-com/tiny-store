@@ -51,8 +51,8 @@ public class WorkspaceService {
 		return dao.findStoresByOwner("irotaru");
 	}
 
-	public void createRepository(Store store, Repository repository) {
-		repository.setStorePackage(store.getPackageName());
+	public void createRepository(String storeId, Repository repository) {
+		repository.setStoreId(storeId);
 		dao.createRepository(repository);
 	}
 
@@ -100,7 +100,7 @@ public class WorkspaceService {
 		return dao.getStore(id);
 	}
 
-	public List<Repository> getRepositories(String storeId) {
+	public List<Repository> getStoreRepositories(String storeId) {
 		return dao.findRepositoriesByStore(storeId);
 	}
 

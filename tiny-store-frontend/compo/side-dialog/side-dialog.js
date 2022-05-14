@@ -24,9 +24,22 @@
             this._titleView.textContent = title;
         }
 
+        setHandler(buttonName, handler) {
+            let button = this.querySelector(`[name=${buttonName}]`);
+            if (!button) {
+                throw `Invalid side dialog. Missing ${buttonName} button.`;
+            }
+            button.addEventListener("click", event => {
+                if (this._form.isValid()) {
+                    handler(this._form.getObject(this._object));
+                }
+            });
+        }
+
         open(callback) {
             this.classList.remove("hidden");
             this._callback = callback;
+            this._object = {};
 
             if (this._form) {
                 this._form.reset();

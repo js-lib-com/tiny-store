@@ -9,8 +9,10 @@ StorePage = class extends Page {
 
 		const storeId = location.search.substring(1);
 		WorkspaceService.getStore(storeId, this._onStoreLoaded.bind(this));
-		WorkspaceService.getRepositories(storeId, repositories => this._repositoriesView.setItems(repositories));
+		WorkspaceService.getStoreRepositories(storeId, repositories => this._repositoriesView.setItems(repositories));
 		WorkspaceService.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
+
+		this._menu("edit-store", this._onEditStore, this);
 
 		this._menu("create-repository", this._onCreateRepository, this);
 		this._menu("edit-repository", this._onEditRepository, this);
@@ -32,20 +34,31 @@ StorePage = class extends Page {
 		this._show("delete-repository", event.detail.selected);
 	}
 
-	_onCreateRepository(event) {
+	_onEditStore() {
+		const dialog = document.getElementById("store-form");
+		dialog.setTitle("Edit Store");
+
+		dialog.edit(this._store, store => {
+			WorkspaceService.saveStore(store, () => this._setObject(store));
+		});
+	}
+
+	_onCreateRepository() {
 		const dialog = document.getElementById("repository-form");
 		dialog.setTitle("Create Repository");
+		dialog.setHandler("test", this._onTestRepository.bind(this));
 
 		dialog.open(repository => {
-			WorkspaceService.createRepository(this._store, repository, () => {
+			WorkspaceService.createRepository(this._store.id, repository, () => {
 				this._repositoriesView.addItem(repository);
 			});
 		});
 	}
 
-	_onEditRepository(event) {
+	_onEditRepository() {
 		const dialog = document.getElementById("repository-form");
 		dialog.setTitle("Edit Repository");
+		dialog.setHandler("test", this._onTestRepository.bind(this));
 
 		dialog.edit(this._repositoriesView.getSelectedItem(), repository => {
 			WorkspaceService.saveRepository(repository, () => {
@@ -54,7 +67,11 @@ StorePage = class extends Page {
 		});
 	}
 
-	_onDeleteRepository(event) {
+	_onTestRepository(repository) {
+		WorkspaceService.testDataSource(repository, success => alert(success));
+	}
+
+	_onDeleteRepository() {
 		const dialog = document.getElementById("repository-delete");
 		dialog.open(() => {
 			const repository = this._repositoriesView.getSelectedItem();
@@ -70,18 +87,18 @@ StorePage = class extends Page {
 		this._show("delete-entity", event.detail.selected);
 	}
 
-	_onCreateEntity(event) {
+	_onCreateEntity() {
 		const dialog = document.getElementById("entity-form");
 		dialog.setTitle("Create Entity");
 
 		dialog.open(entity => {
-			WorkspaceService.createEntity(this._store, entity, () => {
+			WorkspaceService.createEntity(this._store.id, entity, () => {
 				this._entitiesView.addItem(entity);
 			});
 		});
 	}
 
-	_onEditEntity(event) {
+	_onEditEntity() {
 		const dialog = document.getElementById("entity-form");
 		dialog.setTitle("Edit Entity");
 
@@ -92,7 +109,7 @@ StorePage = class extends Page {
 		});
 	}
 
-	_onDeleteEntity(event) {
+	_onDeleteEntity() {
 		this._show("entity-delete", true);
 		const dialog = document.getElementById("entity-delete");
 		dialog.open(() => {
