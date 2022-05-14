@@ -10,8 +10,6 @@ import js.tiny.store.meta.StoreEntity;
 
 public interface IDAO {
 
-	List<StoreEntity> findEntitiesByStore(String storePackage);
-
 	Store getStoreByPackage(String packageName);
 
 	List<Store> findStoresByOwner(String ownerName);
@@ -23,8 +21,14 @@ public interface IDAO {
 	void deleteStore(String packageName);
 
 	List<DataService> findServicesByStore(String storePackage);
-
+	
 	List<DataService> findServicesByRepository(String repositoryName);
+
+	void createRepository(Repository repository);
+
+	void saveRepository(Repository repository);
+
+	void deleteRepository(Repository repository);
 	
 	List<Repository> findRepositoriesByStore(String storePackage);
 
@@ -39,5 +43,13 @@ public interface IDAO {
 	ServiceOperation getServiceOperation(String serviceInterface, String name);
 
 	void saveServiceOperation(ServiceOperation operation);
+
+	void createEntity(StoreEntity entity);
+
+	void saveEntity(StoreEntity entity);
+
+	void deleteEntity(StoreEntity entity);
+
+	List<StoreEntity> findEntitiesByStore(String storePackage);
 	
 }

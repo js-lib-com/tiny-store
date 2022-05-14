@@ -51,6 +51,32 @@ public class WorkspaceService {
 		return dao.findStoresByOwner("irotaru");
 	}
 
+	public void createRepository(Store store, Repository repository) {
+		repository.setStorePackage(store.getPackageName());
+		dao.createRepository(repository);
+	}
+
+	public void saveRepository(Repository repository) {
+		dao.saveRepository(repository);
+	}
+
+	public void deleteRepository(Repository repository) {
+		dao.deleteRepository(repository);
+	}
+
+	public void createEntity(Store store, StoreEntity entity) {
+		entity.setStorePackage(store.getPackageName());
+		dao.createEntity(entity);
+	}
+
+	public void saveEntity(StoreEntity entity) {
+		dao.saveEntity(entity);
+	}
+
+	public void deleteEntity(StoreEntity entity) {
+		dao.deleteEntity(entity);
+	}
+
 	public void buildProject(String projectName) throws IOException {
 		Project project = workspace.getStore(projectName);
 

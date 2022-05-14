@@ -33,15 +33,34 @@ StorePage = class extends Page {
 	}
 
 	_onCreateRepository(event) {
-		this._show("repository-form", true);
+		const dialog = document.getElementById("repository-form");
+		dialog.setTitle("Create Repository");
+
+		dialog.open(repository => {
+			WorkspaceService.createRepository(this._store, repository, () => {
+				this._repositoriesListView.addItem(repository);
+			});
+		});
 	}
 
 	_onEditRepository(event) {
-		this._show("repository-form", true);
+		const dialog = document.getElementById("repository-form");
+		dialog.setTitle("Edit Repository");
+
+		dialog.update(this._repositoriesListView.getSelectedItem(), repository => {
+			WorkspaceService.saveRepository(repository, () => {
+				this._repositoriesListView.setSelectedItem(repository);
+			});
+		});
 	}
 
 	_onDeleteRepository(event) {
-		this._show("repository-delete", true);
+		const dialog = document.getElementById("repository-delete");
+		dialog.open(() => {
+			WorkspaceService.deleteRepository(this._repositoriesListView.getSelectedItem(), () => {
+				this._repositoriesListView.deleteSelectedRow();
+			});
+		});
 	}
 
 	_onEntitySelect(event) {
@@ -51,19 +70,35 @@ StorePage = class extends Page {
 	}
 
 	_onCreateEntity(event) {
-		this._show("entity-form", true);
+		const dialog = document.getElementById("entity-form");
+		dialog.setTitle("Create Entity");
+
+		dialog.open(entity => {
+			WorkspaceService.createEntity(this._store, entity, () => {
+				this._entitiesListView.addItem(entity);
+			});
+		});
 	}
 
 	_onEditEntity(event) {
-		this._show("entity-form", true);
+		const dialog = document.getElementById("entity-form");
+		dialog.setTitle("Edit Entity");
+
+		dialog.update(this._entitiesListView.getSelectedItem(), entity => {
+			WorkspaceService.saveEntity(entity, () => {
+				this._entitiesListView.setSelectedItem(entity);
+			});
+		});
 	}
 
 	_onDeleteEntity(event) {
 		this._show("entity-delete", true);
-	}
-
-	toString() {
-		return "StorePage";
+		const dialog = document.getElementById("entity-delete");
+		dialog.open(() => {
+			WorkspaceService.deleteEntity(this._entitiesListView.getSelectedItem(), () => {
+				this._entitiesListView.deleteSelectedRow();
+			});
+		});
 	}
 };
 

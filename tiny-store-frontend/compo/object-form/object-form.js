@@ -50,10 +50,6 @@
                 input.value = '';
             });
         }
-
-        toString() {
-            return "ObjectForm";
-        }
     };
 
     customElements.define("object-form", ObjectForm);

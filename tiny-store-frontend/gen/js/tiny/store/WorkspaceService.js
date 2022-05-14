@@ -53,6 +53,114 @@ WorkspaceService = {
 		}
 	},
 
+	 createRepository: function(store, repository) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/WorkspaceService/createRepository.rmi";
+		var parameters = [store, repository];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 saveRepository: function(repository) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/saveRepository.rmi";
+		var parameters = [repository];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 deleteRepository: function(repository) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/deleteRepository.rmi";
+		var parameters = [repository];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 createEntity: function(store, entity) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/WorkspaceService/createEntity.rmi";
+		var parameters = [store, entity];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 saveEntity: function(entity) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/saveEntity.rmi";
+		var parameters = [entity];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 deleteEntity: function(entity) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/deleteEntity.rmi";
+		var parameters = [entity];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
 	 buildProject: function(projectName) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;

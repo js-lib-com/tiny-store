@@ -14,17 +14,26 @@
 	</div>
 
 	<ul data-content="nav">
+		<li id="edit-store"><img src="@image/action/edit" /><label>Edit Store</label></li>
 		<li id="create-repository"><img src="@image/action/add" /><label>Create Repository</label></li>
 		<li id="edit-repository" class="hidden"><img src="@image/action/edit" /><label>Edit Repository</label></li>
-		<li id="delete-repository" class="hidden"><img src="@image/action/delete" /><label>Delete Repository</label></li>
+		<li id="delete-repository" class="hidden"><img src="@image/action/delete" /><label>Delete Repository</label>
+		</li>
 		<li id="create-entity"><img src="@image/action/add" /><label>Create Entity</label></li>
 		<li id="edit-entity" class="hidden"><img src="@image/action/edit" /><label>Edit Entity</label></li>
 		<li id="delete-entity" class="hidden"><img src="@image/action/delete" /><label>Delete Entity</label></li>
 	</ul>
 
 	<section data-content="content">
-		<table-view data-compo="page/store/repositories-list"></table-view>
-		<table-view data-compo="page/store/entities-list"></table-view>
+		<dl class="inline">
+			<dt>Package</dt>
+			<dd data-text="packageName"></dd>
+			<dt>Last Updated</dt>
+			<dd data-text="lastUpdated"></dd>
+		</dl>
+
+		<table-view data-compo="page/store/repositories-list" />
+		<table-view data-compo="page/store/entities-list" />
 	</section>
 
 	<section data-content="side-dialog">

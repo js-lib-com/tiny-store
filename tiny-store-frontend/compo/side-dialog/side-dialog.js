@@ -71,10 +71,6 @@
         _onNegativeButton() {
             this.classList.add("hidden");
         }
-
-        toString() {
-            return "SideDialog";
-        }
     }
 
     customElements.define("side-dialog", SideDialog);
