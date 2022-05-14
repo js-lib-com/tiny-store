@@ -50,6 +50,10 @@
             return this._selectedRow != null ? this._selectedRow.__item__ : null;
         }
 
+        getSelectedId() {
+            return this._selectedRow != null ? this._selectedRow.__item__.id : null;
+        }
+
         setSelectedItem(item) {
             if (this._selectedRow == null) {
                 throw "Illegal state: no row selected.";

@@ -1,4 +1,5 @@
 <app package="js.tiny.store">
+	<binding bind="Application" />
 	<binding bind="WorkspaceService" />
 	<binding bind="dao.IDAO" to="dao.DaoFacade" />
 	<binding bind="dao.MongoDB" />

@@ -1,6 +1,12 @@
 package js.tiny.store.meta;
 
-public class Repository {
+import org.bson.types.ObjectId;
+
+import js.tiny.store.dao.PersistedObject;
+
+public class Repository implements PersistedObject {
+	private ObjectId id;
+
 	private String storePackage;
 	private String name;
 	private String display;
@@ -9,6 +15,15 @@ public class Repository {
 	private String connectionString;
 	private String user;
 	private String password;
+
+	@Override
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
 
 	public String getStorePackage() {
 		return storePackage;

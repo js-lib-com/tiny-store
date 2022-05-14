@@ -8,10 +8,8 @@ OperationPage = class extends Page {
         this._exceptionsListView = document.getElementById("exceptions-list");
         this._exceptionsListView.addEventListener("select", this._onExceptionSelect.bind(this));
 
-        const methodQualifiedName = location.search.substring(1).split('-');
-        const serviceInterface = methodQualifiedName[0];
-        const methodName = methodQualifiedName[1];
-        WorkspaceService.getOperation(serviceInterface, methodName, this._onOperationLoaded, this);
+        const operationId = location.search.substring(1);
+        WorkspaceService.getOperation(operationId, this._onOperationLoaded, this);
 
         this._menu("edit-operation", this._onEditOperation, this);
 

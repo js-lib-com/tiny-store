@@ -1,8 +1,6 @@
 package js.tiny.store.dao;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -30,6 +28,11 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
+	public Store getStore(String id) {
+		return storeDAO.get(id);
+	}
+
+	@Override
 	public Store getStoreByPackage(String packageName) {
 		return storeDAO.get("packageName", packageName);
 	}
@@ -46,12 +49,12 @@ public class DaoFacade implements IDAO {
 
 	@Override
 	public void saveStore(Store store) {
-		storeDAO.update("packageName", store.getPackageName(), store);
+		storeDAO.update(store);
 	}
 
 	@Override
-	public void deleteStore(String packageName) {
-		storeDAO.delete("packageName", packageName);
+	public void deleteStore(String id) {
+		storeDAO.delete(id);
 	}
 
 	@Override
@@ -60,8 +63,8 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public List<DataService> findServicesByRepository(String repositoryName) {
-		return serviceDAO.find("repositoryName", repositoryName);
+	public List<DataService> findServicesByRepository(String repositoryId) {
+		return serviceDAO.find("repositoryId", repositoryId);
 	}
 
 	@Override
@@ -71,53 +74,47 @@ public class DaoFacade implements IDAO {
 
 	@Override
 	public void saveRepository(Repository repository) {
-		repositoryDAO.update("name", repository.getName(), repository);
+		repositoryDAO.update(repository);
 	}
 
 	@Override
-	public void deleteRepository(Repository repository) {
-		repositoryDAO.delete("name", repository.getName());
+	public void deleteRepository(String id) {
+		repositoryDAO.delete(id);
 	}
 
 	@Override
-	public List<Repository> findRepositoriesByStore(String storePackage) {
-		return repositoryDAO.find("storePackage", storePackage);
+	public List<Repository> findRepositoriesByStore(String storeId) {
+		return repositoryDAO.find("storeId", storeId);
 	}
 
 	@Override
-	public Repository getRepository(String name) {
-		return repositoryDAO.get("name", name);
+	public Repository getRepository(String repositoryId) {
+		return repositoryDAO.get(repositoryId);
 	}
 
 	@Override
-	public StoreEntity getStoreEntity(String className) {
-		return entityDAO.get("className", className);
+	public StoreEntity getStoreEntity(String entityId) {
+		return entityDAO.get(entityId);
 	}
 
 	@Override
-	public DataService getDataService(String interfaceName) {
-		return serviceDAO.get("interfaceName", interfaceName);
+	public DataService getDataService(String serviceId) {
+		return serviceDAO.get(serviceId);
 	}
 
 	@Override
-	public List<ServiceOperation> findServiceOperations(String serviceInterface) {
-		return operationDAO.find("serviceInterface", serviceInterface);
+	public List<ServiceOperation> findServiceOperations(String serviceId) {
+		return operationDAO.find("serviceId", serviceId);
 	}
 
 	@Override
-	public ServiceOperation getServiceOperation(String serviceInterface, String name) {
-		Map<String, String> filters = new HashMap<>();
-		filters.put("serviceInterface", serviceInterface);
-		filters.put("name", name);
-		return operationDAO.filterAnd(filters);
+	public ServiceOperation getServiceOperation(String operationId) {
+		return operationDAO.get(operationId);
 	}
 
 	@Override
 	public void saveServiceOperation(ServiceOperation operation) {
-		Map<String, String> filters = new HashMap<>();
-		filters.put("serviceInterface", operation.getServiceInterface());
-		filters.put("name", operation.getName());
-		operationDAO.update(filters, operation);
+		operationDAO.update(operation);
 	}
 
 	@Override
@@ -127,16 +124,16 @@ public class DaoFacade implements IDAO {
 
 	@Override
 	public void saveEntity(StoreEntity entity) {
-		entityDAO.update("className", entity.getClassName(), entity);
+		entityDAO.update(entity);
 	}
 
 	@Override
-	public void deleteEntity(StoreEntity entity) {
-		entityDAO.delete("className", entity.getClassName());
+	public void deleteEntity(String id) {
+		entityDAO.delete(id);
 	}
 
 	@Override
-	public List<StoreEntity> findEntitiesByStore(String storePackage) {
-		return entityDAO.find("storePackage", storePackage);
+	public List<StoreEntity> findEntitiesByStore(String storeId) {
+		return entityDAO.find("storeId", storeId);
 	}
 }

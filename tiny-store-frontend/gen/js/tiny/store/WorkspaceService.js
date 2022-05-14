@@ -35,11 +35,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteStore: function(store) {
+	 deleteStore: function(id) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/deleteStore.rmi";
-		var parameters = [store];
+		var parameters = [id];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -89,11 +89,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteRepository: function(repository) {
+	 deleteRepository: function(id) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/deleteRepository.rmi";
-		var parameters = [repository];
+		var parameters = [id];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -107,11 +107,11 @@ WorkspaceService = {
 		}
 	},
 
-	 createEntity: function(store, entity) {
+	 createEntity: function(storeId, entity) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/WorkspaceService/createEntity.rmi";
-		var parameters = [store, entity];
+		var parameters = [storeId, entity];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -143,11 +143,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteEntity: function(entity) {
+	 deleteEntity: function(id) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/deleteEntity.rmi";
-		var parameters = [entity];
+		var parameters = [id];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -197,11 +197,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getStore: function(packageName) {
+	 getStore: function(id) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/getStore.rmi";
-		var parameters = [packageName];
+		var parameters = [id];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -215,11 +215,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getRepositories: function(storePackage) {
+	 getRepositories: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/getRepositories.rmi";
-		var parameters = [storePackage];
+		var parameters = [storeId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -251,11 +251,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getServices: function(repositoryName) {
+	 getRepositoryServices: function(repositoryId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/getServices.rmi";
-		var parameters = [repositoryName];
+		var url = "js/tiny/store/WorkspaceService/getRepositoryServices.rmi";
+		var parameters = [repositoryId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -287,11 +287,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getService: function(interfaceName) {
+	 getService: function(serviceId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/getService.rmi";
-		var parameters = [interfaceName];
+		var parameters = [serviceId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -305,11 +305,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getOperations: function(serviceInterface) {
+	 getServiceOperations: function(serviceId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/getOperations.rmi";
-		var parameters = [serviceInterface];
+		var url = "js/tiny/store/WorkspaceService/getServiceOperations.rmi";
+		var parameters = [serviceId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -323,11 +323,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getOperation: function(serviceInterface, name) {
-		var __callback__ = arguments[2];
-		var __scope__ = arguments[3] || window;
+	 getOperation: function(operationId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/getOperation.rmi";
-		var parameters = [serviceInterface, name];
+		var parameters = [operationId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -377,11 +377,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getStoreEntities: function(storePackage) {
+	 getStoreEntities: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/getStoreEntities.rmi";
-		var parameters = [storePackage];
+		var parameters = [storeId];
 
 		var response = fetch(url, {
 			method: 'POST',

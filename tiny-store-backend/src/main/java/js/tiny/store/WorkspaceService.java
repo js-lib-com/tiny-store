@@ -46,8 +46,8 @@ public class WorkspaceService {
 		dao.saveStore(store);
 	}
 
-	public List<Store> deleteStore(Store store) {
-		dao.deleteStore(store.getPackageName());
+	public List<Store> deleteStore(String id) {
+		dao.deleteStore(id);
 		return dao.findStoresByOwner("irotaru");
 	}
 
@@ -60,12 +60,12 @@ public class WorkspaceService {
 		dao.saveRepository(repository);
 	}
 
-	public void deleteRepository(Repository repository) {
-		dao.deleteRepository(repository);
+	public void deleteRepository(String id) {
+		dao.deleteRepository(id);
 	}
 
-	public void createEntity(Store store, StoreEntity entity) {
-		entity.setStorePackage(store.getPackageName());
+	public void createEntity(String storeId, StoreEntity entity) {
+		entity.setStoreId(storeId);
 		dao.createEntity(entity);
 	}
 
@@ -73,8 +73,8 @@ public class WorkspaceService {
 		dao.saveEntity(entity);
 	}
 
-	public void deleteEntity(StoreEntity entity) {
-		dao.deleteEntity(entity);
+	public void deleteEntity(String id) {
+		dao.deleteEntity(id);
 	}
 
 	public void buildProject(String projectName) throws IOException {
@@ -96,36 +96,36 @@ public class WorkspaceService {
 		return dao.findStoresByOwner("irotaru");
 	}
 
-	public Store getStore(String packageName) {
-		return dao.getStoreByPackage(packageName);
+	public Store getStore(String id) {
+		return dao.getStore(id);
 	}
 
-	public List<Repository> getRepositories(String storePackage) {
-		return dao.findRepositoriesByStore(storePackage);
+	public List<Repository> getRepositories(String storeId) {
+		return dao.findRepositoriesByStore(storeId);
 	}
 
 	public Repository getRepository(String name) {
 		return dao.getRepository(name);
 	}
 
-	public List<DataService> getServices(String repositoryName) {
-		return dao.findServicesByRepository(repositoryName);
+	public List<DataService> getRepositoryServices(String repositoryId) {
+		return dao.findServicesByRepository(repositoryId);
 	}
 
 	public StoreEntity getEntity(String className) {
 		return dao.getStoreEntity(className);
 	}
 
-	public DataService getService(String interfaceName) {
-		return dao.getDataService(interfaceName);
+	public DataService getService(String serviceId) {
+		return dao.getDataService(serviceId);
 	}
 
-	public List<ServiceOperation> getOperations(String serviceInterface) {
-		return dao.findServiceOperations(serviceInterface);
+	public List<ServiceOperation> getServiceOperations(String serviceId) {
+		return dao.findServiceOperations(serviceId);
 	}
 
-	public ServiceOperation getOperation(String serviceInterface, String name) {
-		return dao.getServiceOperation(serviceInterface, name);
+	public ServiceOperation getOperation(String operationId) {
+		return dao.getServiceOperation(operationId);
 	}
 
 	public void saveOperation(ServiceOperation operation) {
@@ -154,7 +154,7 @@ public class WorkspaceService {
 		return false;
 	}
 
-	public List<StoreEntity> getStoreEntities(String storePackage) {
-		return dao.findEntitiesByStore(storePackage);
+	public List<StoreEntity> getStoreEntities(String storeId) {
+		return dao.findEntitiesByStore(storeId);
 	}
 }

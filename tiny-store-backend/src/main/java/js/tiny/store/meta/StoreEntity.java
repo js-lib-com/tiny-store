@@ -2,9 +2,14 @@ package js.tiny.store.meta;
 
 import java.util.List;
 
-public class StoreEntity {
-	/** Qualified package name for parent store. */
-	private String storePackage;
+import org.bson.types.ObjectId;
+
+import js.tiny.store.dao.PersistedObject;
+
+public class StoreEntity implements PersistedObject {
+	private ObjectId id;
+	private String storeId;
+	
 	/** Entity qualified class name. */
 	private String className;
 	/** Name for table or collection storing this entity. */
@@ -14,12 +19,21 @@ public class StoreEntity {
 	private Identity identity;
 	private List<EntityField> fields;
 
-	public String getStorePackage() {
-		return storePackage;
+	@Override
+	public ObjectId getId() {
+		return id;
 	}
 
-	public void setStorePackage(String store) {
-		this.storePackage = store;
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+
+	public String getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
 	}
 
 	public String getClassName() {

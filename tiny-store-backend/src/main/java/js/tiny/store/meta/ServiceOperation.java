@@ -2,8 +2,14 @@ package js.tiny.store.meta;
 
 import java.util.List;
 
-public class ServiceOperation {
-	private String serviceInterface;
+import org.bson.types.ObjectId;
+
+import js.tiny.store.dao.PersistedObject;
+
+public class ServiceOperation implements PersistedObject {
+	private ObjectId id;
+	private String serviceId;
+	
 	private String name;
 	private String description;
 	private String restMethod;
@@ -16,12 +22,21 @@ public class ServiceOperation {
 	private DataOpcode dataOpcode;
 	private String query;
 
-	public String getServiceInterface() {
-		return serviceInterface;
+	@Override
+	public ObjectId getId() {
+		return id;
 	}
 
-	public void setServiceInterface(String serviceInterface) {
-		this.serviceInterface = serviceInterface;
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+
+	public String getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
 	}
 
 	public String getName() {

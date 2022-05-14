@@ -116,12 +116,12 @@ public class Project {
 	}
 
 	public void generateSources() throws IOException {
-		for (StoreEntity entity : dao.findEntitiesByStore(store.getPackageName())) {
+		for (StoreEntity entity : dao.findEntitiesByStore(store.getId().toHexString())) {
 			generate("/entity.java.vtl", serverSourceDir, entity);
 			generate("/model.java.vtl", clientSourceDir, entity);
 		}
 
-		for (DataService service : dao.findServicesByStore(store.getPackageName())) {
+		for (DataService service : dao.findServicesByStore(store.getId().toHexString())) {
 			generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), service);
 			generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), service);
 			generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), service);

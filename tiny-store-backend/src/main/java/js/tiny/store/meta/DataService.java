@@ -1,6 +1,12 @@
 package js.tiny.store.meta;
 
-public class DataService {
+import org.bson.types.ObjectId;
+
+import js.tiny.store.dao.PersistedObject;
+
+public class DataService implements PersistedObject {
+	private ObjectId id;
+
 	/** Qualified package name for parent store. */
 	private String storePackage;
 	/** Parent repository name. */
@@ -11,6 +17,15 @@ public class DataService {
 	private String className;
 	private String description;
 	private String restPath;
+
+	@Override
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
 
 	public String getStorePackage() {
 		return storePackage;

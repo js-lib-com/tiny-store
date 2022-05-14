@@ -1,11 +1,26 @@
 package js.tiny.store.meta;
 
-public class Store {
+import org.bson.types.ObjectId;
+
+import js.tiny.store.dao.PersistedObject;
+
+public class Store implements PersistedObject {
+	private ObjectId id;
+
 	private String owner;
 	private String packageName;
 	private String display;
 	private String description;
 	private String version;
+
+	@Override
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
 
 	public String getOwner() {
 		return owner;

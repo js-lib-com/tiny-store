@@ -1,16 +1,16 @@
 StorePage = class extends Page {
 	constructor() {
 		super();
-		this._repositoriesListView = document.getElementById("repositories-list");
-		this._repositoriesListView.addEventListener("select", this._onRepositorySelect.bind(this));
+		this._repositoriesView = document.getElementById("repositories-list");
+		this._repositoriesView.addEventListener("select", this._onRepositorySelect.bind(this));
 
-		this._entitiesListView = document.getElementById("entities-list");
-		this._entitiesListView.addEventListener("select", this._onEntitySelect.bind(this));
+		this._entitiesView = document.getElementById("entities-list");
+		this._entitiesView.addEventListener("select", this._onEntitySelect.bind(this));
 
-		const storePackage = location.search.substring(1);
-		WorkspaceService.getStore(storePackage, this._onStoreLoaded.bind(this));
-		WorkspaceService.getRepositories(storePackage, repositories => this._repositoriesListView.setItems(repositories));
-		WorkspaceService.getStoreEntities(storePackage, entities => this._entitiesListView.setItems(entities));
+		const storeId = location.search.substring(1);
+		WorkspaceService.getStore(storeId, this._onStoreLoaded.bind(this));
+		WorkspaceService.getRepositories(storeId, repositories => this._repositoriesView.setItems(repositories));
+		WorkspaceService.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
 
 		this._menu("create-repository", this._onCreateRepository, this);
 		this._menu("edit-repository", this._onEditRepository, this);
@@ -38,7 +38,7 @@ StorePage = class extends Page {
 
 		dialog.open(repository => {
 			WorkspaceService.createRepository(this._store, repository, () => {
-				this._repositoriesListView.addItem(repository);
+				this._repositoriesView.addItem(repository);
 			});
 		});
 	}
@@ -47,9 +47,9 @@ StorePage = class extends Page {
 		const dialog = document.getElementById("repository-form");
 		dialog.setTitle("Edit Repository");
 
-		dialog.update(this._repositoriesListView.getSelectedItem(), repository => {
+		dialog.edit(this._repositoriesView.getSelectedItem(), repository => {
 			WorkspaceService.saveRepository(repository, () => {
-				this._repositoriesListView.setSelectedItem(repository);
+				this._repositoriesView.setSelectedItem(repository);
 			});
 		});
 	}
@@ -57,8 +57,9 @@ StorePage = class extends Page {
 	_onDeleteRepository(event) {
 		const dialog = document.getElementById("repository-delete");
 		dialog.open(() => {
-			WorkspaceService.deleteRepository(this._repositoriesListView.getSelectedItem(), () => {
-				this._repositoriesListView.deleteSelectedRow();
+			const repository = this._repositoriesView.getSelectedItem();
+			WorkspaceService.deleteRepository(repository.id, () => {
+				this._repositoriesView.deleteSelectedRow();
 			});
 		});
 	}
@@ -75,7 +76,7 @@ StorePage = class extends Page {
 
 		dialog.open(entity => {
 			WorkspaceService.createEntity(this._store, entity, () => {
-				this._entitiesListView.addItem(entity);
+				this._entitiesView.addItem(entity);
 			});
 		});
 	}
@@ -84,9 +85,9 @@ StorePage = class extends Page {
 		const dialog = document.getElementById("entity-form");
 		dialog.setTitle("Edit Entity");
 
-		dialog.update(this._entitiesListView.getSelectedItem(), entity => {
+		dialog.edit(this._entitiesView.getSelectedItem(), entity => {
 			WorkspaceService.saveEntity(entity, () => {
-				this._entitiesListView.setSelectedItem(entity);
+				this._entitiesView.setSelectedItem(entity);
 			});
 		});
 	}
@@ -95,8 +96,9 @@ StorePage = class extends Page {
 		this._show("entity-delete", true);
 		const dialog = document.getElementById("entity-delete");
 		dialog.open(() => {
-			WorkspaceService.deleteEntity(this._entitiesListView.getSelectedItem(), () => {
-				this._entitiesListView.deleteSelectedRow();
+			const entity = this._entitiesView.getSelectedItem();
+			WorkspaceService.deleteEntity(entity.id, () => {
+				this._entitiesView.deleteSelectedRow();
 			});
 		});
 	}
