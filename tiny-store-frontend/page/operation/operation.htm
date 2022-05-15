@@ -24,7 +24,7 @@
     </ul>
 
     <section data-content="content">
-        <dl class="inline">
+        <dl class="inline line-break">
             <dt>REST Method</dt>
             <dd data-text="restMethod"></dd>
             <dt>REST Path</dt>
@@ -35,19 +35,22 @@
             <dd data-text="value.description"></dd>
         </dl>
 
-        <dl class="inline">
+        <dl class="inline line-break">
             <dt>Data Opcode</dt>
             <dd data-text="dataOpcode"></dd>
             <dt>Query</dt>
             <dd data-text="query"></dd>
         </dl>
 
+        <h2 class="line-break">Parameters:</h2>
         <table-view data-compo="page/operation/parameters-list" data-list="parameters" class="hidden" />
+
+        <h2 class="line-break">Exceptions:</h2>
         <table-view data-compo="page/operation/exceptions-list" data-list="exceptions" class="hidden" />
     </section>
 
     <section data-content="side-dialog">
-        <side-dialog data-compo="page/operation/operation-form" />
+        <side-dialog data-compo="page/service/operation-form" />
         <side-dialog data-compo="page/operation/parameter-form" />
         <side-dialog data-compo="page/operation/parameter-delete" />
         <side-dialog data-compo="page/operation/exception-form" />

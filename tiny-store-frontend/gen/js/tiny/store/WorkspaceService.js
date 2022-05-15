@@ -359,6 +359,60 @@ WorkspaceService = {
 		}
 	},
 
+	 createOperation: function(operation) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/createOperation.rmi";
+		var parameters = [operation];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 saveOperation: function(operation) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/saveOperation.rmi";
+		var parameters = [operation];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 deleteOperation: function(operationId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/deleteOperation.rmi";
+		var parameters = [operationId];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
 	 getServiceOperations: function(serviceId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
@@ -392,24 +446,6 @@ WorkspaceService = {
 		if (__callback__) {
 			var body = response.then(response => response.json());
 			body.then(data => __callback__.call(__scope__, data));
-		}
-	},
-
-	 saveOperation: function(operation) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/saveOperation.rmi";
-		var parameters = [operation];
-
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
 		}
 	},
 

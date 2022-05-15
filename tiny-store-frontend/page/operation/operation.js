@@ -27,10 +27,9 @@ OperationPage = class extends Page {
         this._setObject(operation);
     }
 
-    _onEditOperation(event) {
+    _onEditOperation() {
         const dialog = document.getElementById("operation-form");
-        // dialog 'update' performs changes on  this._operation instance
-        dialog.update(this._operation, () => {
+        dialog.edit(this._operation, () => {
             this._setObject(this._operation);
             this._saveOperation();
         });
@@ -44,7 +43,7 @@ OperationPage = class extends Page {
         this._show("delete-parameter", event.detail.selected);
     }
 
-    _onAddParameter(event) {
+    _onAddParameter() {
         const dialog = document.getElementById("parameter-form");
         dialog.setTitle("Create Parameter");
         dialog.open(parameter => {
@@ -54,7 +53,7 @@ OperationPage = class extends Page {
         });
     }
 
-    _onEditParameter(event) {
+    _onEditParameter() {
         const dialog = document.getElementById("parameter-form");
         dialog.setTitle("Edit Parameter");
         dialog.edit(this._parametersListView.getSelectedItem(), parameter => {
@@ -64,7 +63,7 @@ OperationPage = class extends Page {
         });
     }
 
-    _onDeleteParameter(event) {
+    _onDeleteParameter() {
         const dialog = document.getElementById("parameter-delete");
         dialog.open(() => {
             this._operation.parameters.splice(this._parametersListView.getSelectedIndex(), 1);
@@ -81,7 +80,7 @@ OperationPage = class extends Page {
         this._show("delete-exception", event.detail.selected);
     }
 
-    _onAddException(event) {
+    _onAddException() {
         const dialog = document.getElementById("exception-form");
         dialog.setTitle("Create Exception");
         dialog.open(exception => {
@@ -91,7 +90,7 @@ OperationPage = class extends Page {
         });
     }
 
-    _onEditException(event) {
+    _onEditException() {
         const dialog = document.getElementById("exception-form");
         dialog.setTitle("Edit Exception");
         dialog.edit(this._exceptionsListView.getSelectedItem(), exception => {
@@ -101,7 +100,7 @@ OperationPage = class extends Page {
         });
     }
 
-    _onDeleteException(event) {
+    _onDeleteException() {
         const dialog = document.getElementById("exception-delete");
         dialog.open(() => {
             this._operation.exceptions.splice(this._exceptionsListView.getSelectedIndex(), 1);

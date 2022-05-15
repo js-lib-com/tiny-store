@@ -11,7 +11,7 @@ RepositoryPage = class extends Page {
 
         this._menu("edit-repository", this._onEditRepository, this);
 
-        this._menu("create-service", this._onCreateservice, this);
+        this._menu("create-service", this._onCreateService, this);
         this._menu("edit-service", this._onEditService, this);
         this._menu("delete-service", this._onDeleteService, this);
     }
@@ -41,7 +41,7 @@ RepositoryPage = class extends Page {
         WorkspaceService.testDataSource(repository, success => alert(success));
     }
 
-    _onCreateservice() {
+    _onCreateService() {
         const dialog = document.getElementById("service-form");
         dialog.setTitle("Create Service");
 

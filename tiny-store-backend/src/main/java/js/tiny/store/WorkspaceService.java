@@ -124,16 +124,24 @@ public class WorkspaceService {
 		return dao.getDataService(serviceId);
 	}
 
+	public void createOperation(ServiceOperation operation) {
+		dao.createOperation(operation);
+	}
+
+	public void saveOperation(ServiceOperation operation) {
+		dao.saveServiceOperation(operation);
+	}
+
+	public void deleteOperation(String operationId) {
+		dao.deleteOperation(operationId);
+	}
+
 	public List<ServiceOperation> getServiceOperations(String serviceId) {
 		return dao.findServiceOperations(serviceId);
 	}
 
 	public ServiceOperation getOperation(String operationId) {
 		return dao.getServiceOperation(operationId);
-	}
-
-	public void saveOperation(ServiceOperation operation) {
-		dao.saveServiceOperation(operation);
 	}
 
 	public boolean testDataSource(Repository meta) throws PropertyVetoException {

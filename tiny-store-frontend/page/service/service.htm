@@ -7,41 +7,40 @@
 
     <div data-content="menu">
         <side-menu>
-            <li data-link="store.htm?${this._service.storePackage}" class="selected">Store</li>
+            <li data-link="store.htm?${this._service.storeId}" class="selected">Store</li>
             <li data-link="operation.htm?${this._operationsView.getSelectedId()}">Operation</li>
         </side-menu>
     </div>
 
     <ul data-content="nav">
-        <li id="create-operation"><img src="@image/action/add" /><label>Create Field</label></li>
-        <li id="edit-operation"><img src="@image/action/edit" /><label>Edit Field</label></li>
-        <li id="delete-operation"><img src="@image/action/delete" /><label>Delete Field</label></li>
+        <li id="edit-service"><img src="@image/action/edit" /><label>Edit Service</label></li>
+        <li id="create-operation"><img src="@image/action/add" /><label>Create Operation</label></li>
+        <li id="edit-operation"><img src="@image/action/edit" /><label>Edit Operation</label></li>
+        <li id="delete-operation"><img src="@image/action/delete" /><label>Delete Operation</label></li>
     </ul>
 
     <section data-content="content">
-        <table-view id="operations-list">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Operation</th>
-                        <th>Parameters</th>
-                        <th>Value</th>
-                        <th>Exceptions</th>
-                        <th>REST Method</th>
-                        <th>REST Path</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-text="name"></td>
-                        <td data-text="parameters" data-format="ParametersFormat"></td>
-                        <td data-text="value.type.name"></td>
-                        <td data-text="exceptionsList"></td>
-                        <td data-text="restMethod"></td>
-                        <td data-text="restPath"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </table-view>
+        <dl class="line-break inline">
+            <dt>Meta</dt>
+            <dd>Data Service</dd>
+            <dt>Last Updated</dt>
+            <dd>May 15, 2002</dd>
+        </dl>
+
+        <dl class="line-break inline">
+            <dt>Class Name</dt>
+            <dd data-text="className"></dd>
+            <dt>REST path</dt>
+            <dd data-text="restPath"></dd>
+        </dl>
+
+        <h2 class="line-break">Service Operations:</h2>
+        <table-view data-compo="page/service/operations-list" data-exclude="true" />
+    </section>
+
+    <section data-content="side-dialog">
+        <side-dialog data-compo="page/repository/service-form" />
+        <side-dialog data-compo="page/service/operation-form" />
+        <side-dialog data-compo="page/service/operation-delete" />
     </section>
 </div>

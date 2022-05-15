@@ -53,8 +53,8 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void deleteStore(String id) {
-		storeDAO.delete(id);
+	public void deleteStore(String storeId) {
+		storeDAO.delete(storeId);
 	}
 
 	@Override
@@ -68,8 +68,8 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void deleteRepository(String id) {
-		repositoryDAO.delete(id);
+	public void deleteRepository(String repositoryId) {
+		repositoryDAO.delete(repositoryId);
 	}
 
 	@Override
@@ -93,6 +93,21 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
+	public void createOperation(ServiceOperation operation) {
+		operationDAO.create(operation);
+	}
+
+	@Override
+	public void saveServiceOperation(ServiceOperation operation) {
+		operationDAO.update(operation);
+	}
+
+	@Override
+	public void deleteOperation(String operationId) {
+		operationDAO.delete(operationId);
+	}
+
+	@Override
 	public List<ServiceOperation> findServiceOperations(String serviceId) {
 		return operationDAO.find("serviceId", serviceId);
 	}
@@ -100,11 +115,6 @@ public class DaoFacade implements IDAO {
 	@Override
 	public ServiceOperation getServiceOperation(String operationId) {
 		return operationDAO.get(operationId);
-	}
-
-	@Override
-	public void saveServiceOperation(ServiceOperation operation) {
-		operationDAO.update(operation);
 	}
 
 	@Override

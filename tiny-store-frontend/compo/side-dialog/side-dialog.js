@@ -18,6 +18,8 @@
                 throw "Invalid side dialog. Missing negative button.";
             }
             negativeButton.addEventListener("click", this._onNegativeButton.bind(this));
+
+            this._registeredHandlers = [];
         }
 
         setTitle(title) {
@@ -25,10 +27,17 @@
         }
 
         setHandler(buttonName, handler) {
+            // ensure handler is registered only once
+            if (this._registeredHandlers.indexOf(buttonName) !== -1) {
+                return;
+            }
+
             let button = this.querySelector(`[name=${buttonName}]`);
             if (!button) {
                 throw `Invalid side dialog. Missing ${buttonName} button.`;
             }
+            this._registeredHandlers.push(buttonName);
+
             button.addEventListener("click", event => {
                 if (this._form.isValid()) {
                     handler(this._form.getObject(this._object));
@@ -67,7 +76,7 @@
             else {
                 this._callback();
             }
-            this.classList.add("hidden");
+            this._onNegativeButton();
         }
 
         _onNegativeButton() {
