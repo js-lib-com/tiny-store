@@ -75,23 +75,21 @@ public class WorkspaceService {
 		dao.saveEntity(entity);
 	}
 
-	public void deleteEntity(String id) {
-		dao.deleteEntity(id);
+	public void deleteEntity(String entityId) {
+		dao.deleteEntity(entityId);
 	}
 
-	public void buildProject(String projectName) throws IOException {
-		Project project = workspace.getStore(projectName);
+	public void createService(String repositoryId, DataService service) {
+		service.setRepositoryId(repositoryId);
+		dao.createService(service);
+	}
 
-		project.clean();
-		project.generateSources();
+	public void saveService(DataService service) {
+		dao.saveService(service);
+	}
 
-		project.compileSources();
-		project.buildWar();
-		project.deployWar();
-
-		project.compileClientSources();
-		project.buildClientJar();
-		project.deployClientJar();
+	public void deleteService(String serviceId) {
+		dao.deleteService(serviceId);
 	}
 
 	public List<Store> getStores() throws IOException {
@@ -116,6 +114,10 @@ public class WorkspaceService {
 
 	public StoreEntity getEntity(String className) {
 		return dao.getStoreEntity(className);
+	}
+
+	public List<StoreEntity> getStoreEntities(String storeId) {
+		return dao.findEntitiesByStore(storeId);
 	}
 
 	public DataService getService(String serviceId) {
@@ -156,7 +158,18 @@ public class WorkspaceService {
 		return false;
 	}
 
-	public List<StoreEntity> getStoreEntities(String storeId) {
-		return dao.findEntitiesByStore(storeId);
+	public void buildProject(String projectName) throws IOException {
+		Project project = workspace.getStore(projectName);
+
+		project.clean();
+		project.generateSources();
+
+		project.compileSources();
+		project.buildWar();
+		project.deployWar();
+
+		project.compileClientSources();
+		project.buildClientJar();
+		project.deployClientJar();
 	}
 }

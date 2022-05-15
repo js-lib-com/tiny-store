@@ -19,19 +19,15 @@ public interface IDAO {
 	void createStore(Store store);
 
 	void saveStore(Store store);
-	
-	void deleteStore(String id);
 
-	List<DataService> findServicesByStore(String storePackage);
-	
-	List<DataService> findServicesByRepository(String repositoryId);
+	void deleteStore(String id);
 
 	void createRepository(Repository repository);
 
 	void saveRepository(Repository repository);
 
 	void deleteRepository(String id);
-	
+
 	List<Repository> findRepositoriesByStore(String storeId);
 
 	Repository getRepository(String repositoryId);
@@ -50,8 +46,18 @@ public interface IDAO {
 
 	void saveEntity(StoreEntity entity);
 
-	void deleteEntity(String id);
+	void deleteEntity(String entityId);
 
 	List<StoreEntity> findEntitiesByStore(String storeId);
-	
+
+	void createService(DataService service);
+
+	void saveService(DataService service);
+
+	void deleteService(String serviceId);
+
+	List<DataService> findServicesByStore(String storePackage);
+
+	List<DataService> findServicesByRepository(String repositoryId);
+
 }

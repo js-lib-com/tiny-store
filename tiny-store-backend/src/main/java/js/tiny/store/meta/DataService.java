@@ -6,11 +6,8 @@ import js.tiny.store.dao.PersistedObject;
 
 public class DataService implements PersistedObject {
 	private ObjectId id;
+	private String repositoryId;
 
-	/** Qualified package name for parent store. */
-	private String storePackage;
-	/** Parent repository name. */
-	private String repositoryName;
 	/** Qualified class name for data service interface, used as primary key. */
 	private String interfaceName;
 	/** Qualified class name for data service implementation. */
@@ -27,20 +24,12 @@ public class DataService implements PersistedObject {
 		this.id = id;
 	}
 
-	public String getStorePackage() {
-		return storePackage;
+	public String getRepositoryId() {
+		return repositoryId;
 	}
 
-	public void setStorePackage(String storePackage) {
-		this.storePackage = storePackage;
-	}
-
-	public String getRepositoryName() {
-		return repositoryName;
-	}
-
-	public void setRepositoryName(String store) {
-		this.repositoryName = store;
+	public void setRepositoryId(String repositoryId) {
+		this.repositoryId = repositoryId;
 	}
 
 	public String getInterfaceName() {

@@ -143,11 +143,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteEntity: function(id) {
+	 deleteEntity: function(entityId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/deleteEntity.rmi";
-		var parameters = [id];
+		var parameters = [entityId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -161,11 +161,47 @@ WorkspaceService = {
 		}
 	},
 
-	 buildProject: function(projectName) {
+	 createService: function(repositoryId, service) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/WorkspaceService/createService.rmi";
+		var parameters = [repositoryId, service];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 saveService: function(service) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/buildProject.rmi";
-		var parameters = [projectName];
+		var url = "js/tiny/store/WorkspaceService/saveService.rmi";
+		var parameters = [service];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			__callback__.call(__scope__);
+		}
+	},
+
+	 deleteService: function(serviceId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/deleteService.rmi";
+		var parameters = [serviceId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -287,6 +323,24 @@ WorkspaceService = {
 		}
 	},
 
+	 getStoreEntities: function(storeId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/getStoreEntities.rmi";
+		var parameters = [storeId];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var body = response.then(response => response.json());
+			body.then(data => __callback__.call(__scope__, data));
+		}
+	},
+
 	 getService: function(serviceId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
@@ -377,11 +431,11 @@ WorkspaceService = {
 		}
 	},
 
-	 getStoreEntities: function(storeId) {
+	 buildProject: function(projectName) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/getStoreEntities.rmi";
-		var parameters = [storeId];
+		var url = "js/tiny/store/WorkspaceService/buildProject.rmi";
+		var parameters = [projectName];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -391,7 +445,7 @@ WorkspaceService = {
 
 		if (__callback__) {
 			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			__callback__.call(__scope__);
 		}
 	}
 };

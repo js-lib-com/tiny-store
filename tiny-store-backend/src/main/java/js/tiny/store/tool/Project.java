@@ -27,6 +27,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import js.tiny.store.dao.IDAO;
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -121,10 +122,12 @@ public class Project {
 			generate("/model.java.vtl", clientSourceDir, entity);
 		}
 
-		for (DataService service : dao.findServicesByStore(store.getId().toHexString())) {
-			generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), service);
-			generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), service);
-			generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), service);
+		for (Repository repository : dao.findRepositoriesByStore(store.getId().toHexString())) {
+			for (DataService service : dao.findServicesByRepository(repository.getId().toHexString())) {
+				generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), repository.getName(), service);
+				generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), repository.getName(), service);
+				generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), repository.getName(), service);
+			}
 		}
 
 		generate("/web.xml.vtl", Files.webDescriptorFile(warDir), "project", this);
@@ -141,11 +144,11 @@ public class Project {
 		}
 	}
 
-	private void generate(String template, File targetFile, DataService service) throws IOException {
+	private void generate(String template, File targetFile, String repositoryName, DataService service) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
 		List<ServiceOperation> operations = dao.findServiceOperations(service.getInterfaceName());
 		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(service, operations, writer);
+			sourceFile.generate(repositoryName, service, operations, writer);
 		}
 	}
 

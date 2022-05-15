@@ -86,7 +86,7 @@ public class SourceTemplateTest {
 
 		
 		// when
-		sourceTemplate.generate(service, Arrays.asList(operation), writer);
+		sourceTemplate.generate("call", service, Arrays.asList(operation), writer);
 		
 		// then
 		System.out.println(writer);

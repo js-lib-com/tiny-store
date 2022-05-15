@@ -10,6 +10,7 @@ import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.tool.Strings;
 
 public class DataServiceTemplate {
+	private final String repositoryName;
 	private final DataService dataService;
 
 	private final String implementationPackage;
@@ -19,7 +20,8 @@ public class DataServiceTemplate {
 	private final SortedSet<String> imports;
 	private final List<ServiceOperationTemplate> operations;
 
-	public DataServiceTemplate(DataService dataService, List<ServiceOperation> operations) {
+	public DataServiceTemplate(String repositoryName, DataService dataService, List<ServiceOperation> operations) {
+		this.repositoryName = repositoryName;
 		this.dataService = dataService;
 
 		this.implementationPackage = Strings.getPackageName(dataService.getClassName());
@@ -38,7 +40,7 @@ public class DataServiceTemplate {
 	}
 
 	public String getRepositoryName() {
-		return dataService.getRepositoryName();
+		return repositoryName;
 	}
 
 	public String getDescription() {

@@ -14,8 +14,8 @@
     <ul data-content="nav">
         <li id="edit-entity"><img src="@image/action/edit" /><label>Edit Entity</label></li>
         <li id="create-field"><img src="@image/action/add" /><label>Create Field</label></li>
-        <li id="edit-field"><img src="@image/action/edit" /><label>Edit Field</label></li>
-        <li id="delete-field"><img src="@image/action/delete" /><label>Delete Field</label></li>
+        <li id="edit-field" class="hidden"><img src="@image/action/edit" /><label>Edit Field</label></li>
+        <li id="delete-field" class="hidden"><img src="@image/action/delete" /><label>Delete Field</label></li>
     </ul>
 
     <section data-content="content">
@@ -31,7 +31,7 @@
             <dd data-text="alias"></dd>
         </dl>
 
-        <h2 class="line-break">Fields:</h2>
+        <h2 class="line-break">Entity Fields:</h2>
         <table-view data-compo="page/entity/fields-list" data-exclude="true" />
     </section>
 

@@ -58,16 +58,6 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public List<DataService> findServicesByStore(String storePackage) {
-		return serviceDAO.find("storePackage", storePackage);
-	}
-
-	@Override
-	public List<DataService> findServicesByRepository(String repositoryId) {
-		return serviceDAO.find("repositoryId", repositoryId);
-	}
-
-	@Override
 	public void createRepository(Repository repository) {
 		repositoryDAO.create(repository);
 	}
@@ -128,12 +118,37 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void deleteEntity(String id) {
-		entityDAO.delete(id);
+	public void deleteEntity(String entityId) {
+		entityDAO.delete(entityId);
 	}
 
 	@Override
 	public List<StoreEntity> findEntitiesByStore(String storeId) {
 		return entityDAO.find("storeId", storeId);
+	}
+
+	@Override
+	public void createService(DataService service) {
+		serviceDAO.create(service);
+	}
+
+	@Override
+	public void saveService(DataService service) {
+		serviceDAO.update(service);
+	}
+
+	@Override
+	public void deleteService(String serviceId) {
+		serviceDAO.delete(serviceId);
+	}
+
+	@Override
+	public List<DataService> findServicesByStore(String storePackage) {
+		return serviceDAO.find("storePackage", storePackage);
+	}
+
+	@Override
+	public List<DataService> findServicesByRepository(String repositoryId) {
+		return serviceDAO.find("repositoryId", repositoryId);
 	}
 }
