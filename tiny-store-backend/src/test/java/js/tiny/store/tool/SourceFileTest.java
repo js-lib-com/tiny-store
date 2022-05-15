@@ -18,7 +18,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
-import js.tiny.store.meta.Identity;
 import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
@@ -52,7 +51,7 @@ public class SourceFileTest {
 	@Mock
 	private StoreEntity entity;
 	@Mock
-	private Identity identity;
+	private EntityField identity;
 	@Mock
 	private EntityField field1;
 	@Mock
@@ -67,21 +66,17 @@ public class SourceFileTest {
 		when(entity.getClassName()).thenReturn("ro.gnotis.omsx.model.CallCoordinates");
 		when(entity.getAlias()).thenReturn("customer_data");
 		when(entity.getDescription()).thenReturn("Data related to customer call history.");
-		when(entity.getIdentity()).thenReturn(identity);
-		when(entity.getFields()).thenReturn(Arrays.asList(field1, field2));
+		when(entity.getFields()).thenReturn(Arrays.asList(identity, field1, field2));
 
 		when(identity.getName()).thenReturn("id");
-		when(identity.getTitle()).thenReturn("Id");
 		when(identity.getType()).thenReturn(new TypeDef(int.class.getCanonicalName()));
 		when(identity.getAlias()).thenReturn("nlc");
 
 		when(field1.getName()).thenReturn("userName");
-		when(field1.getTitle()).thenReturn("UserName");
 		when(field1.getType()).thenReturn(new TypeDef(Set.class.getCanonicalName(), String.class.getCanonicalName()));
 		when(field1.getAlias()).thenReturn("user_name");
 
 		when(field2.getName()).thenReturn("phoneNumber");
-		when(field2.getTitle()).thenReturn("PhoneNumber");
 		// when(field2.getType()).thenReturn(new Type(String.class.getCanonicalName()));
 		when(field2.getType()).thenReturn(new TypeDef("ro.gnotis.omsx.model.CallCoordinates"));
 		when(field2.getAlias()).thenReturn("phone_number");

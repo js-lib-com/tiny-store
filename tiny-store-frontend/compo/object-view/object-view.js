@@ -17,8 +17,11 @@
                     if (element.hasAttribute("data-format")) {
                         value = FormatFactory.get(element.getAttribute("data-format")).format(value);
                     }
-                    element.textContent = value;
                 }
+                else {
+                    value = '';
+                }
+                element.textContent = value;
                 return;
             }
 

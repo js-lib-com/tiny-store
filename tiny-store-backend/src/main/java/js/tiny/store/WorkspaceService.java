@@ -4,6 +4,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -66,6 +67,7 @@ public class WorkspaceService {
 
 	public void createEntity(String storeId, StoreEntity entity) {
 		entity.setStoreId(storeId);
+		entity.setFields(new ArrayList<>(0));
 		dao.createEntity(entity);
 	}
 

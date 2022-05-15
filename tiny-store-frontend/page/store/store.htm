@@ -25,19 +25,27 @@
 	</ul>
 
 	<section data-content="content">
-		<dl class="inline">
+        <dl class="line-break inline">
+            <dt>Meta</dt>
+            <dd>Data Store</dd>
+            <dt>Last Updated</dt>
+            <dd>May 15, 2002</dd>
+        </dl>
+
+		<dl class="line-break inline">
 			<dt>Package</dt>
 			<dd data-text="packageName"></dd>
-			<dt>Last Updated</dt>
-			<dd data-text="lastUpdated"></dd>
 		</dl>
 
+		<h2 class="line-break">Repositories:</h2>
 		<table-view data-compo="page/store/repositories-list" />
+
+		<h2 class="line-break">Entities:</h2>
 		<table-view data-compo="page/store/entities-list" />
 	</section>
 
 	<section data-content="side-dialog">
-		<side-dialog data-compo="page/store/store-form" />
+		<side-dialog data-compo="page/index/store-form" />
 		<side-dialog data-compo="page/store/repository-form" />
 		<side-dialog data-compo="page/store/repository-delete" />
 		<side-dialog data-compo="page/store/entity-form" />

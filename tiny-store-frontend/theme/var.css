@@ -16,12 +16,19 @@
     --content-padding: 40px;
     --side-dialog-padding: 20px;
     --section-space: 40px;
+    --line-break: 40px;
 }
 
 /** font sizes */
 
 :root {
+    --font-weight: 400;
+    --h1-font-size: 1.4rem;
+    --h2-font-size: 1.1rem;
     --dl-font-size: 1.1rem;
+    --p-font-size: 1rem;
+    --th-font-size: 16px;
+    --td-font-size: 14px;
 }
 
 /** colors */

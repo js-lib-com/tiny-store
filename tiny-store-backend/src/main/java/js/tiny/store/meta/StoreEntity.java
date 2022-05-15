@@ -15,8 +15,6 @@ public class StoreEntity implements PersistedObject {
 	/** Name for table or collection storing this entity. */
 	private String alias;
 	private String description;
-	/** Primary key or ID on database record. */
-	private Identity identity;
 	private List<EntityField> fields;
 
 	@Override
@@ -60,14 +58,6 @@ public class StoreEntity implements PersistedObject {
 		this.description = description;
 	}
 
-	public Identity getIdentity() {
-		return identity;
-	}
-
-	public void setIdentity(Identity identity) {
-		this.identity = identity;
-	}
-
 	public List<EntityField> getFields() {
 		return fields;
 	}
@@ -78,6 +68,6 @@ public class StoreEntity implements PersistedObject {
 
 	@Override
 	public String toString() {
-		return "RepositoryEntity [className=" + className + ", description=" + description + ", alias=" + alias + ", identity=" + identity + ", fields=" + fields + "]";
+		return "StoreEntity [className=" + className + ", alias=" + alias + ", description=" + description + "]";
 	}
 }

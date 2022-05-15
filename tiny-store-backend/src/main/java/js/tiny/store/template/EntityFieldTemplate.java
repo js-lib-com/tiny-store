@@ -1,6 +1,7 @@
 package js.tiny.store.template;
 
 import js.tiny.store.meta.EntityField;
+import js.tiny.store.meta.FieldFlag;
 import js.tiny.store.tool.Strings;
 
 public class EntityFieldTemplate {
@@ -18,14 +19,18 @@ public class EntityFieldTemplate {
 		return entityField.getName();
 	}
 
-	public String getDescription() {
-		return entityField.getDescription();
-	}
-
 	public String getAlias() {
 		return entityField.getAlias();
 	}
+
+	public String getDescription() {
+		return entityField.getDescription();
+	}
 	
+	public FieldFlag getFlag() {
+		return entityField.getFlag();
+	}
+
 	public String getType() {
 		return type;
 	}

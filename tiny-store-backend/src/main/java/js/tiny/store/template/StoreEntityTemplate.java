@@ -16,7 +16,6 @@ public class StoreEntityTemplate {
 	private final String packageName;
 	private final String className;
 	private final SortedSet<String> imports;
-	private final IdentityTemplate identity;
 	private final List<EntityFieldTemplate> fields;
 
 	public StoreEntityTemplate(StoreEntity storeEntity) {
@@ -41,12 +40,6 @@ public class StoreEntityTemplate {
 		}
 		this.imports = imports.isEmpty() ? null : imports;
 
-		if (storeEntity.getIdentity() != null) {
-			this.identity = new IdentityTemplate(storeEntity.getIdentity());
-		} else {
-			this.identity = null;
-		}
-
 		this.fields = new ArrayList<>();
 		storeEntity.getFields().forEach(field -> this.fields.add(new EntityFieldTemplate(field)));
 	}
@@ -69,10 +62,6 @@ public class StoreEntityTemplate {
 
 	public SortedSet<String> getImports() {
 		return imports;
-	}
-
-	public IdentityTemplate getIdentity() {
-		return identity;
 	}
 
 	public List<EntityFieldTemplate> getFields() {

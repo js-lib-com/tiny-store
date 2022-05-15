@@ -1,0 +1,24 @@
+<side-dialog id="field-form" class="hidden">
+    <h2>Create Field</h2>
+
+    <object-form class="fill">
+        <input name="name" placeholder="name" />
+        <input name="alias" placeholder="alias" class="optional" />
+        <textarea name="description" placeholder="description" class="optional"></textarea>
+        <input name="type.name" placeholder="type" />
+        <input name="type.collection" placeholder="collection" class="optional" />
+        <select name="flag" class="optional">
+            <option></option>
+            <option>PROVIDED_KEY</option>
+            <option>AUTO_KEY</option>
+            <option>IDENTITY_KEY</option>
+            <option>SEQUENCE_KEY</option>
+            <option>TABLE_KEY</option>
+        </select>
+    </object-form>
+
+    <div>
+        <button type="button" name="positive">Save</button>
+        <button type="button" name="negative">Cancel</button>
+    </div>
+</side-dialog>

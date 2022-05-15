@@ -8,14 +8,14 @@ import java.util.List;
 import org.junit.Test;
 
 import js.tiny.store.meta.DataOpcode;
+import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
-import js.tiny.store.meta.Identity;
+import js.tiny.store.meta.FieldFlag;
 import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
-import js.tiny.store.meta.StoreEntity;
-import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 
 public class SourceTemplateTest {
@@ -27,12 +27,12 @@ public class SourceTemplateTest {
 		StringWriter writer = new StringWriter();
 		sourceTemplate = new SourceTemplate("/entity.java.vtl");
 		
-		Identity identity = new Identity();
+		EntityField identity = new EntityField();
 		identity.setName("id");
 		identity.setType(new TypeDef(String.class.getCanonicalName()));
 		identity.setAlias("nlc");
 		identity.setDescription("Call identity.");
-		identity.setGenerated(true);
+		identity.setFlag(FieldFlag.IDENTITY_KEY);
 		
 		EntityField field = new EntityField();
 		field.setName("person");
@@ -44,8 +44,7 @@ public class SourceTemplateTest {
 		entity.setClassName("ro.gnotis.Call");
 		entity.setAlias("call");
 		entity.setDescription("Recorded calls.");
-		entity.setIdentity(identity);
-		entity.setFields(Arrays.asList(field));
+		entity.setFields(Arrays.asList(identity, field));
 		
 		// when
 		sourceTemplate.generate(entity, writer);

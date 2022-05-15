@@ -7,36 +7,37 @@
 
     <div data-content="menu">
         <side-menu>
-            <li data-link="store.htm?${this._entity.storePackage}" class="selected">Store</li>
+            <li data-link="store.htm?${this._entity.storeId}" class="selected">Data Store</li>
         </side-menu>
     </div>
 
     <ul data-content="nav">
+        <li id="edit-entity"><img src="@image/action/edit" /><label>Edit Entity</label></li>
         <li id="create-field"><img src="@image/action/add" /><label>Create Field</label></li>
         <li id="edit-field"><img src="@image/action/edit" /><label>Edit Field</label></li>
         <li id="delete-field"><img src="@image/action/delete" /><label>Delete Field</label></li>
     </ul>
 
-    <section data-content="content" data-exclude="true">
-        <table-view id="fields-list">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Name</th>
-                        <th>Alias</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-text="type.name"></td>
-                        <td data-text="name"></td>
-                        <td data-text="alias"></td>
-                        <td data-text="description"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </table-view>
+    <section data-content="content">
+        <dl class="line-break inline">
+            <dt>Meta</dt>
+            <dd>Repository Entity</dd>
+            <dt>Last Updated</dt>
+            <dd>May 15, 2002</dd>
+        </dl>
+
+        <dl class="line-break inline">
+            <dt>Alias</dt>
+            <dd data-text="alias"></dd>
+        </dl>
+
+        <h2 class="line-break">Fields:</h2>
+        <table-view data-compo="page/entity/fields-list" data-exclude="true" />
+    </section>
+
+    <section data-content="side-dialog">
+        <side-dialog data-compo="page/store/entity-form" />
+        <side-dialog data-compo="page/entity/field-form" />
+        <side-dialog data-compo="page/entity/field-delete" />
     </section>
 </div>

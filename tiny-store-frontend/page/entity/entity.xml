@@ -3,4 +3,5 @@
 	<description>Entity page description.</description>
 
 	<script src="gen/js/tiny/store/WorkspaceService.js" />
+	<script src="lib/format.js" />
 </page>

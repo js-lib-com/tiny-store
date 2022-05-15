@@ -36,8 +36,6 @@ StorePage = class extends Page {
 
 	_onEditStore() {
 		const dialog = document.getElementById("store-form");
-		dialog.setTitle("Edit Store");
-
 		dialog.edit(this._store, store => {
 			WorkspaceService.saveStore(store, () => this._setObject(store));
 		});

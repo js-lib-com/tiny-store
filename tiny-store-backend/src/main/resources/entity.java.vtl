@@ -2,10 +2,8 @@ package ${entity.packageName};
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-#if($entity.identity.generated)
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-#end
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 #if($entity.imports)
@@ -25,27 +23,17 @@ import ${import};
 @Table(name = "${entity.alias}")
 #end
 public class ${entity.className} {
-#if($entity.identity)	
-#if($entity.identity.description)
-	/**
-	 * ${entity.identity.description}
-	 */
-#end
-	@Id
-#if($entity.identity.generated)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-#end	
-#if($entity.identity.alias)	
-	@Column(name = "${entity.identity.alias}")
-#end	
-	private ${entity.identity.type} ${entity.identity.name};
-
-#end	
 #foreach($field in $entity.fields)
 #if($field.description)
 	/**
 	 * ${field.description}
 	 */
+#end
+#if($field.flag == "PROVIDED_KEY")
+	@Id
+#elseif($field.flag == "IDENTITY_KEY")	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 #end
 #if($field.alias)	
 	@Column(name = "${field.alias}")

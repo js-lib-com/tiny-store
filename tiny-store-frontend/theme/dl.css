@@ -1,11 +1,17 @@
 dl {
-    margin: 0;
-    margin-top: var(--section-space);
+	margin: 0;
+	font-size: var(--dl-font-size);
+	font-weight: var(--font-weight);
 }
 
-dt,dd {
-	font-size: var(--dl-font-size);
-	font-weight: normal;
+dl.line-break {
+	margin-top: var(--line-break);
+}
+
+dt,
+dd {
+	font-size: inherit;
+	font-weight: inherit;
 }
 
 /** block list */
@@ -13,14 +19,14 @@ dt,dd {
 
 dl:not(.inline) dt {
 	margin-top: var(--p-space);
-	margin-bottom: var(--dt-head-space);	
+	margin-bottom: var(--dt-head-space);
 	white-space: nowrap;
 	overflow: hidden;
-	text-overflow: ellipsis;	
+	text-overflow: ellipsis;
 }
 
 dl:not(.inline) dt:first-child {
-	margin-top: 0;	
+	margin-top: 0;
 }
 
 dl:not(.inline) dd {
@@ -47,8 +53,7 @@ dl.inline dd>* {
 	display: inline-block;
 }
 
-dl.inline dd * {
-}
+dl.inline dd * {}
 
 dl.inline dd:BEFORE {
 	vertical-align: top;
