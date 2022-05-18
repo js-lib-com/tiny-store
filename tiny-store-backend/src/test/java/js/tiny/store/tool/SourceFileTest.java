@@ -21,7 +21,6 @@ import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
-import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.RestParameter;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.StoreEntity;
@@ -30,8 +29,6 @@ import js.tiny.store.meta.TypeDef;
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class SourceFileTest {
-	@Mock
-	private Repository repository;
 	@Mock
 	private DataService service;
 

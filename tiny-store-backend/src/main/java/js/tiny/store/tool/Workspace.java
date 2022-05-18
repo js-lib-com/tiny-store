@@ -32,19 +32,18 @@ public class Workspace {
 		workspaceDir = new File(WORKSPACE_DIR);
 	}
 
-	public Project getStore(String packageName) throws IOException {
-		String projectName = Strings.getSimpleName(packageName);
-		File projectDir = new File(workspaceDir, projectName);
+	public Project getStore(String name) throws IOException {
+		File projectDir = new File(workspaceDir, name);
 		if (!projectDir.exists() && !projectDir.mkdirs()) {
 			throw new IOException("Fail to create project directory " + projectDir);
 		}
 
-		Store store = dao.getStoreByPackage(packageName);
+		Store store = dao.getStoreByName(name);
 		return new Project(projectDir, new File(RUNTIME_DIR), store, dao);
 	}
 
 	public void createStore(Store store) throws IOException {
-		File projectDir = new File(workspaceDir, Strings.getSimpleName(store.getPackageName()));
+		File projectDir = new File(workspaceDir, store.getName());
 		if (!projectDir.exists() && !projectDir.mkdirs()) {
 			throw new IOException("Fail to create project directory " + projectDir);
 		}

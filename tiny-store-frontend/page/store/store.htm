@@ -8,46 +8,55 @@
 	<div data-content="menu">
 		<side-menu>
 			<li data-link="index.htm" class="selected">Home</li>
-			<li data-link="repository.htm?${this._repositoriesView.getSelectedId()}">Repository</li>
-			<li data-link="entity.htm?${this._entitiesView.getSelectedId()}">Entity</li>
+			<li data-link="service.htm?${this._servicesView.getSelectedId()}">Data Service</li>
+			<li data-link="entity.htm?${this._entitiesView.getSelectedId()}">Store Entity</li>
 		</side-menu>
 	</div>
 
 	<ul data-content="nav">
 		<li id="edit-store"><img src="@image/action/edit" /><label>Edit Store</label></li>
-		<li id="create-repository"><img src="@image/action/add" /><label>Create Repository</label></li>
-		<li id="edit-repository" class="hidden"><img src="@image/action/edit" /><label>Edit Repository</label></li>
-		<li id="delete-repository" class="hidden"><img src="@image/action/delete" /><label>Delete Repository</label>
+		<li id="create-service"><img src="@image/action/add" /><label>Create Service</label></li>
+		<li id="edit-service" class="hidden"><img src="@image/action/edit" /><label>Edit Service</label></li>
+		<li id="delete-service" class="hidden"><img src="@image/action/delete" /><label>Delete Service</label>
 		</li>
 		<li id="create-entity"><img src="@image/action/add" /><label>Create Entity</label></li>
 		<li id="edit-entity" class="hidden"><img src="@image/action/edit" /><label>Edit Entity</label></li>
 		<li id="delete-entity" class="hidden"><img src="@image/action/delete" /><label>Delete Entity</label></li>
+		<li id="build-project"><img src="@image/action/build" /><label>Build Project</label></li>
 	</ul>
 
 	<section data-content="content">
-        <dl class="line-break inline">
-            <dt>Meta</dt>
-            <dd>Data Store</dd>
-            <dt>Last Updated</dt>
-            <dd>May 15, 2002</dd>
-        </dl>
+		<dl class="line-break inline">
+			<dt>Meta</dt>
+			<dd>Data Store</dd>
+			<dt>Last Updated</dt>
+			<dd>May 15, 2002</dd>
+		</dl>
 
 		<dl class="line-break inline">
 			<dt>Package</dt>
 			<dd data-text="packageName"></dd>
+			<dt>Version</dt>
+			<dd data-text="version"></dd>
+			<dt>Connection String</dt>
+			<dd data-text="connectionString"></dd>
+			<dt>Database User</dt>
+			<dd data-text="user"></dd>
+			<dt>Database Password</dt>
+			<dd data-text="password"></dd>
 		</dl>
 
-		<h2 class="line-break">Repositories:</h2>
-		<table-view data-compo="page/store/repositories-list" />
+		<h2 class="line-break">Data Services:</h2>
+		<table-view data-compo="page/store/services-list" data-exclude="true" />
 
-		<h2 class="line-break">Entities:</h2>
-		<table-view data-compo="page/store/entities-list" />
+		<h2 class="line-break">Store Entities:</h2>
+		<table-view data-compo="page/store/entities-list" data-exclude="true" />
 	</section>
 
 	<section data-content="side-dialog">
 		<side-dialog data-compo="page/index/store-form" />
-		<side-dialog data-compo="page/store/repository-form" />
-		<side-dialog data-compo="page/store/repository-delete" />
+		<side-dialog data-compo="page/store/service-form" />
+		<side-dialog data-compo="page/store/service-delete" />
 		<side-dialog data-compo="page/store/entity-form" />
 		<side-dialog data-compo="page/store/entity-delete" />
 	</section>

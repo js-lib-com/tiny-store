@@ -8,16 +8,23 @@ public class Store implements PersistedObject {
 	private ObjectId id;
 
 	private String owner;
+	private String name;
 	private String display;
 	private String description;
+	
 	private String packageName;
 	private String version;
+
+	private String connectionString;
+	private String user;
+	private String password;
 
 	@Override
 	public ObjectId getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(ObjectId id) {
 		this.id = id;
 	}
@@ -28,6 +35,14 @@ public class Store implements PersistedObject {
 
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDisplay() {
@@ -60,5 +75,29 @@ public class Store implements PersistedObject {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getConnectionString() {
+		return connectionString;
+	}
+
+	public void setConnectionString(String connectionString) {
+		this.connectionString = connectionString;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

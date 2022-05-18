@@ -2,13 +2,18 @@
     <h2>Create Store</h2>
 
     <object-form class="fill">
-        <input name="display" placeholder="display" />
+        <input name="name" placeholder="unique store name" />
+        <input name="display" placeholder="display name" />
         <textarea name="description" placeholder="description" class="optional"></textarea>
         <input name="packageName" placeholder="package" />
         <input name="version" placeholder="version" />
+        <textarea name="connectionString" placeholder="database connection"></textarea>
+        <input name="user" placeholder="database user" />
+        <input name="password" placeholder="database password" />
     </object-form>
 
     <div>
+        <button type="button" name="test">Test</button>
         <button type="button" name="positive">Save</button>
         <button type="button" name="negative">Cancel</button>
     </div>

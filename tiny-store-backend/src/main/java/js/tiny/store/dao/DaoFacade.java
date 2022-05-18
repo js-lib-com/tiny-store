@@ -5,7 +5,6 @@ import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.tiny.store.meta.DataService;
-import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -13,7 +12,6 @@ import js.tiny.store.meta.StoreEntity;
 @ApplicationScoped
 public class DaoFacade implements IDAO {
 	private DAO<Store> storeDAO;
-	private DAO<Repository> repositoryDAO;
 	private DAO<StoreEntity> entityDAO;
 	private DAO<DataService> serviceDAO;
 	private DAO<ServiceOperation> operationDAO;
@@ -21,7 +19,6 @@ public class DaoFacade implements IDAO {
 	@Inject
 	public DaoFacade(MongoDB mongo) {
 		this.storeDAO = new DAO<>(mongo, Store.class);
-		this.repositoryDAO = new DAO<>(mongo, Repository.class);
 		this.entityDAO = new DAO<>(mongo, StoreEntity.class);
 		this.serviceDAO = new DAO<>(mongo, DataService.class);
 		this.operationDAO = new DAO<>(mongo, ServiceOperation.class);
@@ -33,8 +30,8 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public Store getStoreByPackage(String packageName) {
-		return storeDAO.get("packageName", packageName);
+	public Store getStoreByName(String name) {
+		return storeDAO.get("name", name);
 	}
 
 	@Override
@@ -58,31 +55,6 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void createRepository(Repository repository) {
-		repositoryDAO.create(repository);
-	}
-
-	@Override
-	public void saveRepository(Repository repository) {
-		repositoryDAO.update(repository);
-	}
-
-	@Override
-	public void deleteRepository(String repositoryId) {
-		repositoryDAO.delete(repositoryId);
-	}
-
-	@Override
-	public List<Repository> findRepositoriesByStore(String storeId) {
-		return repositoryDAO.find("storeId", storeId);
-	}
-
-	@Override
-	public Repository getRepository(String repositoryId) {
-		return repositoryDAO.get(repositoryId);
-	}
-
-	@Override
 	public StoreEntity getStoreEntity(String entityId) {
 		return entityDAO.get(entityId);
 	}
@@ -93,8 +65,8 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void createOperation(ServiceOperation operation) {
-		operationDAO.create(operation);
+	public ServiceOperation createOperation(ServiceOperation operation) {
+		return operationDAO.create(operation);
 	}
 
 	@Override
@@ -118,8 +90,8 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void createEntity(StoreEntity entity) {
-		entityDAO.create(entity);
+	public StoreEntity createEntity(StoreEntity entity) {
+		return entityDAO.create(entity);
 	}
 
 	@Override
@@ -138,8 +110,8 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void createService(DataService service) {
-		serviceDAO.create(service);
+	public DataService createService(DataService service) {
+		return serviceDAO.create(service);
 	}
 
 	@Override
@@ -153,12 +125,7 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public List<DataService> findServicesByStore(String storePackage) {
-		return serviceDAO.find("storePackage", storePackage);
-	}
-
-	@Override
-	public List<DataService> findServicesByRepository(String repositoryId) {
-		return serviceDAO.find("repositoryId", repositoryId);
+	public List<DataService> findServicesByStore(String storeId) {
+		return serviceDAO.find("storeId", storeId);
 	}
 }

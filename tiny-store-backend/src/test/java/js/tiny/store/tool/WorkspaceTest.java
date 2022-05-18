@@ -27,7 +27,8 @@ public class WorkspaceTest {
 	
 	@Test
 	public void buildProject() throws IOException {
-		Project project = workspace.getStore("ro.gnotis.omsx");
+		Project project = workspace.getStore("call");
+		//Project project = workspace.getStore("com.jslib.test");
 		project.clean();
 		project.generateSources();
 		

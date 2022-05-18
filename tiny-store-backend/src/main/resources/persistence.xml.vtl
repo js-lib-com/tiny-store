@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd" version="2.2" xmlns="http://java.sun.com/xml/ns/persistence">
 
-#foreach($repository in $project.repositories)
-	<persistence-unit name="${repository.name}" transaction-type="RESOURCE_LOCAL">
-		<non-jta-data-source>java:comp/env/jdbc/${repository.name}</non-jta-data-source>
+	<persistence-unit name="${store.name}" transaction-type="RESOURCE_LOCAL">
+		<non-jta-data-source>java:comp/env/jdbc/${store.name}</non-jta-data-source>
 		<shared-cache-mode>NONE</shared-cache-mode>
 
-#foreach($entity in $repository.entities)
+#foreach($entity in $entities)
 		<class>${entity.className}</class>
 #end
 
@@ -16,5 +15,4 @@
 		</properties>
 	</persistence-unit>
 
-#end
 </persistence>

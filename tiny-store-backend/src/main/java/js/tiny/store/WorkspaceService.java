@@ -2,12 +2,12 @@ package js.tiny.store;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Remote;
@@ -17,7 +17,6 @@ import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.store.dao.IDAO;
 import js.tiny.store.meta.DataService;
-import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -52,23 +51,10 @@ public class WorkspaceService {
 		return dao.findStoresByOwner("irotaru");
 	}
 
-	public void createRepository(String storeId, Repository repository) {
-		repository.setStoreId(storeId);
-		dao.createRepository(repository);
-	}
-
-	public void saveRepository(Repository repository) {
-		dao.saveRepository(repository);
-	}
-
-	public void deleteRepository(String id) {
-		dao.deleteRepository(id);
-	}
-
-	public void createEntity(String storeId, StoreEntity entity) {
+	public StoreEntity createEntity(String storeId, StoreEntity entity) {
 		entity.setStoreId(storeId);
 		entity.setFields(new ArrayList<>(0));
-		dao.createEntity(entity);
+		return dao.createEntity(entity);
 	}
 
 	public void saveEntity(StoreEntity entity) {
@@ -79,9 +65,9 @@ public class WorkspaceService {
 		dao.deleteEntity(entityId);
 	}
 
-	public void createService(String repositoryId, DataService service) {
-		service.setRepositoryId(repositoryId);
-		dao.createService(service);
+	public DataService createService(String storeId, DataService service) {
+		service.setStoreId(storeId);
+		return dao.createService(service);
 	}
 
 	public void saveService(DataService service) {
@@ -100,16 +86,8 @@ public class WorkspaceService {
 		return dao.getStore(id);
 	}
 
-	public List<Repository> getStoreRepositories(String storeId) {
-		return dao.findRepositoriesByStore(storeId);
-	}
-
-	public Repository getRepository(String name) {
-		return dao.getRepository(name);
-	}
-
-	public List<DataService> getRepositoryServices(String repositoryId) {
-		return dao.findServicesByRepository(repositoryId);
+	public List<DataService> getStoreServices(String storeId) {
+		return dao.findServicesByStore(storeId);
 	}
 
 	public StoreEntity getEntity(String className) {
@@ -124,8 +102,10 @@ public class WorkspaceService {
 		return dao.getDataService(serviceId);
 	}
 
-	public void createOperation(ServiceOperation operation) {
-		dao.createOperation(operation);
+	public ServiceOperation createOperation(String serviceId, ServiceOperation operation) {
+		operation.setServiceId(serviceId);
+		operation.setParameters(new ArrayList<>());
+		return dao.createOperation(operation);
 	}
 
 	public void saveOperation(ServiceOperation operation) {
@@ -144,20 +124,27 @@ public class WorkspaceService {
 		return dao.getServiceOperation(operationId);
 	}
 
-	public boolean testDataSource(Repository meta) throws PropertyVetoException {
-		if (meta.getConnectionString().startsWith("jdbc:")) {
+	public boolean testDataSource(Store store) throws PropertyVetoException {
+		if (store.getConnectionString().startsWith("jdbc:")) {
 			// jdbc data source
 			ComboPooledDataSource datasource = new ComboPooledDataSource();
 			datasource.setAcquireRetryAttempts(1);
 
-			datasource.setJdbcUrl(meta.getConnectionString());
-			datasource.setUser(meta.getUser());
-			datasource.setPassword(meta.getPassword());
+			datasource.setJdbcUrl(store.getConnectionString());
+			datasource.setUser(store.getUser());
+			datasource.setPassword(store.getPassword());
 
-			try (Connection connection = datasource.getConnection()) {
+			try {
+				datasource.getConnection();
 				return true;
 			} catch (SQLException e) {
 				log.error(e);
+			} finally {
+				try {
+					DataSources.destroy(datasource);
+				} catch (SQLException e) {
+					log.error(e);
+				}
 			}
 			return false;
 		}
@@ -166,9 +153,9 @@ public class WorkspaceService {
 		return false;
 	}
 
-	public void buildProject(String projectName) throws IOException {
-		Project project = workspace.getStore(projectName);
-
+	public boolean buildProject(String storeId) throws IOException {
+		Store store = dao.getStore(storeId);
+		Project project = workspace.getStore(store.getName());
 		project.clean();
 		project.generateSources();
 
@@ -179,5 +166,7 @@ public class WorkspaceService {
 		project.compileClientSources();
 		project.buildClientJar();
 		project.deployClientJar();
+		
+		return true;
 	}
 }

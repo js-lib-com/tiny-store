@@ -3,7 +3,6 @@ package js.tiny.store.dao;
 import java.util.List;
 
 import js.tiny.store.meta.DataService;
-import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -12,7 +11,7 @@ public interface IDAO {
 
 	Store getStore(String storeId);
 
-	Store getStoreByPackage(String packageName);
+	Store getStoreByName(String name);
 
 	List<Store> findStoresByOwner(String ownerName);
 
@@ -22,21 +21,11 @@ public interface IDAO {
 
 	void deleteStore(String storeId);
 
-	void createRepository(Repository repository);
-
-	void saveRepository(Repository repository);
-
-	void deleteRepository(String repositoryId);
-
-	List<Repository> findRepositoriesByStore(String storeId);
-
-	Repository getRepository(String repositoryId);
-
 	StoreEntity getStoreEntity(String entityId);
 
 	DataService getDataService(String serviceId);
 
-	void createOperation(ServiceOperation operation);
+	ServiceOperation createOperation(ServiceOperation operation);
 
 	void saveServiceOperation(ServiceOperation operation);
 
@@ -46,7 +35,7 @@ public interface IDAO {
 
 	ServiceOperation getServiceOperation(String operationId);
 
-	void createEntity(StoreEntity entity);
+	StoreEntity createEntity(StoreEntity entity);
 
 	void saveEntity(StoreEntity entity);
 
@@ -54,14 +43,12 @@ public interface IDAO {
 
 	List<StoreEntity> findEntitiesByStore(String storeId);
 
-	void createService(DataService service);
+	DataService createService(DataService service);
 
 	void saveService(DataService service);
 
 	void deleteService(String serviceId);
 
-	List<DataService> findServicesByStore(String storePackage);
-
-	List<DataService> findServicesByRepository(String repositoryId);
+	List<DataService> findServicesByStore(String storeId);
 
 }

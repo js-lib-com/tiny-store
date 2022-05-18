@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
@@ -27,7 +29,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import js.tiny.store.dao.IDAO;
 import js.tiny.store.meta.DataService;
-import js.tiny.store.meta.Repository;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -84,10 +85,9 @@ public class Project {
 
 		// Tomcat uses pound (#) for multi-level context path
 		// it is replaced with path separator: app#1.0 -> app/1.0 used as http://api.server/app/1.0/service/operation
-		String storeName = Strings.getSimpleName(store.getPackageName());
-		this.warFile = new File(targetDir, Strings.concat(storeName, '#', store.getVersion(), ".war"));
+		this.warFile = new File(targetDir, Strings.concat(store.getName(), '#', store.getVersion(), ".war"));
 		// client jar uses 'store' suffix: app-store-1.0.jar
-		this.clientJarFile = new File(targetDir, Strings.concat(storeName, "-store-", store.getVersion(), ".jar"));
+		this.clientJarFile = new File(targetDir, Strings.concat(store.getName(), "-store-", store.getVersion(), ".jar"));
 
 		createFileSystem();
 	}
@@ -100,7 +100,7 @@ public class Project {
 	}
 
 	private void createFileSystem() throws IOException {
-		this.warDir = new File(targetDir, Strings.getSimpleName(store.getPackageName()));
+		this.warDir = new File(targetDir, store.getName());
 		if (!this.warDir.exists() && !this.warDir.mkdirs()) {
 			throw new IOException("Fail to create output directory " + this.warDir);
 		}
@@ -117,26 +117,33 @@ public class Project {
 	}
 
 	public void generateSources() throws IOException {
-		for (StoreEntity entity : dao.findEntitiesByStore(store.getId().toHexString())) {
+		List<StoreEntity> entities = dao.findEntitiesByStore(store.getId().toHexString());
+		for (StoreEntity entity : entities) {
 			generate("/entity.java.vtl", serverSourceDir, entity);
 			generate("/model.java.vtl", clientSourceDir, entity);
 		}
 
-		for (Repository repository : dao.findRepositoriesByStore(store.getId().toHexString())) {
-			for (DataService service : dao.findServicesByRepository(repository.getId().toHexString())) {
-				generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), repository.getName(), service);
-				generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), repository.getName(), service);
-				generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), repository.getName(), service);
-			}
+		for (DataService service : dao.findServicesByStore(store.getId().toHexString())) {
+			generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), store.getName(), service);
+			generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), store.getName(), service);
+			generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), store.getName(), service);
 		}
 
-		generate("/web.xml.vtl", Files.webDescriptorFile(warDir), "project", this);
-		generate("/app.xml.vtl", Files.appDescriptorFile(warDir), "project", this);
-		generate("/context.xml.vtl", Files.contextFile(warDir), "project", this);
-		generate("/persistence.xml.vtl", Files.persistenceFile(warDir), "project", this);
+		generate("/web.xml.vtl", Files.webDescriptorFile(warDir));
+		generate("/app.xml.vtl", Files.appDescriptorFile(warDir));
+		generate("/context.xml.vtl", Files.contextFile(warDir), properties("store", store));
+		generate("/persistence.xml.vtl", Files.persistenceFile(warDir), properties("store", store, "entities", entities));
 	}
 
-	private static void generate(String template, File targetDir, StoreEntity entity) throws IOException {
+	private static Map<String, Object> properties(Object... values) {
+		Map<String, Object> properties = new HashMap<>();
+		for (int i = 0; i < values.length; i += 2) {
+			properties.put((String) values[i], values[i + 1]);
+		}
+		return properties;
+	}
+
+	private void generate(String template, File targetDir, StoreEntity entity) throws IOException {
 		SourceTemplate sourceTemplate = new SourceTemplate(template);
 		File sourceFile = Files.sourceFile(targetDir, entity.getClassName());
 		try (Writer writer = new FileWriter(sourceFile)) {
@@ -146,16 +153,26 @@ public class Project {
 
 	private void generate(String template, File targetFile, String repositoryName, DataService service) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
-		List<ServiceOperation> operations = dao.findServiceOperations(service.getInterfaceName());
+		List<ServiceOperation> operations = dao.findServiceOperations(service.getId().toHexString());
 		try (Writer writer = new FileWriter(targetFile)) {
 			sourceFile.generate(repositoryName, service, operations, writer);
 		}
 	}
 
-	private static void generate(String template, File targetFile, String contextName, Object contextValue) throws IOException {
+	private void generate(String template, File targetFile) throws IOException {
+		SourceTemplate sourceFile = new SourceTemplate(template);
+
+		List<DataService> services = dao.findServicesByStore(store.getId().toHexString());
+
+		try (Writer writer = new FileWriter(targetFile)) {
+			sourceFile.generate(services, writer);
+		}
+	}
+
+	private void generate(String template, File targetFile, Map<String, Object> properties) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
 		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(contextName, contextValue, writer);
+			sourceFile.generate(properties, writer);
 		}
 	}
 

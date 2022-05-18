@@ -25,6 +25,10 @@ public class OperationParameterTemplate {
 		return operationParameter.getDescription();
 	}
 
+	public boolean isPathParam() {
+		return operationParameter.getRestParameter() == RestParameter.PATH_PARAM;
+	}
+
 	public boolean isEntityParam() {
 		return operationParameter.getRestParameter() == RestParameter.ENTITY_PARAM;
 	}

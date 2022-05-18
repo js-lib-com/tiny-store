@@ -12,8 +12,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -30,8 +30,7 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			response.then(__callback__.call(__scope__));
 		}
 	},
 
@@ -48,62 +47,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
-		}
-	},
-
-	 createRepository: function(storeId, repository) {
-		var __callback__ = arguments[2];
-		var __scope__ = arguments[3] || window;
-		var url = "js/tiny/store/WorkspaceService/createRepository.rmi";
-		var parameters = [storeId, repository];
-
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
-		}
-	},
-
-	 saveRepository: function(repository) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/saveRepository.rmi";
-		var parameters = [repository];
-
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
-		}
-	},
-
-	 deleteRepository: function(id) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/deleteRepository.rmi";
-		var parameters = [id];
-
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -120,8 +65,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -138,8 +83,7 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			response.then(__callback__.call(__scope__));
 		}
 	},
 
@@ -156,16 +100,15 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			response.then(__callback__.call(__scope__));
 		}
 	},
 
-	 createService: function(repositoryId, service) {
+	 createService: function(storeId, service) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/WorkspaceService/createService.rmi";
-		var parameters = [repositoryId, service];
+		var parameters = [storeId, service];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -174,8 +117,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -192,8 +135,7 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			response.then(__callback__.call(__scope__));
 		}
 	},
 
@@ -210,8 +152,7 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			response.then(__callback__.call(__scope__));
 		}
 	},
 
@@ -228,8 +169,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -246,15 +187,15 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
-	 getStoreRepositories: function(storeId) {
+	 getStoreServices: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/getStoreRepositories.rmi";
+		var url = "js/tiny/store/WorkspaceService/getStoreServices.rmi";
 		var parameters = [storeId];
 
 		var response = fetch(url, {
@@ -264,44 +205,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
-		}
-	},
-
-	 getRepository: function(name) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/getRepository.rmi";
-		var parameters = [name];
-
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
-		}
-	},
-
-	 getRepositoryServices: function(repositoryId) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/getRepositoryServices.rmi";
-		var parameters = [repositoryId];
-
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -318,8 +223,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -336,8 +241,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -354,16 +259,16 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
-	 createOperation: function(operation) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
+	 createOperation: function(serviceId, operation) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/WorkspaceService/createOperation.rmi";
-		var parameters = [operation];
+		var parameters = [serviceId, operation];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -372,8 +277,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -390,8 +295,7 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			response.then(__callback__.call(__scope__));
 		}
 	},
 
@@ -408,8 +312,7 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			response.then(__callback__.call(__scope__));
 		}
 	},
 
@@ -426,8 +329,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -444,16 +347,16 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
-	 testDataSource: function(meta) {
+	 testDataSource: function(store) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/testDataSource.rmi";
-		var parameters = [meta];
+		var parameters = [store];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -462,16 +365,16 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			body.then(data => __callback__.call(__scope__, data));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
-	 buildProject: function(projectName) {
+	 buildProject: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/buildProject.rmi";
-		var parameters = [projectName];
+		var parameters = [storeId];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -480,8 +383,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			var body = response.then(response => response.json());
-			__callback__.call(__scope__);
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	}
 };

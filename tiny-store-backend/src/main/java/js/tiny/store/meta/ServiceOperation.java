@@ -27,6 +27,7 @@ public class ServiceOperation implements PersistedObject {
 		return id;
 	}
 
+	@Override
 	public void setId(ObjectId id) {
 		this.id = id;
 	}

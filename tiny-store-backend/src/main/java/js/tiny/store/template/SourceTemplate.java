@@ -2,6 +2,7 @@ package js.tiny.store.template;
 
 import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -48,8 +49,25 @@ public class SourceTemplate {
 		template.merge(context, writer);
 	}
 	
-	public void generate(String contextName, Object contextValue, Writer writer) {
-		context.put(contextName, contextValue);
+	public void generate(List<DataService> services, Writer writer) {
+		ProjectTemplate projectTemplate = new ProjectTemplate(services);
+		context.put("project", projectTemplate);
+
+		Template template = engine.getTemplate(templateName);
+		template.merge(context, writer);
+	}
+	
+	public void generate(String contextName, Object value, Writer writer) {
+		context.put(contextName, value);
+
+		Template template = engine.getTemplate(templateName);
+		template.merge(context, writer);
+	}
+	
+	public void generate(Map<String, Object> properties, Writer writer) {
+		for(Map.Entry<String, Object> entry: properties.entrySet()) {
+			context.put(entry.getKey(), entry.getValue());
+		}
 
 		Template template = engine.getTemplate(templateName);
 		template.merge(context, writer);

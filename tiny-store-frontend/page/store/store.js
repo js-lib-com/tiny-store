@@ -1,22 +1,23 @@
 StorePage = class extends Page {
 	constructor() {
 		super();
-		this._repositoriesView = document.getElementById("repositories-list");
-		this._repositoriesView.addEventListener("select", this._onRepositorySelect.bind(this));
+		this._servicesView = document.getElementById("services-list");
+		this._servicesView.addEventListener("select", this._onServiceSelect.bind(this));
 
 		this._entitiesView = document.getElementById("entities-list");
 		this._entitiesView.addEventListener("select", this._onEntitySelect.bind(this));
 
 		const storeId = location.search.substring(1);
 		WorkspaceService.getStore(storeId, this._onStoreLoaded.bind(this));
-		WorkspaceService.getStoreRepositories(storeId, repositories => this._repositoriesView.setItems(repositories));
+		WorkspaceService.getStoreServices(storeId, services => this._servicesView.setItems(services));
 		WorkspaceService.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
 
 		this._menu("edit-store", this._onEditStore, this);
+		this._menu("build-project", this._onBuildProject, this);
 
-		this._menu("create-repository", this._onCreateRepository, this);
-		this._menu("edit-repository", this._onEditRepository, this);
-		this._menu("delete-repository", this._onDeleteRepository, this);
+		this._menu("create-service", this._onCreateService, this);
+		this._menu("edit-service", this._onEditService, this);
+		this._menu("delete-service", this._onDeleteService, this);
 
 		this._menu("create-entity", this._onCreateEntity, this);
 		this._menu("edit-entity", this._onEditEntity, this);
@@ -28,53 +29,52 @@ StorePage = class extends Page {
 		this._setObject(store);
 	}
 
-	_onRepositorySelect(event) {
-		this._show("create-repository", !event.detail.selected);
-		this._show("edit-repository", event.detail.selected);
-		this._show("delete-repository", event.detail.selected);
+	_onServiceSelect(event) {
+		this._show("create-service", !event.detail.selected);
+		this._show("edit-service", event.detail.selected);
+		this._show("delete-service", event.detail.selected);
 	}
 
 	_onEditStore() {
 		const dialog = document.getElementById("store-form");
+		dialog.setHandler("test", this._onTestStore.bind(this));
 		dialog.edit(this._store, store => {
 			WorkspaceService.saveStore(store, () => this._setObject(store));
 		});
 	}
 
-	_onCreateRepository() {
-		const dialog = document.getElementById("repository-form");
-		dialog.setTitle("Create Repository");
-		dialog.setHandler("test", this._onTestRepository.bind(this));
+	_onTestStore(store) {
+		WorkspaceService.testDataSource(store, success => alert(success));
+	}
 
-		dialog.open(repository => {
-			WorkspaceService.createRepository(this._store.id, repository, () => {
-				this._repositoriesView.addItem(repository);
+	_onCreateService() {
+		const dialog = document.getElementById("service-form");
+		dialog.setTitle("Create Service");
+
+		dialog.open(service => {
+			WorkspaceService.createService(this._store.id, service, service => {
+				this._servicesView.addItem(service);
 			});
 		});
 	}
 
-	_onEditRepository() {
-		const dialog = document.getElementById("repository-form");
-		dialog.setTitle("Edit Repository");
-		dialog.setHandler("test", this._onTestRepository.bind(this));
+	_onEditService() {
+		const dialog = document.getElementById("service-form");
+		dialog.setTitle("Edit Service");
 
-		dialog.edit(this._repositoriesView.getSelectedItem(), repository => {
-			WorkspaceService.saveRepository(repository, () => {
-				this._repositoriesView.setSelectedItem(repository);
+		dialog.edit(this._servicesView.getSelectedItem(), service => {
+			WorkspaceService.saveService(service, () => {
+				this._servicesView.setSelectedItem(service);
 			});
 		});
 	}
 
-	_onTestRepository(repository) {
-		WorkspaceService.testDataSource(repository, success => alert(success));
-	}
-
-	_onDeleteRepository() {
-		const dialog = document.getElementById("repository-delete");
+	_onDeleteService() {
+		const dialog = document.getElementById("service-delete");
 		dialog.open(() => {
-			const repository = this._repositoriesView.getSelectedItem();
-			WorkspaceService.deleteRepository(repository.id, () => {
-				this._repositoriesView.deleteSelectedRow();
+			const service = this._servicesView.getSelectedItem();
+			WorkspaceService.deleteService(service.id, () => {
+				this._servicesView.deleteSelectedRow();
 			});
 		});
 	}
@@ -90,7 +90,7 @@ StorePage = class extends Page {
 		dialog.setTitle("Create Entity");
 
 		dialog.open(entity => {
-			WorkspaceService.createEntity(this._store.id, entity, () => {
+			WorkspaceService.createEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});
 		});
@@ -116,6 +116,10 @@ StorePage = class extends Page {
 				this._entitiesView.deleteSelectedRow();
 			});
 		});
+	}
+
+	_onBuildProject() {
+		WorkspaceService.buildProject(this._store.id, result => alert(JSON.stringify(result)));
 	}
 };
 

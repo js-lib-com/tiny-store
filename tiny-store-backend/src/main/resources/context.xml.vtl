@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context reloadable="true">
 
-#foreach($repository in $project.repositories)
-#set($database=$repository.database)
 	<Resource 
-		name="jdbc/${repository.name}"
+		name="jdbc/${store.name}"
 		factory="org.apache.naming.factory.BeanFactory"
 		auth="Container" 
 		type="com.mchange.v2.c3p0.ComboPooledDataSource"
 
-		jdbcUrl="${database.url}"
-		user="${database.user}" 
-		password="${database.password}"
+		jdbcUrl="${store.connectionString}"
+		user="${store.user}" 
+		password="${store.password}"
 	/>
-		
-#end
 
 </Context>

@@ -23,6 +23,7 @@ IndexPage = class extends Page {
 	_onCreateStore() {
 		const dialog = document.getElementById("store-form");
 		dialog.setTitle("Create Store");
+		dialog.setHandler("test", this._onTestStore.bind(this));
 
 		const store = this._storesView.getSelectedItem();
 		dialog.open(store => {
@@ -33,10 +34,15 @@ IndexPage = class extends Page {
 	_onEditStore() {
 		const dialog = document.getElementById("store-form");
 		dialog.setTitle("Edit Store");
+		dialog.setHandler("test", this._onTestStore.bind(this));
 
 		dialog.edit(this._storesView.getSelectedItem(), store => {
 			WorkspaceService.saveStore(store, () => this._storesView.setSelectedItem(store));
 		});
+	}
+
+	_onTestStore(store) {
+		WorkspaceService.testDataSource(store, success => alert(success));
 	}
 
 	_onDeleteStore() {
