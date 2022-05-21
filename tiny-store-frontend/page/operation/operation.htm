@@ -1,18 +1,16 @@
-<div data-template="template/page">
+<div w:template="template/page" xmlns:w="js-lib.com/wood">
 
-    <div id="page-caption" data-content="caption">
+    <div id="page-caption" w:content="caption">
         <div class="logo"></div>
         <h1><span data-text="serviceInterface"></span><span>#</span><span data-text="name"></span></h1>
         <p data-text="description"></p>
     </div>
 
-    <div data-content="menu">
-        <side-menu>
-            <li data-link="service.htm?${this._operation.serviceId}" class="selected">Service</li>
-        </side-menu>
-    </div>
+    <side-menu w:content="side-menu">
+        <li data-link="service.htm?${this._operation.serviceId}" class="selected">Service</li>
+    </side-menu>
 
-    <ul data-content="nav">
+    <ul w:content="nav">
         <li id="edit-operation"><img src="@image/action/edit" /><label>Edit Operation</label></li>
         <li id="add-parameter"><img src="@image/action/add" /><label>Add Parameter</label></li>
         <li id="edit-parameter" class="hidden"><img src="@image/action/edit" /><label>Edit Parameter</label></li>
@@ -23,7 +21,7 @@
         </li>
     </ul>
 
-    <section data-content="content">
+    <section w:content="content">
         <dl class="inline line-break">
             <dt>REST Method</dt>
             <dd data-text="restMethod"></dd>
@@ -43,18 +41,18 @@
         </dl>
 
         <h2 class="line-break">Parameters:</h2>
-        <table-view data-compo="page/operation/parameters-list" data-list="parameters" class="hidden" />
+        <table-view w:compo="page/operation/parameters-list" data-list="parameters" class="hidden" />
 
         <h2 class="line-break">Exceptions:</h2>
-        <table-view data-compo="page/operation/exceptions-list" data-list="exceptions" class="hidden" />
+        <table-view w:compo="page/operation/exceptions-list" data-list="exceptions" class="hidden" />
     </section>
 
-    <section data-content="side-dialog">
-        <side-dialog data-compo="page/service/operation-form" />
-        <side-dialog data-compo="page/operation/parameter-form" />
-        <side-dialog data-compo="page/operation/parameter-delete" />
-        <side-dialog data-compo="page/operation/exception-form" />
-        <side-dialog data-compo="page/operation/exception-delete" />
+    <section w:content="side-dialog">
+        <side-dialog w:compo="page/service/operation-form" />
+        <side-dialog w:compo="page/operation/parameter-form" />
+        <side-dialog w:compo="page/operation/parameter-delete" />
+        <side-dialog w:compo="page/operation/exception-form" />
+        <side-dialog w:compo="page/operation/exception-delete" />
     </section>
 
 </div>

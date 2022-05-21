@@ -1,31 +1,29 @@
-<div data-template="template/page">
+<div w:template="template/page" xmlns:w="js-lib.com/wood">
 
-	<div data-content="caption">
+	<div w:content="caption">
 		<div class="logo"></div>
 		<h1>Tiny Store</h1>
-        <p>On premise, no-code portal for persistence API.</p>
+		<p>On premise, no-code portal for persistence API.</p>
 	</div>
 
-	<ul data-content="menu">
-		<side-menu>
-            <li data-link="store.htm?${this._storesView.getSelectedId()}" class="selected">Data Store</li>
-		</side-menu>
-	</ul>
+	<side-menu w:content="side-menu">
+		<li data-link="store.htm?${this._storesView.getSelectedId()}" class="selected">Data Store</li>
+	</side-menu>
 
-	<ul data-content="nav">
+	<ul w:content="nav">
 		<li id="create-store"><img src="@image/action/add" /><label>Create Store</label></li>
 		<li id="edit-store" class="hidden"><img src="@image/action/edit" /><label>Edit Store</label></li>
 		<li id="delete-store" class="hidden"><img src="@image/action/delete" /><label>Delete Store</label></li>
 	</ul>
 
-	<section data-content="content">
+	<section w:content="content">
 		<h2 class="line-break">Data Stores:</h2>
-		<table-view data-compo="page/index/stores-list" />
+		<table-view w:compo="page/index/stores-list" />
 	</section>
 
-	<section data-content="side-dialog">
-        <side-dialog data-compo="page/index/store-form" />
-        <side-dialog data-compo="page/index/store-delete" />
-    </section>
+	<section w:content="side-dialog">
+		<side-dialog w:compo="page/index/store-form" />
+		<side-dialog w:compo="page/index/store-delete" />
+	</section>
 
 </div>

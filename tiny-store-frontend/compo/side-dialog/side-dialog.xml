@@ -1,6 +1,0 @@
-<template>
-    <groupId>com.js-lib.web</groupId>
-    <artifactId>side-dialog</artifactId>
-    <version>1.0</version>
-    <description>Side dialog.</description>
-</template>

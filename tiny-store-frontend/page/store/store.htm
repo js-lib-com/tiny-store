@@ -1,19 +1,18 @@
-<div data-template="template/page">
-	<div id="page-caption" data-content="caption">
+<div w:template="template/page" xmlns:w="js-lib.com/wood">
+
+	<div id="page-caption" w:content="caption">
 		<div class="logo"></div>
 		<h1><span data-text="display"></span> <span data-text="version"></span></h1>
 		<p data-text="description"></p>
 	</div>
 
-	<div data-content="menu">
-		<side-menu>
-			<li data-link="index.htm" class="selected">Home</li>
-			<li data-link="service.htm?${this._servicesView.getSelectedId()}">Data Service</li>
-			<li data-link="entity.htm?${this._entitiesView.getSelectedId()}">Store Entity</li>
-		</side-menu>
-	</div>
+	<side-menu w:content="side-menu">
+		<li data-link="index.htm" class="selected">Home</li>
+		<li data-link="service.htm?${this._servicesView.getSelectedId()}">Data Service</li>
+		<li data-link="entity.htm?${this._entitiesView.getSelectedId()}">Store Entity</li>
+	</side-menu>
 
-	<ul data-content="nav">
+	<ul w:content="nav">
 		<li id="edit-store"><img src="@image/action/edit" /><label>Edit Store</label></li>
 		<li id="create-service"><img src="@image/action/add" /><label>Create Service</label></li>
 		<li id="edit-service" class="hidden"><img src="@image/action/edit" /><label>Edit Service</label></li>
@@ -25,7 +24,7 @@
 		<li id="build-project"><img src="@image/action/build" /><label>Build Project</label></li>
 	</ul>
 
-	<section data-content="content">
+	<section w:content="content">
 		<dl class="line-break inline">
 			<dt>Meta</dt>
 			<dd>Data Store</dd>
@@ -47,18 +46,18 @@
 		</dl>
 
 		<h2 class="line-break">Data Services:</h2>
-		<table-view data-compo="page/store/services-list" data-exclude="true" />
+		<table-view w:compo="page/store/services-list" data-exclude="true" />
 
 		<h2 class="line-break">Store Entities:</h2>
-		<table-view data-compo="page/store/entities-list" data-exclude="true" />
+		<table-view w:compo="page/store/entities-list" data-exclude="true" />
 	</section>
 
-	<section data-content="side-dialog">
-		<side-dialog data-compo="page/index/store-form" />
-		<side-dialog data-compo="page/store/service-form" />
-		<side-dialog data-compo="page/store/service-delete" />
-		<side-dialog data-compo="page/store/entity-form" />
-		<side-dialog data-compo="page/store/entity-delete" />
+	<section w:content="side-dialog">
+		<side-dialog w:compo="page/index/store-form" />
+		<side-dialog w:compo="page/store/service-form" />
+		<side-dialog w:compo="page/store/service-delete" />
+		<side-dialog w:compo="page/store/entity-form" />
+		<side-dialog w:compo="page/store/entity-delete" />
 	</section>
 
 </div>

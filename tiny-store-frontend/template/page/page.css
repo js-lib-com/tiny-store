@@ -74,33 +74,9 @@ body>object-view>.caption {
     xvertical-align: middle;
 }
 
-body>object-view>.menu {
+side-menu {
     grid-column: 1;
     grid-row: 2/4;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-right: solid 1px lightgray;
-    background-color: #ffffff;
-}
-
-body>object-view>.menu li {
-    width: var(--menu-item-width);
-    height: var(--menu-item-height);
-    line-height: var(--menu-item-height);
-    padding-left: 30px;
-    cursor: pointer;
-    border-left: solid 4px transparent;
-}
-
-body>object-view>.menu li.selected {
-    background-color: #F0F0F0;
-    border-left-color: cornflowerblue;
-    color: black;
-}
-
-body>object-view>.menu li:hover {
-    border-left-color: cadetblue;
 }
 
 body>object-view>nav {

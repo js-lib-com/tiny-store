@@ -3,7 +3,7 @@
 	<name>tiny-strore</name>
 	<technology>js-lib</technology>
 	<package></package>
-	<operators>DATA_ATTR</operators>
+	<operators>XMLNS</operators>
 	<asset-dir>asset</asset-dir>
 	<theme-dir>theme</theme-dir>
 	<build-dir>target/site</build-dir>

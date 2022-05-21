@@ -1,6 +1,0 @@
-<template>
-    <groupId>com.js-lib.web</groupId>
-    <artifactId>object-form</artifactId>
-    <version>1.0</version>
-    <description>Object form.</description>
-</template>

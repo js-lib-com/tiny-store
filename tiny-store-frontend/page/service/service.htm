@@ -1,25 +1,24 @@
-<div data-template="template/page">
-    <div id="page-caption" data-content="caption">
+<div w:template="template/page" xmlns:w="js-lib.com/wood">
+
+    <div id="page-caption" w:content="caption">
         <div class="logo"></div>
         <h1 data-text="interfaceName"></h1>
         <p data-text="description"></p>
     </div>
 
-    <div data-content="menu">
-        <side-menu>
-            <li data-link="store.htm?${this._service.storeId}" class="selected">Store</li>
-            <li data-link="operation.htm?${this._operationsView.getSelectedId()}">Operation</li>
-        </side-menu>
-    </div>
+    <side-menu w:content="side-menu">
+        <li data-link="store.htm?${this._service.storeId}" class="selected">Store</li>
+        <li data-link="operation.htm?${this._operationsView.getSelectedId()}">Operation</li>
+    </side-menu>
 
-    <ul data-content="nav">
+    <ul w:content="nav">
         <li id="edit-service"><img src="@image/action/edit" /><label>Edit Service</label></li>
         <li id="create-operation"><img src="@image/action/add" /><label>Create Operation</label></li>
         <li id="edit-operation"><img src="@image/action/edit" /><label>Edit Operation</label></li>
         <li id="delete-operation"><img src="@image/action/delete" /><label>Delete Operation</label></li>
     </ul>
 
-    <section data-content="content">
+    <section w:content="content">
         <dl class="line-break inline">
             <dt>Meta</dt>
             <dd>Data Service</dd>
@@ -35,12 +34,13 @@
         </dl>
 
         <h2 class="line-break">Service Operations:</h2>
-        <table-view data-compo="page/service/operations-list" data-exclude="true" />
+        <table-view w:compo="page/service/operations-list" data-exclude="true" />
     </section>
 
-    <section data-content="side-dialog">
-        <side-dialog data-compo="page/store/service-form" />
-        <side-dialog data-compo="page/service/operation-form" />
-        <side-dialog data-compo="page/service/operation-delete" />
+    <section w:content="side-dialog">
+        <side-dialog w:compo="page/store/service-form" />
+        <side-dialog w:compo="page/service/operation-form" />
+        <side-dialog w:compo="page/service/operation-delete" />
     </section>
+
 </div>

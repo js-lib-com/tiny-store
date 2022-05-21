@@ -1,4 +1,4 @@
-<body>
+<body xmlns:w="js-lib.com/wood">
 	<header>
 		<span class="icon"><img src="@image/action/apps" /></span>
 		<span class="title">Tiny Store</span>
@@ -15,16 +15,16 @@
 	</aside>
 
 	<object-view id="page-view">
-		<div class="caption" data-editable="caption"></div>
-		<div class="menu" data-editable="menu" data-exclude="true"></div>
+		<div class="caption" w:editable="caption"></div>
+		<side-menu w:editable="side-menu" data-exclude="true"></side-menu>
 
 		<nav data-exclude="true">
-			<ul data-editable="nav"></ul>
+			<ul w:editable="nav"></ul>
 		</nav>
-		<section class="content" data-editable="content"></section>
+		<section class="content" w:editable="content"></section>
 	</object-view>
 
-	<section class="side-dialog" data-editable="side-dialog"></section>
+	<section class="side-dialog" w:editable="side-dialog"></section>
 	<footer>
 		<bread-crumbs></bread-crumbs><span class="copyright">@string/app-rights</span>
 	</footer>

@@ -1,24 +1,23 @@
-<div data-template="template/page">
-    <div id="page-caption" data-content="caption">
+<div w:template="template/page" xmlns:w="js-lib.com/wood">
+
+    <div id="page-caption" w:content="caption">
         <div class="logo"></div>
         <h1 data-text="className"></h1>
         <p data-text="description"></p>
     </div>
 
-    <div data-content="menu">
-        <side-menu>
-            <li data-link="store.htm?${this._entity.storeId}" class="selected">Data Store</li>
-        </side-menu>
-    </div>
+    <side-menu w:content="side-menu">
+        <li data-link="store.htm?${this._entity.storeId}" class="selected">Data Store</li>
+    </side-menu>
 
-    <ul data-content="nav">
+    <ul w:content="nav">
         <li id="edit-entity"><img src="@image/action/edit" /><label>Edit Entity</label></li>
         <li id="create-field"><img src="@image/action/add" /><label>Create Field</label></li>
         <li id="edit-field" class="hidden"><img src="@image/action/edit" /><label>Edit Field</label></li>
         <li id="delete-field" class="hidden"><img src="@image/action/delete" /><label>Delete Field</label></li>
     </ul>
 
-    <section data-content="content">
+    <section w:content="content">
         <dl class="line-break inline">
             <dt>Meta</dt>
             <dd>Repository Entity</dd>
@@ -32,12 +31,13 @@
         </dl>
 
         <h2 class="line-break">Entity Fields:</h2>
-        <table-view data-compo="page/entity/fields-list" data-exclude="true" />
+        <table-view w:compo="page/entity/fields-list" data-exclude="true" />
     </section>
 
-    <section data-content="side-dialog">
-        <side-dialog data-compo="page/store/entity-form" />
-        <side-dialog data-compo="page/entity/field-form" />
-        <side-dialog data-compo="page/entity/field-delete" />
+    <section w:content="side-dialog">
+        <side-dialog w:compo="page/store/entity-form" />
+        <side-dialog w:compo="page/entity/field-form" />
+        <side-dialog w:compo="page/entity/field-delete" />
     </section>
+
 </div>
