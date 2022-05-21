@@ -7,9 +7,6 @@
     text-align: center;
 }
 
-.icon:hover {
-}
-
 .icon img {
     display: inline-block;
     width: var(--icon-size);

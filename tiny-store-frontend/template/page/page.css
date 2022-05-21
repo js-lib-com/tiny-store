@@ -48,7 +48,6 @@ body>aside {
 body>aside .icon.selected {
     background-color: rgb(168, 192, 236);
     background-color: #E0E0E0;
-    xfilter: invert(43%) sepia(59%) saturate(2104%) hue-rotate(163deg) brightness(98%) contrast(101%);
 }
 
 body>aside .icon:hover {
@@ -70,8 +69,6 @@ body>object-view>.caption {
     border-bottom: solid 1px lightgray;
     padding-left: 20px;
     padding-top: 20px;
-    xline-height: 126px;
-    xvertical-align: middle;
 }
 
 side-menu {
