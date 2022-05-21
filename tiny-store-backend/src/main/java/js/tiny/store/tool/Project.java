@@ -27,6 +27,8 @@ import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import js.log.Log;
+import js.log.LogFactory;
 import js.tiny.store.dao.IDAO;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
@@ -35,6 +37,8 @@ import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.template.SourceTemplate;
 
 public class Project {
+	private static final Log log = LogFactory.getLog(Project.class);
+
 	private static final String SERVER_SOURCE_DIR = "server";
 	private static final String CLIENT_SOURCE_DIR = "client";
 	private static final String TARGET_DIR = "target";
@@ -212,6 +216,15 @@ public class Project {
 	public void deployWar() throws IOException {
 		File webappsDir = new File(runtimeDir, "webapps");
 		Files.copy(warFile, new File(webappsDir, warFile.getName()));
+	}
+
+	public void undeployWar() {
+		File webappsDir = new File(runtimeDir, "webapps");
+		File deployedWarFile = new File(webappsDir, warFile.getName());
+		log.info("Undeploy WAR |%s|.", deployedWarFile);
+		if (!deployedWarFile.delete()) {
+			log.error("Fail to delete file |%s|.", deployedWarFile);
+		}
 	}
 
 	public void compileClientSources() throws IOException {

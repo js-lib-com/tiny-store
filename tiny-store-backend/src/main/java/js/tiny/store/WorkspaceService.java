@@ -36,11 +36,12 @@ public class WorkspaceService {
 	private IDAO dao;
 
 	public List<Store> createStore(Store store) throws IOException {
+		store.setOwner("irotaru");
+		dao.createStore(store);
+
 		// by convention project name is the store name
 		workspace.createProject(store.getName());
 
-		store.setOwner("irotaru");
-		dao.createStore(store);
 		return dao.findStoresByOwner("irotaru");
 	}
 
@@ -163,7 +164,7 @@ public class WorkspaceService {
 
 	public boolean buildProject(String storeId) throws IOException {
 		Store store = dao.getStore(storeId);
-		Project project = workspace.getProject(store);
+		Project project = workspace.getProject(store.getName());
 		project.clean();
 
 		if (project.generateSources()) {

@@ -3,6 +3,7 @@ package js.tiny.store.tool;
 import java.io.IOException;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import js.tiny.store.dao.DaoFacade;
@@ -11,6 +12,7 @@ import js.tiny.store.dao.MongoDB;
 import js.tiny.store.meta.Store;
 import js.util.Classes;
 
+@Ignore
 public class WorkspaceTest {
 	private IDAO dao;
 	private Workspace workspace;
