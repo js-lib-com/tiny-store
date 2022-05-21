@@ -7,10 +7,14 @@ textarea {
 	font-size: 14px;
 }
 
+textarea:required {
+	border-color: cadetblue;
+}
+
 textarea:focus {
 	outline: none;
 }
 
 textarea.invalid {
-    border-color: red;
+	border-color: red;
 }

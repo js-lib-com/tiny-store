@@ -7,8 +7,12 @@ input {
 	margin-top: 40px;
 	background: 0;
 	border: 0;
-	border-bottom: solid 1px cadetblue;
+	border-bottom: solid 1px lightgray;
 	font-size: 14px;
+}
+
+input:required {
+	border-color: cadetblue;
 }
 
 input:focus {

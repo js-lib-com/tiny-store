@@ -35,7 +35,7 @@
         isValid() {
             let valid = true;
             this._inputs.forEach(input => {
-                if (!input.classList.contains("optional")) {
+                if (input.hasAttribute("required")) {
                     const inputValid = !!input.value.trim();
                     input.classList[inputValid ? "remove" : "add"]("invalid");
                     valid = inputValid && valid;

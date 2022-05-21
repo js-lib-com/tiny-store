@@ -2,27 +2,27 @@
     <h2>Create Operation</h2>
 
     <object-form class="fill">
-        <input name="name" placeholder="name" />
-        <textarea name="description" placeholder="description" class="optional"></textarea>
+        <input name="name" placeholder="name" required="true" />
+        <textarea name="description" placeholder="description"></textarea>
 
-        <select name="restMethod">
+        <select name="restMethod" required="true">
             <option selected="selected">GET</option>
             <option>POST</option>
             <option>PUT</option>
             <option>DELETE</option>
         </select>
-        <input name="restPath" placeholder="REST path" class="optional" />
+        <input name="restPath" placeholder="REST path" />
 
-        <input name="value.type.name" placeholder="value type" class="optional" />
-        <input name="value.type.collection" placeholder="value collection" class="optional" />
+        <input name="value.type.name" placeholder="value type" />
+        <input name="value.type.collection" placeholder="value collection" />
 
-        <select name="dataOpcode">
+        <select name="dataOpcode" required="true">
             <option selected="selected">CREATE</option>
             <option>READ</option>
             <option>UPDATE</option>
             <option>DELETE</option>
         </select>
-        <textarea name="query" placeholder="query" class="optional"></textarea>
+        <textarea name="query" placeholder="query"></textarea>
     </object-form>
     
     <div>

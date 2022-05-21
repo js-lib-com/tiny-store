@@ -2,15 +2,15 @@
     <h2>Parameter Entity</h2>
 
     <object-form class="fill">
-        <input name="type.name" placeholder="type" />
-        <input name="type.collection" placeholder="collection" class="optional" />
-        <input name="name" placeholder="name" />
-        <textarea name="description" placeholder="description" class="optional"></textarea>
-        <select name="restParameter">
+        <input name="type.name" placeholder="type" required="true" />
+        <input name="type.collection" placeholder="collection" />
+        <input name="name" placeholder="name" required="true" />
+        <textarea name="description" placeholder="description"></textarea>
+        <select name="restParameter" required="true">
             <option selected="selected">PATH_PARAM</option>
             <option>ENTITY_PARAM</option>
         </select>
-        <select name="flag" class="optional">
+        <select name="flag">
             <option selected="selected"></option>
             <option>FIRST_RESULT</option>
             <option>MAX_RESULTS</option>

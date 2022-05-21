@@ -4,9 +4,13 @@ select {
     margin-top: 40px;
     background: white;
     border: none;
-    border-bottom: solid 1px cadetblue;
+    border-bottom: solid 1px lightgray;
     padding: 4px 20px 4px 4px;
     font-size: 14px;
+}
+
+select:required {
+	border-color: cadetblue;
 }
 
 select.invalid {
