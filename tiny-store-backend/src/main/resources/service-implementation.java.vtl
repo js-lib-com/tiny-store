@@ -26,11 +26,11 @@ public class ${service.implementationName} implements ${service.interfaceName} {
 	public ${service.implementationName}(EntityManager em) {
 		this.em = em;
 	}
-
 ##
 ## operation description
 ## ---------------------
 #foreach($operation in $service.operations)
+
 	/**
 #if($operation.description)	
 	 * ${operation.description}

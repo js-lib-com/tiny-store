@@ -6,15 +6,23 @@ import org.bson.types.ObjectId;
 
 import js.tiny.store.dao.PersistedObject;
 
+/**
+ * Service operation.
+ * 
+ * Service operation has a list of parameters, a returned value and a list of exceptions; all optional with default to empty
+ * parameters list, empty value object and empty exceptions list.
+ * 
+ * @author Iulian Rotaru
+ */
 public class ServiceOperation implements PersistedObject {
 	private ObjectId id;
 	private String serviceId;
-	
+
 	private String name;
 	private String description;
-	private String restMethod;
+	private RestMethod restMethod;
 	private String restPath;
-	
+
 	private List<OperationParameter> parameters;
 	private OperationValue value;
 	private List<OperationException> exceptions;
@@ -56,11 +64,11 @@ public class ServiceOperation implements PersistedObject {
 		this.description = description;
 	}
 
-	public String getRestMethod() {
+	public RestMethod getRestMethod() {
 		return restMethod;
 	}
 
-	public void setRestMethod(String restMethod) {
+	public void setRestMethod(RestMethod restMethod) {
 		this.restMethod = restMethod;
 	}
 

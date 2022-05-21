@@ -10,7 +10,7 @@ public class OperationValueTemplate {
 	private final boolean collection;
 
 	public OperationValueTemplate(OperationValue operationValue) {
-		if (operationValue != null) {
+		if (operationValue.getType().getName() != null) {
 			this.type = Strings.getParameterizedName(operationValue.getType());
 			this.rawType = Strings.getSimpleName(operationValue.getType().getName());
 			this.description = operationValue.getDescription();

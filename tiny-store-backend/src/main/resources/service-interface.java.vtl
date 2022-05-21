@@ -14,8 +14,8 @@ import ${import};
 #end 
  */
 public interface ${service.interfaceName} {
-
 #foreach($operation in $service.operations)
+
 	/**
 #if($operation.description)	
 	 * ${operation.description}

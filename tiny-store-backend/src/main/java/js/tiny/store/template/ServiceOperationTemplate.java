@@ -20,9 +20,11 @@ public class ServiceOperationTemplate {
 	private final List<OperationParameterTemplate> parameters;
 	/**
 	 * Flag true only if this operation has an entity parameter. An entity parameter is a parameter not annotated
-	 * with @PathParam in which case parameter value is loaded from request body - also know as HTTP entity.
+	 * with {@literal}PathParam in which case parameter value is loaded from request body - also know as HTTP entity.
 	 */
 	private final boolean entityParam;
+	/** Flag true if at least one parameter is annotated with {@literal}PathParam. */
+	private final boolean pathParam;
 	private final OperationValueTemplate value;
 
 	public ServiceOperationTemplate(ServiceOperation serviceOperation) {
@@ -33,18 +35,23 @@ public class ServiceOperationTemplate {
 		this.value = new OperationValueTemplate(serviceOperation.getValue());
 
 		final AtomicBoolean entityParam = new AtomicBoolean(false);
+		final AtomicBoolean pathParam = new AtomicBoolean(false);
 		if (serviceOperation.getParameters() != null) {
 			serviceOperation.getParameters().forEach(parameter -> {
 				addImport(parameter.getType());
 				this.parameters.add(new OperationParameterTemplate(parameter));
+				if(parameter.getRestParameter() == RestParameter.PATH_PARAM) {
+					pathParam.set(true);
+				}
 				if (parameter.getRestParameter() == RestParameter.ENTITY_PARAM) {
 					entityParam.set(true);
 				}
 			});
 		}
 		this.entityParam = entityParam.get();
+		this.pathParam = pathParam.get();
 
-		if (serviceOperation.getValue() != null) {
+		if (serviceOperation.getValue().getType().getName() != null) {
 			addImport(serviceOperation.getValue().getType());
 		}
 
@@ -77,7 +84,7 @@ public class ServiceOperationTemplate {
 	}
 
 	public String getRestMethod() {
-		return serviceOperation.getRestMethod();
+		return serviceOperation.getRestMethod().name();
 	}
 
 	public String getRestPath() {
@@ -114,6 +121,10 @@ public class ServiceOperationTemplate {
 
 	public boolean isEntityParam() {
 		return entityParam;
+	}
+	
+	public boolean isPathParam() {
+		return pathParam;
 	}
 
 	public OperationValueTemplate getValue() {

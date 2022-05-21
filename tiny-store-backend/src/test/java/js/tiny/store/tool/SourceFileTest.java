@@ -21,6 +21,7 @@ import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
+import js.tiny.store.meta.RestMethod;
 import js.tiny.store.meta.RestParameter;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.StoreEntity;
@@ -84,7 +85,7 @@ public class SourceFileTest {
 		when(service.getDescription()).thenReturn("Data related to customer call history.");
 
 		when(operation.getName()).thenReturn("readCallCoordinates");
-		when(operation.getRestMethod()).thenReturn("GET");
+		when(operation.getRestMethod()).thenReturn(RestMethod.GET);
 		when(operation.getRestPath()).thenReturn("coordinates");
 		when(operation.getDescription()).thenReturn("Reads coordinates for call performed from given phone number or null if phone number not found.");
 		when(operation.getParameters()).thenReturn(Arrays.asList(parameter1, parameter2));

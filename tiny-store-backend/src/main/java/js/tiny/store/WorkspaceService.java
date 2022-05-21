@@ -105,6 +105,7 @@ public class WorkspaceService {
 	public ServiceOperation createOperation(String serviceId, ServiceOperation operation) {
 		operation.setServiceId(serviceId);
 		operation.setParameters(new ArrayList<>());
+		operation.setExceptions(new ArrayList<>());
 		return dao.createOperation(operation);
 	}
 

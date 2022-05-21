@@ -35,14 +35,14 @@ import ${import};
 @Remote
 @PermitAll
 @Produces("application/json")
-#if(${service.restPath})
+#if($service.restPath)
 @Path("/${service.restPath}")
 #end
 @Transactional(schema = "${service.repositoryName}")
 @Immutable
 public interface ${service.interfaceName} {
-
 #foreach($operation in $service.operations)
+
 	/**
 #if($operation.description)	
 	 * ${operation.description}
@@ -60,11 +60,13 @@ public interface ${service.interfaceName} {
 #end
 	 */
 	@${operation.restMethod}
-	@Path("/${operation.restPath}#foreach($param in $operation.parameters)#if($param.pathParam)/{${param.name}}#end#end")
+#if($operation.restPath or $operation.pathParam)	
+	@Path("#if($operation.restPath)/${operation.restPath}#end#foreach($param in $operation.parameters)#if($param.pathParam)/{${param.name}}#end#end")
+#end	
 #if($operation.entityParam)
 	@Consumes("application/json")
 #end	
-#if($operation.databaseOpcode != "READ")
+#if($operation.dataOpcode != "READ")
 	@Mutable
 #end
 	${operation.value.type}#*
