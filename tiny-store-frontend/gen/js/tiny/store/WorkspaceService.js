@@ -34,11 +34,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteStore: function(id) {
+	 deleteStore: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/deleteStore.rmi";
-		var parameters = [id];
+		var parameters = [storeId];
 
 		var response = fetch(url, {
 			method: 'POST',

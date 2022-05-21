@@ -10,6 +10,11 @@ button {
 	cursor: pointer;
 }
 
+button.danger {
+	background-color: var(--danger-color);
+	color: white;
+}
+
 button:hover {
 	background-color: rgb(3, 100, 174);
 }

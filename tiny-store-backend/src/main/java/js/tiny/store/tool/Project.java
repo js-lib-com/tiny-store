@@ -116,14 +116,15 @@ public class Project {
 		}
 	}
 
-	public void generateSources() throws IOException {
+	public boolean generateSources() throws IOException {
 		List<StoreEntity> entities = dao.findEntitiesByStore(store.getId().toHexString());
 		for (StoreEntity entity : entities) {
 			generate("/entity.java.vtl", serverSourceDir, entity);
 			generate("/model.java.vtl", clientSourceDir, entity);
 		}
 
-		for (DataService service : dao.findServicesByStore(store.getId().toHexString())) {
+		List<DataService> services = dao.findServicesByStore(store.getId().toHexString());
+		for (DataService service : services) {
 			generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), store.getName(), service);
 			generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), store.getName(), service);
 			generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), store.getName(), service);
@@ -133,6 +134,8 @@ public class Project {
 		generate("/app.xml.vtl", Files.appDescriptorFile(warDir));
 		generate("/context.xml.vtl", Files.contextFile(warDir), properties("store", store));
 		generate("/persistence.xml.vtl", Files.persistenceFile(warDir), properties("store", store, "entities", entities));
+
+		return !entities.isEmpty() || !services.isEmpty();
 	}
 
 	private static Map<String, Object> properties(Object... values) {

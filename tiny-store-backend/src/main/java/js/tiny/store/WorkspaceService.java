@@ -36,8 +36,11 @@ public class WorkspaceService {
 	private IDAO dao;
 
 	public List<Store> createStore(Store store) throws IOException {
+		// by convention project name is the store name
+		workspace.createProject(store.getName());
+
 		store.setOwner("irotaru");
-		workspace.createStore(store);
+		dao.createStore(store);
 		return dao.findStoresByOwner("irotaru");
 	}
 
@@ -46,8 +49,12 @@ public class WorkspaceService {
 		dao.saveStore(store);
 	}
 
-	public List<Store> deleteStore(String id) {
-		dao.deleteStore(id);
+	public List<Store> deleteStore(String storeId) throws IOException {
+		Store store = dao.getStore(storeId);
+		// by convention project name is the store name
+		workspace.deleteProject(store.getName());
+
+		dao.deleteStore(storeId);
 		return dao.findStoresByOwner("irotaru");
 	}
 
@@ -156,18 +163,20 @@ public class WorkspaceService {
 
 	public boolean buildProject(String storeId) throws IOException {
 		Store store = dao.getStore(storeId);
-		Project project = workspace.getStore(store.getName());
+		Project project = workspace.getProject(store);
 		project.clean();
-		project.generateSources();
 
-		project.compileSources();
+		if (project.generateSources()) {
+			project.compileSources();
+			project.compileClientSources();
+		}
+
 		project.buildWar();
 		project.deployWar();
 
-		project.compileClientSources();
 		project.buildClientJar();
 		project.deployClientJar();
-		
+
 		return true;
 	}
 }

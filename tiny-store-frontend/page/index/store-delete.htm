@@ -1,8 +1,12 @@
 <side-dialog id="store-delete" class="hidden">
-    <h2>Delete Store</h2>
-    <p class="fill">Please confirm store delete.</p>
+    <h2 class="danger">Delete Store</h2>
+    <section class="fill">
+        <p>Please confirm store delete.</p>
+        <p>All related database records and workspace project files and directories will be permanently deleted.</p>
+        <p>Also all running API versions will be undeployed and permanently deleted.</p>
+    </section>
     <div>
-        <button type="button" name="positive">Delete</button>
+        <button type="button" name="positive" class="danger">Delete</button>
         <button type="button" name="negative">Cancel</button>
     </div>
 </side-dialog>

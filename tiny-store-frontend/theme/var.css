@@ -3,7 +3,7 @@
 :root {
     --header-height: 48px;
     --footer-height: var(--header-height);
-	--aside-width: var(--header-height);
+    --aside-width: var(--header-height);
     --side-form-width: 500px;
     --menu-width: auto;
     --caption-height: 128px;
@@ -11,8 +11,8 @@
     --menu-item-width: 200px;
     --menu-item-height: 3rem;
     --icon-size: 28px;
-	--p-space: 20px;
-	--dt-head-space: 4px;
+    --p-space: 20px;
+    --dt-head-space: 4px;
     --content-padding: 40px;
     --side-dialog-padding: 20px;
     --section-space: 40px;
@@ -34,5 +34,6 @@
 /** colors */
 
 :root {
-	--danger-color: #d94d48;
+    --danger-color: #d94d48;
+    --border-color: lightgray;
 }

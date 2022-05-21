@@ -8,6 +8,10 @@ body * {
 	color: rgb(50, 49, 48);
 }
 
+.danger {
+	color: var(--danger-color);
+}
+
 .hidden {
 	display: none !important;
 }

@@ -5,6 +5,11 @@ side-dialog {
     overflow-y: auto;
 }
 
+side-dialog h2 {
+    width: 80%;
+    border-bottom: solid 1px var(--border-color);
+}
+
 side-dialog .fill {
     flex-grow: 1;
     margin-bottom: 40px;

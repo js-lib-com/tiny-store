@@ -32,26 +32,21 @@ public class Workspace {
 		workspaceDir = new File(WORKSPACE_DIR);
 	}
 
-	public Project getStore(String name) throws IOException {
-		File projectDir = new File(workspaceDir, name);
+	public void createProject(String projectName) throws IOException {
+		File projectDir = new File(workspaceDir, projectName);
 		if (!projectDir.exists() && !projectDir.mkdirs()) {
 			throw new IOException("Fail to create project directory " + projectDir);
 		}
-
-		Store store = dao.getStoreByName(name);
-		return new Project(projectDir, new File(RUNTIME_DIR), store, dao);
 	}
 
-	public void createStore(Store store) throws IOException {
-		File projectDir = new File(workspaceDir, store.getName());
-		if (!projectDir.exists() && !projectDir.mkdirs()) {
-			throw new IOException("Fail to create project directory " + projectDir);
-		}
-		dao.createStore(store);
-	}
-
-	public void deleteStore(String projectName) throws IOException {
+	public void deleteProject(String projectName) throws IOException {
 		File projectDir = new File(workspaceDir, projectName);
 		Files.removeFilesHierarchy(projectDir).delete();
+	}
+
+	public Project getProject(Store store) throws IOException {
+		// by convention project name is the store name
+		File projectDir = new File(workspaceDir, store.getName());
+		return new Project(projectDir, new File(RUNTIME_DIR), store, dao);
 	}
 }
