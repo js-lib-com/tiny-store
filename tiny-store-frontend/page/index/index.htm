@@ -7,7 +7,7 @@
 	</div>
 
 	<side-menu w:content="side-menu">
-		<li data-link="store.htm?${this._storesView.getSelectedId()}" class="selected">Data Store</li>
+		<li id="store-page" class="selected">Data Store</li>
 	</side-menu>
 
 	<action-bar w:content="action-bar">
@@ -21,9 +21,9 @@
 		<table-view w:compo="page/index/stores-list" />
 	</section>
 
-	<section w:content="side-dialogs">
+	<div w:content="side-dialogs">
 		<side-dialog w:compo="page/index/store-form" />
 		<side-dialog w:compo="page/index/store-delete" />
-	</section>
+	</div>
 
 </div>

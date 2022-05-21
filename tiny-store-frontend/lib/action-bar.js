@@ -3,14 +3,15 @@
     class ActionBar extends HTMLElement {
         constructor() {
             super();
+
             this._actions = {};
 
             let child = this.firstElementChild;
             while (child) {
-                if (!child.hasAttribute("id")) {
+                if (!child.id) {
                     throw "Invalid action element. Missing id.";
                 }
-                this._actions[child.getAttribute("id")] = child;
+                this._actions[child.id] = child;
                 child = child.nextElementSibling;
             }
         }

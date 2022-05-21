@@ -7,6 +7,9 @@ IndexPage = class extends Page {
 
 		this._storeForm = document.getElementById("store-form");
 
+        this._sideMenu = this.getSideMenu();
+        this._sideMenu.setLink("store-page", () => `store.htm?${this._storesView.getSelectedId()}`);
+
 		this._actionBar = this.getActionBar();
 		this._actionBar.setHandler("create-store", this._onCreateStore);
 		this._actionBar.setHandler("edit-store", this._onEditStore);
@@ -17,10 +20,11 @@ IndexPage = class extends Page {
 	}
 
 	_onStoreSelect(event) {
-		const show = event.detail.selected;
-		this._actionBar.show("create-store", !show);
-		this._actionBar.show("edit-store", show);
-		this._actionBar.show("delete-store", show);
+		const selected = event.detail.selected;
+        this._sideMenu.enable("store-page", selected);
+		this._actionBar.show("create-store", !selected);
+		this._actionBar.show("edit-store", selected);
+		this._actionBar.show("delete-store", selected);
 	}
 
 	_onCreateStore() {

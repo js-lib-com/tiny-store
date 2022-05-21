@@ -12,6 +12,11 @@ StorePage = class extends Page {
 		WorkspaceService.getStoreServices(storeId, services => this._servicesView.setItems(services));
 		WorkspaceService.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
 
+		this._sideMenu = this.getSideMenu();
+		this._sideMenu.setLink("index-page", () => `index.htm`);
+		this._sideMenu.setLink("service-page", () => `service.htm?${this._servicesView.getSelectedId()}`);
+		this._sideMenu.setLink("entity-page", () => `entity.htm?${this._entitiesView.getSelectedId()}`);
+
 		this._actionBar = this.getActionBar();
 		this._actionBar.setHandler("edit-store", this._onEditStore);
 		this._actionBar.setHandler("build-project", this._onBuildProject);
@@ -33,10 +38,11 @@ StorePage = class extends Page {
 	}
 
 	_onServiceSelect(event) {
-        const show = event.detail.selected;
-        this._actionBar.show("create-service", !show);
-        this._actionBar.show("edit-service", show);
-        this._actionBar.show("delete-service", show);
+		const selected = event.detail.selected;
+		this._sideMenu.enable("service-page", selected);
+		this._actionBar.show("create-service", !selected);
+		this._actionBar.show("edit-service", selected);
+		this._actionBar.show("delete-service", selected);
 	}
 
 	_onEditStore() {
@@ -84,10 +90,11 @@ StorePage = class extends Page {
 	}
 
 	_onEntitySelect(event) {
-        const show = event.detail.selected;
-        this._actionBar.show("create-entity", !show);
-        this._actionBar.show("edit-entity", show);
-        this._actionBar.show("delete-entity", show);
+		const selected = event.detail.selected;
+		this._sideMenu.enable("entity-page", selected);
+		this._actionBar.show("create-entity", !selected);
+		this._actionBar.show("edit-entity", selected);
+		this._actionBar.show("delete-entity", selected);
 	}
 
 	_onCreateEntity() {

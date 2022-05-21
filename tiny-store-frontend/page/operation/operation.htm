@@ -7,7 +7,7 @@
     </div>
 
     <side-menu w:content="side-menu">
-        <li data-link="service.htm?${this._operation.serviceId}" class="selected">Service</li>
+        <li id="service-page" class="selected">Service</li>
     </side-menu>
 
     <action-bar w:content="action-bar">
@@ -46,12 +46,12 @@
         <table-view w:compo="page/operation/exceptions-list" data-list="exceptions" class="hidden" />
     </section>
 
-    <section w:content="side-dialogs">
+    <div w:content="side-dialogs">
         <side-dialog w:compo="page/service/operation-form" />
         <side-dialog w:compo="page/operation/parameter-form" />
         <side-dialog w:compo="page/operation/parameter-delete" />
         <side-dialog w:compo="page/operation/exception-form" />
         <side-dialog w:compo="page/operation/exception-delete" />
-    </section>
+    </div>
 
 </div>

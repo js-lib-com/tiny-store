@@ -2,16 +2,25 @@
     class SideMenu extends HTMLElement {
         constructor() {
             super();
+
+            const children = Array.from(this.children);
+            this._linkIds = children.map(child => child.id);
         }
 
-        bind(scope) {
-            const links = this.getElementsByTagName("li");
-            for (let i = 0; i < links.length; ++i) {
-                const link = links.item(i);
-                const expression = `location.assign(\`${link.getAttribute("data-link")}\`);`;
-                console.debug(`expression: ${expression}`);
-                link.addEventListener("click", event => Function(expression).bind(scope)());
+        setLink(linkId, urlProducer) {
+            this._link(linkId).addEventListener("click", event => location.assign(urlProducer()));
+        }
+
+        enable(linkId, enabled) {
+            this._link(linkId).classList.toggle("disabled", !enabled);
+        }
+
+        _link(linkId) {
+            const link = this.children.item(this._linkIds.indexOf(linkId));
+            if (!link) {
+                throw `Missing link element with id ${linkId}.`;
             }
+            return link;
         }
     };
 

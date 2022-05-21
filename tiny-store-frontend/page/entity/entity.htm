@@ -7,7 +7,7 @@
     </div>
 
     <side-menu w:content="side-menu">
-        <li data-link="store.htm?${this._entity.storeId}" class="selected">Data Store</li>
+        <li id="store-page" class="selected">Data Store</li>
     </side-menu>
 
     <action-bar w:content="action-bar">
@@ -34,10 +34,10 @@
         <table-view w:compo="page/entity/fields-list" data-exclude="true" />
     </section>
 
-    <section w:content="side-dialogs">
+    <div w:content="side-dialogs">
         <side-dialog w:compo="page/store/entity-form" />
         <side-dialog w:compo="page/entity/field-form" />
         <side-dialog w:compo="page/entity/field-delete" />
-    </section>
+    </div>
 
 </div>

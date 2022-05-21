@@ -7,8 +7,8 @@
     </div>
 
     <side-menu w:content="side-menu">
-        <li data-link="store.htm?${this._service.storeId}" class="selected">Store</li>
-        <li data-link="operation.htm?${this._operationsView.getSelectedId()}">Operation</li>
+        <li id="store-page" class="selected">Store</li>
+        <li id="operation-page">Operation</li>
     </side-menu>
 
     <action-bar w:content="action-bar">
@@ -37,10 +37,10 @@
         <table-view w:compo="page/service/operations-list" data-exclude="true" />
     </section>
 
-    <section w:content="side-dialogs">
+    <div w:content="side-dialogs">
         <side-dialog w:compo="page/store/service-form" />
         <side-dialog w:compo="page/service/operation-form" />
         <side-dialog w:compo="page/service/operation-delete" />
-    </section>
+    </div>
 
 </div>

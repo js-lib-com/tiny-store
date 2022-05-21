@@ -9,13 +9,15 @@ class Page {
 	};
 
 	constructor() {
-		const sideMenu = document.getElementsByTagName("side-menu")[0];
-		sideMenu.bind(this);
-
+		this._sideMenu = document.getElementsByTagName("side-menu")[0];
 		this._actionBar = document.getElementsByTagName("action-bar")[0];
 
 		const breadCrumbs = document.getElementsByTagName("bread-crumbs")[0];
 		breadCrumbs.setPath(Page.PAGE_BREAD_CRUMBS[location.pathname]);
+	}
+
+	getSideMenu() {
+		return this._sideMenu;
 	}
 
 	getActionBar() {

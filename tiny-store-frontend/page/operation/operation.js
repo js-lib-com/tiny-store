@@ -11,6 +11,8 @@ OperationPage = class extends Page {
         const operationId = location.search.substring(1);
         WorkspaceService.getOperation(operationId, this._onOperationLoaded, this);
 
+        const sideMenu = this.getSideMenu();
+        sideMenu.setLink("service-page", () => `service.htm?${this._operation.serviceId}`);
 
         this._actionBar = this.getActionBar();
         this._actionBar.setHandler("edit-operation", this._onEditOperation);

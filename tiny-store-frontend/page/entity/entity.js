@@ -8,6 +8,9 @@ EntityPage = class extends Page {
         const className = location.search.substring(1);
         WorkspaceService.getEntity(className, this._onEntityLoaded.bind(this));
 
+        const sideMenu = this.getSideMenu();
+        sideMenu.setLink("store-page", () => `store.htm?${this._entity.storeId}`);
+
         this._actionBar = this.getActionBar();
         this._actionBar.setHandler("edit-entity", this._onEditEntity);
 

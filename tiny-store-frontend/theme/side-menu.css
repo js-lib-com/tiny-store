@@ -23,6 +23,11 @@ side-menu li.selected {
     color: black;
 }
 
+side-menu li.disabled {
+    color: lightgray;
+    pointer-events: none;
+}
+
 side-menu li:hover {
     border-left-color: cadetblue;
 }
