@@ -11,15 +11,19 @@ OperationPage = class extends Page {
         const operationId = location.search.substring(1);
         WorkspaceService.getOperation(operationId, this._onOperationLoaded, this);
 
-        this._menu("edit-operation", this._onEditOperation, this);
 
-        this._menu("add-parameter", this._onAddParameter, this);
-        this._menu("edit-parameter", this._onEditParameter, this);
-        this._menu("delete-parameter", this._onDeleteParameter, this);
+        this._actionBar = this.getActionBar();
+        this._actionBar.setHandler("edit-operation", this._onEditOperation);
 
-        this._menu("add-exception", this._onAddException, this);
-        this._menu("edit-exception", this._onEditException, this);
-        this._menu("delete-exception", this._onDeleteException, this);
+        this._actionBar.setHandler("add-parameter", this._onAddParameter);
+        this._actionBar.setHandler("edit-parameter", this._onEditParameter);
+        this._actionBar.setHandler("delete-parameter", this._onDeleteParameter);
+        this._onParameterSelect({ detail: { selected: false } });
+
+        this._actionBar.setHandler("add-exception", this._onAddException);
+        this._actionBar.setHandler("edit-exception", this._onEditException);
+        this._actionBar.setHandler("delete-exception", this._onDeleteException);
+        this._onExceptionSelect({ detail: { selected: false } });
     }
 
     _onOperationLoaded(operation) {
@@ -38,9 +42,10 @@ OperationPage = class extends Page {
     // --------------------------------------------------------------------
 
     _onParameterSelect(event) {
-        this._show("add-parameter", !event.detail.selected);
-        this._show("edit-parameter", event.detail.selected);
-        this._show("delete-parameter", event.detail.selected);
+		const show = event.detail.selected;
+		this._actionBar.show("add-parameter", !show);
+		this._actionBar.show("edit-parameter", show);
+		this._actionBar.show("delete-parameter", show);
     }
 
     _onAddParameter() {
@@ -75,9 +80,10 @@ OperationPage = class extends Page {
     // --------------------------------------------------------------------
 
     _onExceptionSelect(event) {
-        this._show("add-exception", !event.detail.selected);
-        this._show("edit-exception", event.detail.selected);
-        this._show("delete-exception", event.detail.selected);
+		const show = event.detail.selected;
+		this._actionBar.show("add-exception", !show);
+		this._actionBar.show("edit-exception", show);
+		this._actionBar.show("delete-exception", show);
     }
 
     _onAddException() {

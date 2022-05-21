@@ -11,12 +11,12 @@
         <li data-link="operation.htm?${this._operationsView.getSelectedId()}">Operation</li>
     </side-menu>
 
-    <ul w:content="nav">
+    <action-bar w:content="action-bar">
         <li id="edit-service"><img src="@image/action/edit" /><label>Edit Service</label></li>
         <li id="create-operation"><img src="@image/action/add" /><label>Create Operation</label></li>
         <li id="edit-operation"><img src="@image/action/edit" /><label>Edit Operation</label></li>
         <li id="delete-operation"><img src="@image/action/delete" /><label>Delete Operation</label></li>
-    </ul>
+    </action-bar>
 
     <section w:content="content">
         <dl class="line-break inline">
@@ -37,7 +37,7 @@
         <table-view w:compo="page/service/operations-list" data-exclude="true" />
     </section>
 
-    <section w:content="side-dialog">
+    <section w:content="side-dialogs">
         <side-dialog w:compo="page/store/service-form" />
         <side-dialog w:compo="page/service/operation-form" />
         <side-dialog w:compo="page/service/operation-delete" />

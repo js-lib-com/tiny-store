@@ -8,24 +8,26 @@ EntityPage = class extends Page {
         const className = location.search.substring(1);
         WorkspaceService.getEntity(className, this._onEntityLoaded.bind(this));
 
-        this._menu("edit-entity", this._onEditEntity, this);
+        this._actionBar = this.getActionBar();
+        this._actionBar.setHandler("edit-entity", this._onEditEntity);
 
-        this._menu("create-field", this._onCreateField, this);
-        this._menu("edit-field", this._onEditField, this);
-        this._menu("delete-field", this._onDeleteField, this);
+        this._actionBar.setHandler("create-field", this._onCreateField);
+        this._actionBar.setHandler("edit-field", this._onEditField);
+        this._actionBar.setHandler("delete-field", this._onDeleteField);
+        this._onFieldSelect({ detail: { selected: false } });
     }
 
     _onEntityLoaded(entity) {
         this._entity = entity;
         this._setObject(entity);
-        //this._fieldsView.addItem(entity.identity);
         this._fieldsView.addItems(this._entity.fields);
     }
 
     _onFieldSelect(event) {
-        this._show("create-field", !event.detail.selected);
-        this._show("edit-field", event.detail.selected);
-        this._show("delete-field", event.detail.selected);
+        const show = event.detail.selected;
+        this._actionBar.show("create-field", !show);
+        this._actionBar.show("edit-field", show);
+        this._actionBar.show("delete-field", show);
     }
 
     _onEditEntity() {

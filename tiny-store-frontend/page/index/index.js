@@ -3,21 +3,24 @@ IndexPage = class extends Page {
 		super();
 
 		this._storesView = document.getElementById("stores-list");
-		this._storesView.addEventListener("select", this._onStoreItemSelect.bind(this));
+		this._storesView.addEventListener("select", this._onStoreSelect.bind(this));
 
 		this._storeForm = document.getElementById("store-form");
 
-		this._menu("create-store", this._onCreateStore, this);
-		this._menu("edit-store", this._onEditStore, this);
-		this._menu("delete-store", this._onDeleteStore, this);
+		this._actionBar = this.getActionBar();
+		this._actionBar.setHandler("create-store", this._onCreateStore);
+		this._actionBar.setHandler("edit-store", this._onEditStore);
+		this._actionBar.setHandler("delete-store", this._onDeleteStore);
+		this._onStoreSelect({ detail: { selected: false } });
 
 		WorkspaceService.getStores(stores => this._storesView.setItems(stores));
 	}
 
-	_onStoreItemSelect(event) {
-		this._show("create-store", !event.detail.selected);
-		this._show("edit-store", event.detail.selected);
-		this._show("delete-store", event.detail.selected);
+	_onStoreSelect(event) {
+		const show = event.detail.selected;
+		this._actionBar.show("create-store", !show);
+		this._actionBar.show("edit-store", show);
+		this._actionBar.show("delete-store", show);
 	}
 
 	_onCreateStore() {

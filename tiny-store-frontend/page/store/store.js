@@ -12,16 +12,19 @@ StorePage = class extends Page {
 		WorkspaceService.getStoreServices(storeId, services => this._servicesView.setItems(services));
 		WorkspaceService.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
 
-		this._menu("edit-store", this._onEditStore, this);
-		this._menu("build-project", this._onBuildProject, this);
+		this._actionBar = this.getActionBar();
+		this._actionBar.setHandler("edit-store", this._onEditStore);
+		this._actionBar.setHandler("build-project", this._onBuildProject);
 
-		this._menu("create-service", this._onCreateService, this);
-		this._menu("edit-service", this._onEditService, this);
-		this._menu("delete-service", this._onDeleteService, this);
+		this._actionBar.setHandler("create-service", this._onCreateService);
+		this._actionBar.setHandler("edit-service", this._onEditService);
+		this._actionBar.setHandler("delete-service", this._onDeleteService);
+		this._onServiceSelect({ detail: { selected: false } });
 
-		this._menu("create-entity", this._onCreateEntity, this);
-		this._menu("edit-entity", this._onEditEntity, this);
-		this._menu("delete-entity", this._onDeleteEntity, this);
+		this._actionBar.setHandler("create-entity", this._onCreateEntity);
+		this._actionBar.setHandler("edit-entity", this._onEditEntity);
+		this._actionBar.setHandler("delete-entity", this._onDeleteEntity);
+		this._onEntitySelect({ detail: { selected: false } });
 	}
 
 	_onStoreLoaded(store) {
@@ -30,9 +33,10 @@ StorePage = class extends Page {
 	}
 
 	_onServiceSelect(event) {
-		this._show("create-service", !event.detail.selected);
-		this._show("edit-service", event.detail.selected);
-		this._show("delete-service", event.detail.selected);
+        const show = event.detail.selected;
+        this._actionBar.show("create-service", !show);
+        this._actionBar.show("edit-service", show);
+        this._actionBar.show("delete-service", show);
 	}
 
 	_onEditStore() {
@@ -80,9 +84,10 @@ StorePage = class extends Page {
 	}
 
 	_onEntitySelect(event) {
-		this._show("create-entity", !event.detail.selected);
-		this._show("edit-entity", event.detail.selected);
-		this._show("delete-entity", event.detail.selected);
+        const show = event.detail.selected;
+        this._actionBar.show("create-entity", !show);
+        this._actionBar.show("edit-entity", show);
+        this._actionBar.show("delete-entity", show);
 	}
 
 	_onCreateEntity() {

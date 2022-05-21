@@ -7,9 +7,10 @@
 		<script src="lib/opp.js"></script>
 		<script src="lib/object-view.js"></script>
 		<script src="lib/object-form.js"></script>
-		<script src="lib/bread-crumbs.js"></script>
 		<script src="lib/side-menu.js"></script>
+		<script src="lib/action-bar.js"></script>
 		<script src="lib/side-dialog.js"></script>
 		<script src="lib/table-view.js"></script>
+		<script src="lib/bread-crumbs.js"></script>
 	</head>
 </template>

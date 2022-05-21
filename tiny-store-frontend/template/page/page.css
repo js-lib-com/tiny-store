@@ -79,41 +79,9 @@ side-menu {
     grid-row: 2/4;
 }
 
-body>object-view>nav {
+action-bar {
     grid-column: 2;
     grid-row: 2;
-    border-bottom: solid 1px lightgray;
-}
-
-body>object-view>nav ul {
-    list-style: none;
-    margin: 0;
-}
-
-body>object-view>nav ul li {
-    display: inline-block;
-    line-height: var(--nav-height);
-    padding-left: 10px;
-    padding-right: 40px;
-    cursor: pointer;
-}
-
-body>object-view>nav ul li.disabled {
-    opacity: 0.4;
-    cursor: default;
-}
-
-body>object-view>nav ul li:hover {
-    background-color: #F0F0F0;
-}
-
-body>object-view>nav ul li img {
-    vertical-align: middle;
-}
-
-body>object-view>nav ul li label {
-    color: cornflowerblue;
-    cursor: inherit;
 }
 
 label {
@@ -128,25 +96,13 @@ body>object-view>.content {
     padding-top: 0;
 }
 
-body>.side-dialog {
+body>.side-dialogs {
     grid-column: 3;
     grid-row: 2;
     border-left: solid 1px lightgray;
     margin: 0 0 0 var(--side-dialog-padding);
     padding: var(--side-dialog-padding);
     overflow: hidden;
-}
-
-body>.side-dialog side-dialog {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
-}
-
-body>.side-dialog .fill {
-    flex-grow: 1;
-    margin-bottom: 40px;
 }
 
 body>footer {

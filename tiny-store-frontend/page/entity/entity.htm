@@ -10,12 +10,12 @@
         <li data-link="store.htm?${this._entity.storeId}" class="selected">Data Store</li>
     </side-menu>
 
-    <ul w:content="nav">
+    <action-bar w:content="action-bar">
         <li id="edit-entity"><img src="@image/action/edit" /><label>Edit Entity</label></li>
         <li id="create-field"><img src="@image/action/add" /><label>Create Field</label></li>
         <li id="edit-field" class="hidden"><img src="@image/action/edit" /><label>Edit Field</label></li>
         <li id="delete-field" class="hidden"><img src="@image/action/delete" /><label>Delete Field</label></li>
-    </ul>
+    </action-bar>
 
     <section w:content="content">
         <dl class="line-break inline">
@@ -34,7 +34,7 @@
         <table-view w:compo="page/entity/fields-list" data-exclude="true" />
     </section>
 
-    <section w:content="side-dialog">
+    <section w:content="side-dialogs">
         <side-dialog w:compo="page/store/entity-form" />
         <side-dialog w:compo="page/entity/field-form" />
         <side-dialog w:compo="page/entity/field-delete" />

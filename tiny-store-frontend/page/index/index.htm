@@ -10,18 +10,18 @@
 		<li data-link="store.htm?${this._storesView.getSelectedId()}" class="selected">Data Store</li>
 	</side-menu>
 
-	<ul w:content="nav">
+	<action-bar w:content="action-bar">
 		<li id="create-store"><img src="@image/action/add" /><label>Create Store</label></li>
-		<li id="edit-store" class="hidden"><img src="@image/action/edit" /><label>Edit Store</label></li>
-		<li id="delete-store" class="hidden"><img src="@image/action/delete" /><label>Delete Store</label></li>
-	</ul>
+		<li id="edit-store"><img src="@image/action/edit" /><label>Edit Store</label></li>
+		<li id="delete-store"><img src="@image/action/delete" /><label>Delete Store</label></li>
+	</action-bar>
 
 	<section w:content="content">
 		<h2 class="line-break">Data Stores:</h2>
 		<table-view w:compo="page/index/stores-list" />
 	</section>
 
-	<section w:content="side-dialog">
+	<section w:content="side-dialogs">
 		<side-dialog w:compo="page/index/store-form" />
 		<side-dialog w:compo="page/index/store-delete" />
 	</section>

@@ -1,0 +1,33 @@
+action-bar {
+    list-style: none;
+    border-bottom: solid 1px lightgray;
+    margin: 0;
+}
+
+action-bar li {
+    display: inline-block;
+    line-height: var(--nav-height);
+    padding-left: 10px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+action-bar li.disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+action-bar li:hover {
+    background-color: #F0F0F0;
+}
+
+action-bar li img {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    vertical-align: middle;
+}
+
+action-bar li label {
+    color: cornflowerblue;
+    cursor: inherit;
+}

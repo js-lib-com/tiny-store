@@ -9,11 +9,13 @@ ServicePage = class extends Page {
         WorkspaceService.getService(serviceId, this._onServiceLoaded.bind(this));
         WorkspaceService.getServiceOperations(serviceId, operations => this._operationsView.setItems(operations));
 
-        this._menu("edit-service", this._onEditService, this);
+        this._actionBar = this.getActionBar();
+        this._actionBar.setHandler("edit-service", this._onEditService);
+        this._actionBar.setHandler("create-operation", this._onCreateOperation);
+        this._actionBar.setHandler("edit-operation", this._onEditOperation);
+        this._actionBar.setHandler("delete-operation", this._onDeleteOperation);
 
-        this._menu("create-operation", this._onCreateOperation, this);
-        this._menu("edit-operation", this._onEditOperation, this);
-        this._menu("delete-operation", this._onDeleteOperation, this);
+        this._onOperationSelect({ detail: { selected: false } });
     }
 
     _onServiceLoaded(service) {
@@ -22,9 +24,10 @@ ServicePage = class extends Page {
     }
 
     _onOperationSelect(event) {
-        this._show("create-operation", !event.detail.selected);
-        this._show("edit-operation", event.detail.selected);
-        this._show("delete-operation", event.detail.selected);
+        const show = event.detail.selected;
+        this._actionBar.show("create-operation", !show);
+        this._actionBar.show("edit-operation", show);
+        this._actionBar.show("delete-operation", show);
     }
 
     _onEditService() {

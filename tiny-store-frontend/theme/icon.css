@@ -1,8 +1,8 @@
 .icon {
     display: inline-block;
-    width: var(--icon-size);
-    height: var(--icon-size);
-    line-height: var(--icon-size);
+    width: var(--header-height);
+    height: var(--header-height);
+    line-height: var(--header-height);
     cursor: pointer;
     text-align: center;
 }
@@ -12,6 +12,8 @@
 
 .icon img {
     display: inline-block;
+    width: var(--icon-size);
+    height: var(--icon-size);
     vertical-align: middle;
     margin: 0 auto;
 }

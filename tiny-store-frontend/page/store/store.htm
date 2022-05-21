@@ -12,17 +12,16 @@
 		<li data-link="entity.htm?${this._entitiesView.getSelectedId()}">Store Entity</li>
 	</side-menu>
 
-	<ul w:content="nav">
+	<action-bar w:content="action-bar">
 		<li id="edit-store"><img src="@image/action/edit" /><label>Edit Store</label></li>
 		<li id="create-service"><img src="@image/action/add" /><label>Create Service</label></li>
-		<li id="edit-service" class="hidden"><img src="@image/action/edit" /><label>Edit Service</label></li>
-		<li id="delete-service" class="hidden"><img src="@image/action/delete" /><label>Delete Service</label>
-		</li>
+		<li id="edit-service"><img src="@image/action/edit" /><label>Edit Service</label></li>
+		<li id="delete-service"><img src="@image/action/delete" /><label>Delete Service</label></li>
 		<li id="create-entity"><img src="@image/action/add" /><label>Create Entity</label></li>
-		<li id="edit-entity" class="hidden"><img src="@image/action/edit" /><label>Edit Entity</label></li>
-		<li id="delete-entity" class="hidden"><img src="@image/action/delete" /><label>Delete Entity</label></li>
+		<li id="edit-entity"><img src="@image/action/edit" /><label>Edit Entity</label></li>
+		<li id="delete-entity"><img src="@image/action/delete" /><label>Delete Entity</label></li>
 		<li id="build-project"><img src="@image/action/build" /><label>Build Project</label></li>
-	</ul>
+	</action-bar>
 
 	<section w:content="content">
 		<dl class="line-break inline">
@@ -52,7 +51,7 @@
 		<table-view w:compo="page/store/entities-list" data-exclude="true" />
 	</section>
 
-	<section w:content="side-dialog">
+	<section w:content="side-dialogs">
 		<side-dialog w:compo="page/index/store-form" />
 		<side-dialog w:compo="page/store/service-form" />
 		<side-dialog w:compo="page/store/service-delete" />

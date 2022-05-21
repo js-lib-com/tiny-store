@@ -12,21 +12,20 @@ class Page {
 		const sideMenu = document.getElementsByTagName("side-menu")[0];
 		sideMenu.bind(this);
 
+		this._actionBar = document.getElementsByTagName("action-bar")[0];
+
 		const breadCrumbs = document.getElementsByTagName("bread-crumbs")[0];
 		breadCrumbs.setPath(Page.PAGE_BREAD_CRUMBS[location.pathname]);
+	}
+
+	getActionBar() {
+		this._actionBar.setHandlersScope(this);
+		return this._actionBar;
 	}
 
 	_setObject(object) {
 		const pageView = document.getElementById("page-view");
 		pageView.setObject(object);
-	}
-
-	_menu(id, listener, scope) {
-		const element = document.getElementById(id);
-		if (!element) {
-			throw `Missing element with id ${id}.`;
-		}
-		element.addEventListener("click", listener.bind(scope));
 	}
 
 	_show(id, show) {
