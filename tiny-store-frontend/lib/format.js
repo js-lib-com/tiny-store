@@ -3,6 +3,7 @@ FormatFactory = {
         switch (className) {
             case "ParametersFormat": return ParametersFormat;
             case "TypeFormat": return TypeFormat;
+            case "VersionFormat": return VersionFormat;
             default: throw `Not defined formatter class ${className}.`;
         }
     }
@@ -20,5 +21,11 @@ TypeFormat = {
             return type.name;
         }
         return `${type.collection}<${type.name}>`;
+    }
+}
+
+VersionFormat = {
+    format(version) {
+        return `${version.major}.${version.minor}`;
     }
 }

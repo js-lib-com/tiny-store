@@ -13,7 +13,7 @@ public class Store implements PersistedObject {
 	private String description;
 	
 	private String packageName;
-	private String version;
+	private Version version;
 
 	private String connectionString;
 	private String user;
@@ -69,11 +69,11 @@ public class Store implements PersistedObject {
 		this.packageName = packageName;
 	}
 
-	public String getVersion() {
+	public Version getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(Version version) {
 		this.version = version;
 	}
 

@@ -20,6 +20,7 @@ import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
+import js.tiny.store.meta.Version;
 import js.tiny.store.tool.Project;
 import js.tiny.store.tool.Workspace;
 
@@ -37,6 +38,7 @@ public class WorkspaceService {
 
 	public List<Store> createStore(Store store) throws IOException {
 		store.setOwner("irotaru");
+		store.setVersion(new Version(1, 0));
 		dao.createStore(store);
 
 		// by convention project name is the store name
