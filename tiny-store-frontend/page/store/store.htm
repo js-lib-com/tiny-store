@@ -14,12 +14,16 @@
 
 	<action-bar w:content="action-bar">
 		<li id="edit-store"><img src="@image/action/edit" /><label>Edit Store</label></li>
+		
 		<li id="create-service"><img src="@image/action/add" /><label>Create Service</label></li>
 		<li id="edit-service"><img src="@image/action/edit" /><label>Edit Service</label></li>
 		<li id="delete-service"><img src="@image/action/delete" /><label>Delete Service</label></li>
+
+		<li id="create-dao"><img src="@image/action/add" /><label>Create DAO</label></li>
 		<li id="create-entity"><img src="@image/action/add" /><label>Create Entity</label></li>
 		<li id="edit-entity"><img src="@image/action/edit" /><label>Edit Entity</label></li>
 		<li id="delete-entity"><img src="@image/action/delete" /><label>Delete Entity</label></li>
+		
 		<li id="build-project"><img src="@image/action/build" /><label>Build Project</label></li>
 	</action-bar>
 
@@ -57,6 +61,7 @@
 		<side-dialog w:compo="page/index/store-form" />
 		<side-dialog w:compo="page/store/service-form" />
 		<side-dialog w:compo="page/store/service-delete" />
+		<side-dialog w:compo="page/store/dao-form" />
 		<side-dialog w:compo="page/store/entity-form" />
 		<side-dialog w:compo="page/store/entity-delete" />
 	</section>

@@ -122,6 +122,24 @@ WorkspaceService = {
 		}
 	},
 
+	 createDaoService: function(storeId, entity, service) {
+		var __callback__ = arguments[3];
+		var __scope__ = arguments[4] || window;
+		var url = "js/tiny/store/WorkspaceService/createDaoService.rmi";
+		var parameters = [storeId, entity, service];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
+		}
+	},
+
 	 saveService: function(service) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;

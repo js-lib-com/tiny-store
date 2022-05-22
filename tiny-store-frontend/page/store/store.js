@@ -26,6 +26,7 @@ StorePage = class extends Page {
 		this._actionBar.setHandler("delete-service", this._onDeleteService);
 		this._onServiceSelect({ detail: { selected: false } });
 
+		this._actionBar.setHandler("create-dao", this._onCreateDAO);
 		this._actionBar.setHandler("create-entity", this._onCreateEntity);
 		this._actionBar.setHandler("edit-entity", this._onEditEntity);
 		this._actionBar.setHandler("delete-entity", this._onDeleteEntity);
@@ -61,7 +62,12 @@ StorePage = class extends Page {
 		const dialog = document.getElementById("service-form");
 		dialog.setTitle("Create Service");
 
-		dialog.open(service => {
+		const service = {
+			interfaceName: `${this._store.packageName}.`,
+			className: `${this._store.packageName}.impl.`
+		};
+
+		dialog.edit(service, service => {
 			WorkspaceService.createService(this._store.id, service, service => {
 				this._servicesView.addItem(service);
 			});
@@ -92,9 +98,31 @@ StorePage = class extends Page {
 	_onEntitySelect(event) {
 		const selected = event.detail.selected;
 		this._sideMenu.enable("entity-page", selected);
+		this._actionBar.show("create-dao", selected);
 		this._actionBar.show("create-entity", !selected);
 		this._actionBar.show("edit-entity", selected);
 		this._actionBar.show("delete-entity", selected);
+		this._actionBar.show("build-project", !selected);
+	}
+
+	_onCreateDAO() {
+		const dialog = document.getElementById("dao-form");
+
+		const entity = this._entitiesView.getSelectedItem();
+		const entityName = entity.className.split('.').pop();
+
+		const service = {
+			interfaceName: `${this._store.packageName}.I${entityName}DAO`,
+			className: `${this._store.packageName}.impl.${entityName}DAO`,
+			description: `Data access for ${entityName} entity.`,
+			restPath: entityName.toLowerCase()
+		};
+
+		dialog.edit(service, service => {
+			WorkspaceService.createDaoService(this._store.id, entity, service, service => {
+				this._servicesView.addItem(service);
+			});
+		});
 	}
 
 	_onCreateEntity() {

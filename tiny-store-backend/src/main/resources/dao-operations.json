@@ -1,0 +1,139 @@
+[
+	{
+		"dataOpcode": "CREATE",
+		"description": "Create new ${entity-name}.",
+		"exceptions": [],
+		"name": "create",
+		"parameters": [
+			{
+				"name": "${entity-name}",
+				"restParameter": "ENTITY_PARAM",
+				"type": {
+					"name": "${entity-class}"
+				},
+				"description": "detached ${entity-name} entity"
+			}
+		],
+		"restMethod": "POST",
+		"value": {
+			"type": {
+				"name": "${entity-class}"
+			},
+			"description": "${entity-name} entity with ID field updated"
+		}
+	},
+	{
+		"dataOpcode": "READ",
+		"description": "Get ${entity-name} by ID.",
+		"exceptions": [],
+		"name": "read",
+		"parameters": [
+			{
+				"name": "id",
+				"restParameter": "PATH_PARAM",
+				"type": {
+					"name": "${entity-id-type}"
+				},
+				"description": "database identity"
+			}
+		],
+		"restMethod": "GET",
+		"value": {
+			"type": {
+				"name": "${entity-class}"
+			},
+			"description": "${entity-name} entity with requested ID"
+		}
+	},
+	{
+		"dataOpcode": "UPDATE",
+		"description": "Update existing ${entity-name}.",
+		"exceptions": [],
+		"name": "update",
+		"parameters": [
+			{
+				"name": "${entity-name}",
+				"restParameter": "ENTITY_PARAM",
+				"type": {
+					"name": "${entity-class}"
+				},
+				"description": "detached ${entity-name} entity"
+			}
+		],
+		"restMethod": "PUT",
+		"value": {
+			"type": {
+				
+			}
+		}
+	},
+	{
+		"dataOpcode": "DELETE",
+		"description": "Delete existing ${entity-name} by ID.",
+		"exceptions": [],
+		"name": "delete",
+		"parameters": [
+			{
+				"name": "id",
+				"restParameter": "PATH_PARAM",
+				"type": {
+					"name": "${entity-id-type}"
+				},
+				"description": "database identity"
+			}
+		],
+		"restMethod": "DELETE",
+		"value": {
+			"type": {
+				
+			}
+		}
+	},
+	{
+		"dataOpcode": "READ",
+		"description": "Get all ${entity-name} records. Store max.results limit applies.",
+		"exceptions": [],
+		"name": "list",
+		"parameters": [],
+		"restMethod": "GET",
+		"value": {
+			"type": {
+				"name": "${entity-class}",
+				"collection": "java.util.List"
+			},
+			"description": "list of all ${entity-name} entities, limited to store max.result property"
+		}
+	},
+	{
+		"name": "find",
+		"dataOpcode": "READ",
+		"restMethod": "GET",
+		"description": "Get all ${entity-name} records with requested property value. Returns empty list if no entity found.",
+		"parameters": [
+			{
+				"name": "name",
+				"restParameter": "PATH_PARAM",
+				"type": {
+					"name": "java.lang.String"
+				},
+				"description": "property name"
+			},
+			{
+				"name": "value",
+				"restParameter": "PATH_PARAM",
+				"type": {
+					"name": "java.lang.Object"
+				},
+				"description": "property value"
+			}
+		],
+		"value": {
+			"type": {
+				"name": "${entity-class}",
+				"collection": "java.util.List"
+			},
+			"description": "list of ${entity-name} entities, possible empty"
+		},
+		"exceptions": []
+	}
+]

@@ -89,9 +89,22 @@ public class ${service.implementationName} implements ${service.interfaceName} {
 #elseif($operation.dataOpcode == "CREATE")
 ## ---------------------------------
 		em.persist(${operation.parameter.name});
+#if(!$operation.value.void)
+		return ${operation.parameter.name};
+#end
 #elseif($operation.dataOpcode == "READ")
 ## -------------------------------
+#if($operation.parametersCount == 0)
+		TypedQuery query = em.createQuery("select e from ${operation.value.rawType} e", ${operation.value.rawType}.class);
+		return query.getResultList();
+#elseif($operation.parametersCount == 1)
 		return em.find(${operation.value.type}.class, ${operation.parameter.name});
+#elseif($operation.parametersCount == 2)
+		String jpql = String.format("select e from ${operation.value.rawType} e where e.%s=?1", ${operation.parameters[0].name});
+		TypedQuery query = em.createQuery(jpql, ${operation.value.rawType}.class);
+		query.setParameter(1, ${operation.parameters[1].name});
+		return query.getResultList();
+#end
 #elseif($operation.dataOpcode == "UPDATE")
 ## ---------------------------------
 		em.merge(${operation.parameter.name});

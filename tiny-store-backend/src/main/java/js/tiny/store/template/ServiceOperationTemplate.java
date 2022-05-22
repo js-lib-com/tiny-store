@@ -118,6 +118,10 @@ public class ServiceOperationTemplate {
 	public List<OperationParameterTemplate> getParameters() {
 		return parameters;
 	}
+	
+	public int getParametersCount() {
+		return parameters.size();
+	}
 
 	public boolean isEntityParam() {
 		return entityParam;

@@ -17,7 +17,10 @@
         setObject(object) {
             this._inputs.forEach(input => {
                 input.classList.remove("invalid");
-                input.value = OPP.get(object, input.getAttribute("name"));
+                const value = OPP.get(object, input.getAttribute("name"));
+                if (value) {
+                    input.value = value;
+                }
             });
         }
 

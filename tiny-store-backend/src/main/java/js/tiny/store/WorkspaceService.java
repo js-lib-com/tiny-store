@@ -4,7 +4,9 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
@@ -13,6 +15,8 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import js.json.Json;
+import js.lang.GType;
 import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.store.dao.IDAO;
@@ -22,7 +26,9 @@ import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.Version;
 import js.tiny.store.tool.Project;
+import js.tiny.store.tool.Strings;
 import js.tiny.store.tool.Workspace;
+import js.util.Classes;
 
 @ApplicationScoped
 @Remote
@@ -78,6 +84,26 @@ public class WorkspaceService {
 	public DataService createService(String storeId, DataService service) {
 		service.setStoreId(storeId);
 		return dao.createService(service);
+	}
+
+	public DataService createDaoService(String storeId, StoreEntity entity, DataService service) throws IOException {
+		service.setStoreId(storeId);
+		DataService createdService = dao.createService(service);
+
+		Map<String,String> variables = new HashMap<>();
+		variables.put("entity-class", entity.getClassName());
+		variables.put("entity-name", Strings.getSimpleName(entity.getClassName()));
+		variables.put("entity-id-type", Strings.getParameterizedName(entity.getFields().get(0).getType()));
+		String operationsJson = Strings.injectVariables(Strings.load(Classes.getResourceAsReader("/dao-operations.json")), variables);
+				
+		Json json = Classes.loadService(Json.class);
+		List<ServiceOperation> operations = json.parse(operationsJson, new GType(List.class, ServiceOperation.class));
+		operations.forEach(operation -> {
+			operation.setServiceId(createdService.getId().toHexString());
+			dao.createOperation(operation);
+		});
+
+		return createdService;
 	}
 
 	public void saveService(DataService service) {
