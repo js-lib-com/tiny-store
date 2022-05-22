@@ -1,17 +1,17 @@
 FormatFactory = {
-    get(className) {
-        switch (className) {
-            case "ParametersFormat": return ParametersFormat;
-            case "TypeFormat": return TypeFormat;
-            case "VersionFormat": return VersionFormat;
-            default: throw `Not defined formatter class ${className}.`;
+    get(formatName) {
+        switch (formatName) {
+            case "parameters": return ParametersFormat;
+            case "type": return TypeFormat;
+            case "version": return VersionFormat;
+            default: throw `Not defined formatter class ${formatName}.`;
         }
     }
 };
 
 ParametersFormat = {
     format(parameters) {
-        return "";
+        return parameters.map(parameter => TypeFormat.format(parameter.type)).join(", ");
     }
 }
 
