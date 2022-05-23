@@ -5,8 +5,6 @@ IndexPage = class extends Page {
 		this._storesView = document.getElementById("stores-list");
 		this._storesView.addEventListener("select", this._onStoreSelect.bind(this));
 
-		this._storeForm = document.getElementById("store-form");
-
         this._sideMenu = this.getSideMenu();
         this._sideMenu.setLink("store-page", () => `store.htm?${this._storesView.getSelectedId()}`);
 
