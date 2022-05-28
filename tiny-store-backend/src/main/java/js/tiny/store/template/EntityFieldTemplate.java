@@ -12,7 +12,7 @@ public class EntityFieldTemplate {
 	public EntityFieldTemplate(EntityField entityField) {
 		this.entityField = entityField;
 		this.type = Strings.getParameterizedName(entityField.getType());
-		this.title = Strings.toTitleCase(entityField.getName());
+		this.title = Character.toUpperCase(entityField.getName().charAt(0)) + entityField.getName().substring(1);
 	}
 
 	public String getName() {
@@ -26,7 +26,7 @@ public class EntityFieldTemplate {
 	public String getDescription() {
 		return entityField.getDescription();
 	}
-	
+
 	public FieldFlag getFlag() {
 		return entityField.getFlag();
 	}

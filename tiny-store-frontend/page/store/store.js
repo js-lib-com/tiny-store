@@ -129,7 +129,11 @@ StorePage = class extends Page {
 		const dialog = document.getElementById("entity-form");
 		dialog.setTitle("Create Entity");
 
-		dialog.open(entity => {
+		const entity = {
+			className: `${this._store.packageName}.`,
+		};
+
+		dialog.edit(entity, entity => {
 			WorkspaceService.createEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});

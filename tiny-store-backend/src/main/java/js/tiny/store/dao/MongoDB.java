@@ -15,23 +15,23 @@ import com.mongodb.client.MongoDatabase;
 
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import js.tiny.store.Context;
 
 @ApplicationScoped
 public class MongoDB {
-	private static final String MONGO_URL = "mongodb://10.138.44.35:27017";
-	private static final String MONG_DB = "tiny_store";
+	private MongoClient client;
+	private MongoDatabase database;
 
-	private final MongoClient client;
-	private final MongoDatabase database;
-
-	public MongoDB() {
-		ConnectionString connectionString = new ConnectionString(MONGO_URL);
+	@Inject
+	public MongoDB(Context context) {
+		ConnectionString connectionString = new ConnectionString(context.getMongoURL());
 		CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
 		CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
 
 		MongoClientSettings clientSettings = MongoClientSettings.builder().applyConnectionString(connectionString).codecRegistry(codecRegistry).build();
 		this.client = MongoClients.create(clientSettings);
-		this.database = this.client.getDatabase(MONG_DB);
+		this.database = this.client.getDatabase(context.getMongoDatabase());
 	}
 
 	@PreDestroy

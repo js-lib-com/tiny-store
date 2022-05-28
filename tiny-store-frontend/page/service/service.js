@@ -48,7 +48,9 @@ ServicePage = class extends Page {
         dialog.setTitle("Create Operation");
 
         dialog.open(operation => {
-            WorkspaceService.createOperation(this._service.id, operation, () => this._operationsView.addItem(operation));
+            WorkspaceService.createOperation(this._service.id, operation, operation => {
+                this._operationsView.addItem(operation);
+            });
         });
     }
 

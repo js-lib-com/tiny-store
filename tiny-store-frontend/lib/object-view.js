@@ -33,14 +33,8 @@
                 else if (childElement.hasAttribute("data-list")) {
                     console.debug(`List element ${childElement.tagName}.`);
                     const list = OPP.get(object, childElement.getAttribute("data-list"));
-                    if (list && list.length) {
-                        console.debug(`List property ${list}.`);
-                        childElement.classList.remove("hidden");
-                        childElement.setItems(list);
-                    }
-                    else {
-                        childElement.classList.add("hidden");
-                    }
+                    console.debug(`List property ${list}.`);
+                    childElement.setItems(list);
                 }
                 else {
                     this._inject(childElement, object);

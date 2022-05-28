@@ -88,10 +88,14 @@ public class ${service.implementationName} implements ${service.interfaceName} {
 #end
 #elseif($operation.dataOpcode == "CREATE")
 ## ---------------------------------
+#if($operation.parametersCount > 0)
 		em.persist(${operation.parameter.name});
 #if(!$operation.value.void)
 		return ${operation.parameter.name};
 #end
+#else
+		return null;
+#end		
 #elseif($operation.dataOpcode == "READ")
 ## -------------------------------
 #if($operation.parametersCount == 0)

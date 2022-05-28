@@ -1,0 +1,15 @@
+<Context reloadable="true">
+
+	<Environment name="mongo.url" type="java.lang.String" value="mongodb://10.138.44.35:27017" />
+	<Environment name="mongo.db" type="java.lang.String" value="tiny_store" />
+
+	<Environment name="workspace.dir" type="java.lang.String" value="${catalina.base}/workspace" />
+	<Environment name="runtime.dir" type="java.lang.String" value="${catalina.base}" />
+
+	<Environment name="proxy.protocol" type="java.lang.String" value="http" />
+	<Environment name="proxy.host" type="java.lang.String" value="10.138.98.4" />
+	<Environment name="proxy.port" type="java.lang.Integer" value="3128" />
+	<Environment name="proxy.user" type="java.lang.String" value="" />
+	<Environment name="proxy.password" type="java.lang.String" value="" />
+
+</Context>

@@ -15,20 +15,29 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
+import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 
 import js.log.Log;
 import js.log.LogFactory;
+import js.tiny.store.Context;
 import js.tiny.store.dao.IDAO;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
@@ -46,6 +55,8 @@ public class Project {
 	private static final String CLIENT_CLASSES_DIR = "target/client-classes";
 
 	private final HttpClientBuilder clientBuilder;
+	private final RequestConfig requestConfig;
+
 	private final Store store;
 	private final IDAO dao;
 
@@ -64,13 +75,28 @@ public class Project {
 
 	private File clientClassesDir;
 
-	public Project(File projectDir, File runtimeDir, Store store, IDAO dao) throws IOException {
-		this.clientBuilder = HttpClientBuilder.create();
+	public Project(Context context, Store store, IDAO dao) throws IOException {
+		HttpClientBuilder clientBuilder = HttpClients.custom();
+		RequestConfig.Builder configBuilder = RequestConfig.custom();
+		if (context.hasProxy()) {
+			HttpHost proxy = new HttpHost(context.getProxyHost(), context.getProxyPort(), context.getProxyProtocol());
+			configBuilder.setProxy(proxy);
+		}
+		this.requestConfig = configBuilder.build();
+
+		if (context.isProxySecure()) {
+			CredentialsProvider credentials = new BasicCredentialsProvider();
+			credentials.setCredentials(new AuthScope(context.getProxyHost(), context.getProxyPort()), new UsernamePasswordCredentials(context.getProxyUser(), context.getProxyPassword()));
+			clientBuilder = clientBuilder.setDefaultCredentialsProvider(credentials);
+		}
+		this.clientBuilder = clientBuilder;
+
 		this.store = store;
 		this.dao = dao;
 
-		this.projectDir = projectDir;
-		this.runtimeDir = runtimeDir;
+		// by convention project name is the store name
+		this.projectDir = new File(context.getWorkspaceDir(), store.getName());
+		this.runtimeDir = context.getRuntimeDir();
 
 		this.targetDir = new File(projectDir, TARGET_DIR);
 		if (!this.targetDir.exists() && !this.targetDir.mkdirs()) {
@@ -136,7 +162,8 @@ public class Project {
 
 		generate("/web.xml.vtl", Files.webDescriptorFile(warDir));
 		generate("/app.xml.vtl", Files.appDescriptorFile(warDir));
-		generate("/context.xml.vtl", Files.contextFile(warDir), properties("store", store));
+		// TODO: hack on connection string ampersand escape
+		generate("/context.xml.vtl", Files.contextFile(warDir), properties("store", store, "connectionString", Strings.escapeXML(store.getConnectionString())));
 		generate("/persistence.xml.vtl", Files.persistenceFile(warDir), properties("store", store, "entities", entities));
 
 		return !entities.isEmpty() || !services.isEmpty();
@@ -183,22 +210,35 @@ public class Project {
 		}
 	}
 
-	public void compileSources() throws IOException {
+	public boolean compileSources() throws IOException {
 		List<File> sourceFiles = new ArrayList<>();
 		Files.scanSources(serverSourceDir, sourceFiles);
 
 		File librariesDir = new File(runtimeDir, "libx");
+		if (!librariesDir.exists()) {
+			librariesDir = new File(runtimeDir, "lib");
+		}
 		List<File> libraries = new ArrayList<>();
 		libraries.add(new File(librariesDir, "js-jee-api-1.1.jar"));
 		libraries.add(new File(librariesDir, "js-transaction-api-1.3.jar"));
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		DiagnosticListener<JavaFileObject> diagnosticListener = diagnostic -> {
+			System.out.println(diagnostic);
+		};
+		List<String> options = Arrays.asList("-source", "1.8", "-target", "1.8");
+
 		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
 			fileManager.setLocation(StandardLocation.CLASS_PATH, libraries);
 			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(warClassesDir));
 
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
-			compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
+			if (result == null || !result) {
+				log.warn("Compilation error on server sources: %s", sourceFiles);
+				return false;
+			}
+			return true;
 		}
 	}
 
@@ -227,16 +267,26 @@ public class Project {
 		}
 	}
 
-	public void compileClientSources() throws IOException {
+	public boolean compileClientSources() throws IOException {
 		List<File> sourceFiles = new ArrayList<>();
 		Files.scanSources(clientSourceDir, sourceFiles);
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		DiagnosticListener<JavaFileObject> diagnosticListener = diagnostic -> {
+			System.out.println(diagnostic);
+		};
+		List<String> options = Arrays.asList("-source", "1.8", "-target", "1.8");
+
 		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
 			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(clientClassesDir));
 
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
-			compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
+			if (result == null || !result) {
+				log.warn("Compilation error on client sources: %s", sourceFiles);
+				return false;
+			}
+			return true;
 		}
 	}
 
@@ -251,9 +301,12 @@ public class Project {
 	}
 
 	public void deployClientJar() throws IOException {
-		String url = String.format("https://maven.js-lib.com/%s-store/%s/%s", store.getPackageName().replace('.', '/'), store.getVersion(), clientJarFile.getName());
+		String url = String.format("https://maven.js-lib.com/%s/%s-store/%s/%s", store.getPackageName().replace('.', '/'), store.getName(), store.getVersion(), clientJarFile.getName());
+		log.debug("Deploy client JAR to |%s|.", url);
+
 		try (CloseableHttpClient client = clientBuilder.build()) {
 			HttpPost httpPost = new HttpPost(url);
+			httpPost.setConfig(requestConfig);
 			httpPost.setHeader("Content-Type", "application/octet-stream");
 			httpPost.setEntity(new InputStreamEntity(new FileInputStream(clientJarFile)));
 

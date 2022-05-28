@@ -196,8 +196,13 @@ public class WorkspaceService {
 		project.clean();
 
 		if (project.generateSources()) {
-			project.compileSources();
-			project.compileClientSources();
+			if(!project.compileSources()) {
+				// TODO: send compilation diagnostic to user interface
+				return false;
+			}
+			if(!project.compileClientSources()) {
+				return false;
+			}
 		}
 
 		project.buildWar();
