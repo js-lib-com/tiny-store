@@ -53,6 +53,7 @@ public class Project {
 	private static final String TARGET_DIR = "target";
 	private static final String WAR_CLASSES_DIR = "/WEB-INF/classes";
 	private static final String CLIENT_CLASSES_DIR = "target/client-classes";
+	private static final String JAVA_COMPILER = "1.8";
 
 	private final HttpClientBuilder clientBuilder;
 	private final RequestConfig requestConfig;
@@ -211,35 +212,11 @@ public class Project {
 	}
 
 	public boolean compileSources() throws IOException {
-		List<File> sourceFiles = new ArrayList<>();
-		Files.scanSources(serverSourceDir, sourceFiles);
-
 		File librariesDir = new File(runtimeDir, "libx");
 		if (!librariesDir.exists()) {
 			librariesDir = new File(runtimeDir, "lib");
 		}
-		List<File> libraries = new ArrayList<>();
-		libraries.add(new File(librariesDir, "js-jee-api-1.1.jar"));
-		libraries.add(new File(librariesDir, "js-transaction-api-1.3.jar"));
-
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		DiagnosticListener<JavaFileObject> diagnosticListener = diagnostic -> {
-			System.out.println(diagnostic);
-		};
-		List<String> options = Arrays.asList("-source", "1.8", "-target", "1.8");
-
-		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
-			fileManager.setLocation(StandardLocation.CLASS_PATH, libraries);
-			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(warClassesDir));
-
-			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
-			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
-			if (result == null || !result) {
-				log.warn("Compilation error on server sources: %s", sourceFiles);
-				return false;
-			}
-			return true;
-		}
+		return compile(serverSourceDir, warClassesDir, new File(librariesDir, "js-jee-api-1.1.jar"), new File(librariesDir, "js-transaction-api-1.3.jar"));
 	}
 
 	public void buildWar() throws IOException {
@@ -268,17 +245,24 @@ public class Project {
 	}
 
 	public boolean compileClientSources() throws IOException {
+		return compile(clientSourceDir, clientClassesDir);
+	}
+
+	private static boolean compile(File sourceDir, File classDir, File... libraries) throws IOException {
 		List<File> sourceFiles = new ArrayList<>();
-		Files.scanSources(clientSourceDir, sourceFiles);
+		Files.scanSources(sourceDir, sourceFiles);
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		DiagnosticListener<JavaFileObject> diagnosticListener = diagnostic -> {
 			System.out.println(diagnostic);
 		};
-		List<String> options = Arrays.asList("-source", "1.8", "-target", "1.8");
+		List<String> options = Arrays.asList("-source", JAVA_COMPILER, "-target", JAVA_COMPILER);
 
 		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
-			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(clientClassesDir));
+			if (libraries.length > 0) {
+				fileManager.setLocation(StandardLocation.CLASS_PATH, Arrays.asList(libraries));
+			}
+			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(classDir));
 
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
 			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
