@@ -1,0 +1,11 @@
+object-form input {
+	margin-top: var(--control-space);
+}
+
+object-form textarea {
+	margin-top: var(--control-space);
+}
+
+object-form select {
+	margin-top: var(--control-space);
+}

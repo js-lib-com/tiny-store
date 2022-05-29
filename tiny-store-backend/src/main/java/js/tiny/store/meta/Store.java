@@ -11,7 +11,16 @@ public class Store implements PersistedObject {
 	private String name;
 	private String display;
 	private String description;
-	
+	/**
+	 * Optional REST path for this store, default to null. If used, usually is the the store name. If null this data store does
+	 * not have REST support and can be consumed only by Java applications via remote EJB. User interface should reflect missing
+	 * REST support and to not display controls related to REST protocol.
+	 */
+	private String restPath;
+
+	private DeploymentType deploymentType;
+	private String gitURL;
+	private String mavenServer;
 	private String packageName;
 	private Version version;
 
@@ -59,6 +68,38 @@ public class Store implements PersistedObject {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getRestPath() {
+		return restPath;
+	}
+
+	public void setRestPath(String restPath) {
+		this.restPath = restPath;
+	}
+
+	public DeploymentType getDeploymentType() {
+		return deploymentType;
+	}
+
+	public void setDeploymentType(DeploymentType deploymentType) {
+		this.deploymentType = deploymentType;
+	}
+
+	public String getGitURL() {
+		return gitURL;
+	}
+
+	public void setGitURL(String gitURL) {
+		this.gitURL = gitURL;
+	}
+
+	public String getMavenServer() {
+		return mavenServer;
+	}
+
+	public void setMavenServer(String mavenServer) {
+		this.mavenServer = mavenServer;
 	}
 
 	public String getPackageName() {

@@ -38,6 +38,12 @@
 			<version>1.7</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- latest version for Java 8 -->
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>5.13.0.202109080827-r</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>

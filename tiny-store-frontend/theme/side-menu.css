@@ -15,6 +15,7 @@ side-menu li {
     padding-left: 30px;
     cursor: pointer;
     border-left: solid 4px transparent;
+    border-bottom: solid 1px var(--border-color);
 }
 
 side-menu li.selected {

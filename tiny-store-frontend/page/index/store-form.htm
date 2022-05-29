@@ -5,7 +5,15 @@
         <input name="name" placeholder="unique store name" required="true" />
         <input name="display" placeholder="display name" required="true" />
         <textarea name="description" placeholder="description"></textarea>
+        <input name="restPath" placeholder="REST path" />
 
+        <select name="deploymentType" required="true">
+            <option selected="selected">SERVICE</option>
+            <option>HOSTED</option>
+            <option>EMBEDDED</option>
+        </select>
+        <input name="gitURL" placeholder="Git URL" />
+        <input name="mavenServer" placeholder="Maven server" />
         <input name="packageName" placeholder="package" required="true" />
 
         <textarea name="connectionString" placeholder="database connection" required="true"></textarea>

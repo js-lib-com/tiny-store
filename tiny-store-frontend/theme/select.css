@@ -1,7 +1,6 @@
 select {
     display: block;
     min-width: 50%;
-    margin-top: 40px;
     background: white;
     border: none;
     border-bottom: solid 1px lightgray;
