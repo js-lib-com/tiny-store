@@ -47,6 +47,10 @@ public class DataServiceTemplate {
 		return dataService.getDescription();
 	}
 
+	public boolean isRestEnabled() {
+		return dataService.isRestEnabled();
+	}
+
 	public String getRestPath() {
 		return dataService.getRestPath();
 	}

@@ -16,6 +16,10 @@
 
         setObject(object) {
             this._inputs.forEach(input => {
+                if (input.hasAttribute("data-if")) {
+                    const expression = OPP.get(object, input.getAttribute("data-if"));
+                    input.classList.toggle("hidden", !expression);
+                }
                 input.classList.remove("invalid");
                 const value = OPP.get(object, input.getAttribute("name"));
                 if (value) {

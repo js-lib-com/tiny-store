@@ -9,7 +9,17 @@
             console.log(`${this}#constructor()`);
             this._selectedRow = null;
 
-            const elements = this.getElementsByTagName("tbody");
+            let elements = this.getElementsByTagName("thead");
+            if (elements.length == 0) {
+                throw `Invalid table view #${this.getAttribute("id")}. Missing header.`;
+            }
+            const thead = elements.item(0);
+            if (!thead.firstElementChild) {
+                throw `Invalid table view #${this.getAttribute("id")}. Missing header row.`;
+            }
+            this._headers = Array.from(thead.firstElementChild.children);
+
+            elements = this.getElementsByTagName("tbody");
             if (elements.length > 0) {
                 this._tbody = elements.item(0);
                 this._tbody.addEventListener("click", this._onClick.bind(this));
@@ -63,13 +73,20 @@
 
         _setRowItem(row, item) {
             let cell = row.firstElementChild;
+            let index = 0;
             while (cell) {
+                if (cell.hasAttribute("data-if")) {
+                    const expression = OPP.get(item, cell.getAttribute("data-if"));
+                    cell.classList.toggle("hidden", !expression);
+                    this._headers[index].classList.toggle("hidden", !expression);
+                }
                 let value = OPP.get(item, cell.getAttribute("data-text"));
                 if (cell.hasAttribute("data-format")) {
                     value = FormatFactory.get(cell.getAttribute("data-format")).format(value);
                 }
                 cell.textContent = value;
                 cell = cell.nextElementSibling;
+                ++index;
             }
             row.__item__ = item;
         }

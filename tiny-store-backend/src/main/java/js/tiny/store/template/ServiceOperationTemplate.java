@@ -83,6 +83,10 @@ public class ServiceOperationTemplate {
 		return serviceOperation.getName();
 	}
 
+	public boolean isRestEnabled() {
+		return serviceOperation.isRestEnabled();
+	}
+
 	public String getRestMethod() {
 		return serviceOperation.getRestMethod().name();
 	}

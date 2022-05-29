@@ -6,8 +6,8 @@
                 <th>Parameters</th>
                 <th>Value</th>
                 <th>Exceptions</th>
-                <th>REST Method</th>
-                <th>REST Path</th>
+                <th data-if="restEnabled" class="hidden">REST Method</th>
+                <th data-if="restEnabled" class="hidden">REST Path</th>
             </tr>
         </thead>
         <tbody>
@@ -16,8 +16,8 @@
                 <td data-text="parameters" data-format="parameters"></td>
                 <td data-text="value.type.name"></td>
                 <td data-text="exceptionsList"></td>
-                <td data-text="restMethod"></td>
-                <td data-text="restPath"></td>
+                <td data-if="restEnabled" data-text="restMethod"></td>
+                <td data-if="restEnabled" data-text="restPath"></td>
             </tr>
         </tbody>
     </table>

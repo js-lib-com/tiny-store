@@ -44,16 +44,21 @@ OperationPage = class extends Page {
     // --------------------------------------------------------------------
 
     _onParameterSelect(event) {
-		const show = event.detail.selected;
-		this._actionBar.show("add-parameter", !show);
-		this._actionBar.show("edit-parameter", show);
-		this._actionBar.show("delete-parameter", show);
+        const show = event.detail.selected;
+        this._actionBar.show("add-parameter", !show);
+        this._actionBar.show("edit-parameter", show);
+        this._actionBar.show("delete-parameter", show);
     }
 
     _onAddParameter() {
         const dialog = document.getElementById("parameter-form");
         dialog.setTitle("Create Parameter");
-        dialog.open(parameter => {
+
+        const parameter = {
+            restEnabled: this._operation.restEnabled
+        };
+
+        dialog.edit(parameter, parameter => {
             this._operation.parameters.push(parameter);
             this._parametersListView.addItem(parameter);
             this._saveOperation();
@@ -82,10 +87,10 @@ OperationPage = class extends Page {
     // --------------------------------------------------------------------
 
     _onExceptionSelect(event) {
-		const show = event.detail.selected;
-		this._actionBar.show("add-exception", !show);
-		this._actionBar.show("edit-exception", show);
-		this._actionBar.show("delete-exception", show);
+        const show = event.detail.selected;
+        this._actionBar.show("add-exception", !show);
+        this._actionBar.show("edit-exception", show);
+        this._actionBar.show("delete-exception", show);
     }
 
     _onAddException() {

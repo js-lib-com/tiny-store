@@ -13,6 +13,7 @@ public class DataService implements PersistedObject {
 	/** Qualified class name for data service implementation. */
 	private String className;
 	private String description;
+	private boolean restEnabled;
 	private String restPath;
 
 	@Override
@@ -55,6 +56,14 @@ public class DataService implements PersistedObject {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isRestEnabled() {
+		return restEnabled;
+	}
+
+	public void setRestEnabled(boolean restEnabled) {
+		this.restEnabled = restEnabled;
 	}
 
 	public String getRestPath() {

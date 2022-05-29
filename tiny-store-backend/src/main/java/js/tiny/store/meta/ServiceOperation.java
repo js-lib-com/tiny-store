@@ -20,6 +20,7 @@ public class ServiceOperation implements PersistedObject {
 
 	private String name;
 	private String description;
+	private boolean restEnabled;
 	private RestMethod restMethod;
 	private String restPath;
 
@@ -62,6 +63,14 @@ public class ServiceOperation implements PersistedObject {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isRestEnabled() {
+		return restEnabled;
+	}
+
+	public void setRestEnabled(boolean restEnabled) {
+		this.restEnabled = restEnabled;
 	}
 
 	public RestMethod getRestMethod() {

@@ -47,8 +47,12 @@ ServicePage = class extends Page {
         const dialog = document.getElementById("operation-form");
         dialog.setTitle("Create Operation");
 
-        dialog.open(operation => {
-            WorkspaceService.createOperation(this._service.id, operation, operation => {
+        const operation = {
+            restEnabled: this._service.restEnabled
+        };
+
+        dialog.edit(operation, operation => {
+            WorkspaceService.createOperation(this._service, operation, operation => {
                 this._operationsView.addItem(operation);
             });
         });

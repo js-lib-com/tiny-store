@@ -63,6 +63,7 @@ StorePage = class extends Page {
 		dialog.setTitle("Create Service");
 
 		const service = {
+			restEnabled: this._store.restPath != null,
 			interfaceName: `${this._store.packageName}.`,
 			className: `${this._store.packageName}.impl.`
 		};

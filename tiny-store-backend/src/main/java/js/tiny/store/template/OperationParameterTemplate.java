@@ -25,6 +25,10 @@ public class OperationParameterTemplate {
 		return operationParameter.getDescription();
 	}
 
+	public boolean isRestEnabled() {
+		return operationParameter.isRestEnabled();
+	}
+
 	public boolean isPathParam() {
 		return operationParameter.getRestParameter() == RestParameter.PATH_PARAM;
 	}

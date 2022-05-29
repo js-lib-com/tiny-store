@@ -6,7 +6,7 @@
         <input name="type.collection" placeholder="collection" />
         <input name="name" placeholder="name" required="true" />
         <textarea name="description" placeholder="description"></textarea>
-        <select name="restParameter" required="true">
+        <select data-if="restEnabled" name="restParameter" required="true">
             <option selected="selected">PATH_PARAM</option>
             <option>ENTITY_PARAM</option>
         </select>

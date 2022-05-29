@@ -282,11 +282,11 @@ WorkspaceService = {
 		}
 	},
 
-	 createOperation: function(serviceId, operation) {
+	 createOperation: function(service, operation) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/WorkspaceService/createOperation.rmi";
-		var parameters = [serviceId, operation];
+		var parameters = [service, operation];
 
 		var response = fetch(url, {
 			method: 'POST',

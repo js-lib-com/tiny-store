@@ -56,6 +56,21 @@ public class WorkspaceService {
 	public void saveStore(Store store) {
 		store.setOwner("irotaru");
 		dao.saveStore(store);
+
+		// update REST enabled state to all store services and their operations and parameters
+		boolean restEnabled = store.getRestPath() != null;
+		for (DataService service : dao.findServicesByStore(store.getId().toHexString())) {
+			if (service.isRestEnabled() != restEnabled) {
+				service.setRestEnabled(restEnabled);
+				dao.saveService(service);
+				// if service REST enabled state was changed consider also service operations and related parameters
+				for (ServiceOperation operation : dao.findServiceOperations(service.getId().toHexString())) {
+					operation.setRestEnabled(restEnabled);
+					operation.getParameters().forEach(parameter -> parameter.setRestEnabled(restEnabled));
+					dao.saveServiceOperation(operation);
+				}
+			}
+		}
 	}
 
 	public List<Store> deleteStore(String storeId) throws IOException {
@@ -90,12 +105,12 @@ public class WorkspaceService {
 		service.setStoreId(storeId);
 		DataService createdService = dao.createService(service);
 
-		Map<String,String> variables = new HashMap<>();
+		Map<String, String> variables = new HashMap<>();
 		variables.put("entity-class", entity.getClassName());
 		variables.put("entity-name", Strings.getSimpleName(entity.getClassName()));
 		variables.put("entity-id-type", Strings.getParameterizedName(entity.getFields().get(0).getType()));
 		String operationsJson = Strings.injectVariables(Strings.load(Classes.getResourceAsReader("/dao-operations.json")), variables);
-				
+
 		Json json = Classes.loadService(Json.class);
 		List<ServiceOperation> operations = json.parse(operationsJson, new GType(List.class, ServiceOperation.class));
 		operations.forEach(operation -> {
@@ -138,8 +153,9 @@ public class WorkspaceService {
 		return dao.getDataService(serviceId);
 	}
 
-	public ServiceOperation createOperation(String serviceId, ServiceOperation operation) {
-		operation.setServiceId(serviceId);
+	public ServiceOperation createOperation(DataService service, ServiceOperation operation) {
+		operation.setServiceId(service.getId().toHexString());
+		operation.setRestEnabled(service.isRestEnabled());
 		operation.setParameters(new ArrayList<>());
 		operation.setExceptions(new ArrayList<>());
 		return dao.createOperation(operation);
@@ -196,11 +212,11 @@ public class WorkspaceService {
 		project.clean();
 
 		if (project.generateSources()) {
-			if(!project.compileSources()) {
+			if (!project.compileSources()) {
 				// TODO: send compilation diagnostic to user interface
 				return false;
 			}
-			if(!project.compileClientSources()) {
+			if (!project.compileClientSources()) {
 				return false;
 			}
 		}

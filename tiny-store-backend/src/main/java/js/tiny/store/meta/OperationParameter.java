@@ -4,6 +4,7 @@ public class OperationParameter {
 	private TypeDef type;
 	private String name;
 	private String description;
+	private boolean restEnabled;
 	private RestParameter restParameter;
 	private ParameterFlag flag;
 
@@ -29,6 +30,14 @@ public class OperationParameter {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isRestEnabled() {
+		return restEnabled;
+	}
+
+	public void setRestEnabled(boolean restEnabled) {
+		this.restEnabled = restEnabled;
 	}
 
 	public RestParameter getRestParameter() {

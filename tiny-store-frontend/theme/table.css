@@ -1,4 +1,5 @@
 table {
+    min-width: 50%;
     border-collapse: collapse;
     margin-top: 4px;
 }

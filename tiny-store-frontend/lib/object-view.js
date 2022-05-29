@@ -30,6 +30,16 @@
                 if (childElement.hasAttribute("data-exclude")) {
                     console.debug(`Excluded element ${childElement.tagName}.`);
                 }
+                else if (childElement.hasAttribute("data-if")) {
+                    let expression = OPP.get(object, childElement.getAttribute("data-if"));
+                    if (expression) {
+                        childElement.classList.remove("hidden");
+                        this._inject(childElement, object);
+                    }
+                    else {
+                        childElement.classList.add("hidden");
+                    }
+                }
                 else if (childElement.hasAttribute("data-list")) {
                     console.debug(`List element ${childElement.tagName}.`);
                     const list = OPP.get(object, childElement.getAttribute("data-list"));
