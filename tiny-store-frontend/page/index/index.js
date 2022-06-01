@@ -36,9 +36,8 @@ IndexPage = class extends Page {
 		dialog.setTitle("Create Store");
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
-		const store = this._storesView.getSelectedItem();
 		dialog.open(store => {
-			WorkspaceService.createStore(store, stores => this._storesView.setItems(stores));
+			WorkspaceService.createStore(store, store => this._storesView.addItem(store));
 		});
 	}
 
@@ -53,7 +52,7 @@ IndexPage = class extends Page {
 	}
 
 	_onTestStore(store) {
-		WorkspaceService.testDataSource(store, success => alert(success));
+		WorkspaceService.testDataSource(store, this._alert);
 	}
 
 	_onDeleteStore() {

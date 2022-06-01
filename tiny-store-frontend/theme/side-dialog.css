@@ -11,8 +11,19 @@ side-dialog table thead,
     display: block;
 }
 
+side-dialog table tbody,
+.side-dialog table tbody {
+    display: block;
+}
+
 side-dialog table thead tr,
 .side-dialog table thead tr {
+    display: block;
+    width: 100%;
+}
+
+side-dialog table tbody tr,
+.side-dialog table tbody tr {
     display: block;
     width: 100%;
 }

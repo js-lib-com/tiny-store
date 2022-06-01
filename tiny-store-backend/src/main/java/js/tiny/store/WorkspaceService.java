@@ -53,14 +53,12 @@ public class WorkspaceService {
 	@Inject
 	private IDAO dao;
 
-	public List<Store> createStore(Store store) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
+	public Store createStore(Store store) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		store.setOwner("irotaru");
 		store.setVersion(new Version(1, 0));
 		dao.createStore(store);
-
 		workspace.createProject(store);
-
-		return dao.findStoresByOwner("irotaru");
+		return store;
 	}
 
 	@Intercepted(MetaChangeListener.class)

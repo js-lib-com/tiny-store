@@ -19,6 +19,7 @@ StorePage = class extends Page {
 
 		this._actionBar = this.getActionBar();
 		this._actionBar.setHandler("edit-store", this._onEditStore);
+		this._actionBar.setHandler("delete-store", this._onDeleteStore);
 		this._actionBar.setHandler("build-project", this._onBuildProject);
 
 		this._actionBar.setHandler("create-service", this._onCreateService);
@@ -55,8 +56,15 @@ StorePage = class extends Page {
 		});
 	}
 
+	_onDeleteStore() {
+		const dialog = document.getElementById("store-delete");
+		dialog.open(() => {
+			WorkspaceService.deleteStore(this._store.id, () => location.assign("index.htm"));
+		});
+	}
+
 	_onTestStore(store) {
-		WorkspaceService.testDataSource(store, success => alert(success));
+		WorkspaceService.testDataSource(store, this._alert);
 	}
 
 	_onCreateService() {
