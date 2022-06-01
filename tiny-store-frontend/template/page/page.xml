@@ -12,5 +12,6 @@
 		<script src="lib/side-dialog.js"></script>
 		<script src="lib/table-view.js"></script>
 		<script src="lib/bread-crumbs.js"></script>
+		<script src="template/page/commit-dialog.js"></script>
 	</head>
 </template>

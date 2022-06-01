@@ -2,6 +2,7 @@ package js.tiny.store.dao;
 
 import java.util.List;
 
+import js.tiny.store.ChangeLog;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -50,5 +51,11 @@ public interface IDAO {
 	void deleteService(String serviceId);
 
 	List<DataService> findServicesByStore(String storeId);
+
+	void createChangeLog(ChangeLog changeLog);
+
+	List<ChangeLog> getChangeLog(String storeId);
+
+	void deleteChangeLog(String storeId);
 
 }

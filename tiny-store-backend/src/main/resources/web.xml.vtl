@@ -8,18 +8,22 @@
         <servlet-class>js.tiny.container.rmi.HttpRmiServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+#if($store.restPath)
     <servlet>
         <servlet-name>rest-servlet</servlet-name>
         <servlet-class>js.tiny.container.rest.RestServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
+#end
 
     <servlet-mapping>
         <servlet-name>rmi-servlet</servlet-name>
         <url-pattern>*.rmi</url-pattern>
     </servlet-mapping>
+#if($store.restPath)
     <servlet-mapping>
         <servlet-name>rest-servlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+#end    
 </web-app>

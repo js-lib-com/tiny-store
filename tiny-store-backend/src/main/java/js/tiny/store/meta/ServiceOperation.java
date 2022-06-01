@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import js.tiny.store.dao.PersistedObject;
+import js.tiny.store.dao.IPersistedObject;
 
 /**
  * Service operation.
@@ -14,7 +14,7 @@ import js.tiny.store.dao.PersistedObject;
  * 
  * @author Iulian Rotaru
  */
-public class ServiceOperation implements PersistedObject {
+public class ServiceOperation implements IPersistedObject {
 	private ObjectId id;
 	private String serviceId;
 

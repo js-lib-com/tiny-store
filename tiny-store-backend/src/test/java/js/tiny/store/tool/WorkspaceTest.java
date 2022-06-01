@@ -44,9 +44,9 @@ public class WorkspaceTest {
 		project.clean();
 		project.generateSources();
 
-		project.compileSources();
-		project.buildWar();
-		project.deployWar();
+		project.compileServerSources();
+		project.buildServerWar();
+		project.deployServerWar();
 
 		project.compileClientSources();
 		project.buildClientJar();

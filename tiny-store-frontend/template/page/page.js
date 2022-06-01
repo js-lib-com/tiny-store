@@ -10,6 +10,9 @@ class Page {
 
 	constructor() {
 		this._sideMenu = document.getElementsByTagName("side-menu")[0];
+		this._sideMenu.setAction("commit-changes", this._onCommitChanges, this);
+		this._sideMenu.setAction("push-changes", this._onPushChanges, this);
+
 		this._actionBar = document.getElementsByTagName("action-bar")[0];
 
 		const breadCrumbs = document.getElementsByTagName("bread-crumbs")[0];
@@ -36,6 +39,22 @@ class Page {
 			throw `Missing element with id ${id}.`;
 		}
 		element.classList[show ? "remove" : "add"]("hidden");
+	}
+
+	_onCommitChanges() {
+		WorkspaceService.getChangeLog(this._storeId, changeLog => {
+			const dialog = document.getElementById("commit-form");
+			dialog.edit({ changeLog: changeLog }, commit => {
+				WorkspaceService.commitChanges(this._storeId, commit.message);
+			});
+		});
+	}
+
+	_onPushChanges() {
+		const dialog = document.getElementById("push-confirm");
+		dialog.open(() => {
+			WorkspaceService.pushChanges(this._storeId);
+		});
 	}
 };
 

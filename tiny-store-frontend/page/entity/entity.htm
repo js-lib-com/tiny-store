@@ -8,6 +8,8 @@
 
     <side-menu w:content="side-menu">
         <li id="store-page">Data Store</li>
+        <li></li>
+		<li id="commit-changes">Commit Changes</li>
     </side-menu>
 
     <action-bar w:content="action-bar">
@@ -35,6 +37,7 @@
     </section>
 
     <div w:content="side-dialogs">
+		<side-dialog w:compo="template/page/commit-form" />
         <side-dialog w:compo="page/store/entity-form" />
         <side-dialog w:compo="page/entity/field-form" />
         <side-dialog w:compo="page/entity/field-delete" />

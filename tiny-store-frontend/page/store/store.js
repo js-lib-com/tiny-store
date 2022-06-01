@@ -35,6 +35,7 @@ StorePage = class extends Page {
 
 	_onStoreLoaded(store) {
 		this._store = store;
+		this._storeId = store.id;
 		this._setObject(store);
 	}
 
@@ -50,7 +51,7 @@ StorePage = class extends Page {
 		const dialog = document.getElementById("store-form");
 		dialog.setHandler("test", this._onTestStore.bind(this));
 		dialog.edit(this._store, store => {
-			WorkspaceService.saveStore(store, () => this._setObject(store));
+			WorkspaceService.updateStore(store, () => this._setObject(store));
 		});
 	}
 
@@ -69,7 +70,7 @@ StorePage = class extends Page {
 		};
 
 		dialog.edit(service, service => {
-			WorkspaceService.createService(this._store.id, service, service => {
+			WorkspaceService.createDataService(this._store.id, service, service => {
 				this._servicesView.addItem(service);
 			});
 		});
@@ -80,7 +81,7 @@ StorePage = class extends Page {
 		dialog.setTitle("Edit Service");
 
 		dialog.edit(this._servicesView.getSelectedItem(), service => {
-			WorkspaceService.saveService(service, () => {
+			WorkspaceService.updateDataService(service, () => {
 				this._servicesView.setSelectedItem(service);
 			});
 		});
@@ -90,7 +91,7 @@ StorePage = class extends Page {
 		const dialog = document.getElementById("service-delete");
 		dialog.open(() => {
 			const service = this._servicesView.getSelectedItem();
-			WorkspaceService.deleteService(service.id, () => {
+			WorkspaceService.deleteDataService(service, () => {
 				this._servicesView.deleteSelectedRow();
 			});
 		});
@@ -135,7 +136,7 @@ StorePage = class extends Page {
 		};
 
 		dialog.edit(entity, entity => {
-			WorkspaceService.createEntity(this._store.id, entity, entity => {
+			WorkspaceService.createStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});
 		});
@@ -146,7 +147,7 @@ StorePage = class extends Page {
 		dialog.setTitle("Edit Entity");
 
 		dialog.edit(this._entitiesView.getSelectedItem(), entity => {
-			WorkspaceService.saveEntity(entity, () => {
+			WorkspaceService.updateStoreEntity(entity, () => {
 				this._entitiesView.setSelectedItem(entity);
 			});
 		});
@@ -157,7 +158,7 @@ StorePage = class extends Page {
 		const dialog = document.getElementById("entity-delete");
 		dialog.open(() => {
 			const entity = this._entitiesView.getSelectedItem();
-			WorkspaceService.deleteEntity(entity.id, () => {
+			WorkspaceService.deleteStoreEntity(entity, () => {
 				this._entitiesView.deleteSelectedRow();
 			});
 		});

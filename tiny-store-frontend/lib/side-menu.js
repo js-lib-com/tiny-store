@@ -4,23 +4,30 @@
             super();
 
             const children = Array.from(this.children);
-            this._linkIds = children.map(child => child.id);
+            this._itemIds = children.map(child => child.id);
         }
 
         setLink(linkId, urlProducer) {
-            this._link(linkId).addEventListener("click", event => location.assign(urlProducer()));
-        }
-
-        enable(linkId, enabled) {
-            this._link(linkId).classList.toggle("disabled", !enabled);
-        }
-
-        _link(linkId) {
-            const link = this.children.item(this._linkIds.indexOf(linkId));
+            const link = this.children.item(this._itemIds.indexOf(linkId));
             if (!link) {
-                throw `Missing link element with id ${linkId}.`;
+                throw `Missing menu link element with id ${linkId}.`;
             }
-            return link;
+            link.addEventListener("click", event => location.assign(urlProducer()));
+        }
+
+        setAction(actionId, listener, scope) {
+            const action = this.children.item(this._itemIds.indexOf(actionId));
+            if (action) {
+                action.addEventListener("click", listener.bind(scope || window));
+            }
+        }
+
+        enable(itemId, enabled) {
+            const item = this.children.item(this._itemIds.indexOf(itemId));
+            if (!item) {
+                throw `Missing menu item element with id ${itemId}.`;
+            }
+            item.classList.toggle("disabled", !enabled);
         }
     };
 

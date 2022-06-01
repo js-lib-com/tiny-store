@@ -41,8 +41,8 @@ public class SourceTemplate {
 		template.merge(context, writer);
 	}
 	
-	public void generate(String repositoryName, DataService service, List<ServiceOperation> operations, Writer writer) {
-		DataServiceTemplate serviceTemplate = new DataServiceTemplate(repositoryName, service, operations);
+	public void generate(String storeName, DataService service, List<ServiceOperation> operations, Writer writer) {
+		DataServiceTemplate serviceTemplate = new DataServiceTemplate(storeName, service, operations);
 		context.put("service", serviceTemplate);
 		
 		Template template = engine.getTemplate(templateName);

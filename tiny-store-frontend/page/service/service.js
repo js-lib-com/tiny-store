@@ -24,6 +24,7 @@ ServicePage = class extends Page {
 
     _onServiceLoaded(service) {
         this._service = service;
+        this._storeId = service.storeId;
         this._setObject(service);
     }
 
@@ -39,7 +40,7 @@ ServicePage = class extends Page {
         const dialog = document.getElementById("service-form");
         dialog.setTitle("Edit Service");
         dialog.edit(this._service, service => {
-            WorkspaceService.saveService(service, () => this._setObject(service));
+            WorkspaceService.updateDataService(service, () => this._setObject(service));
         });
     }
 
@@ -52,7 +53,7 @@ ServicePage = class extends Page {
         };
 
         dialog.edit(operation, operation => {
-            WorkspaceService.createOperation(this._service, operation, operation => {
+            WorkspaceService.createServiceOperation(this._service, operation, operation => {
                 this._operationsView.addItem(operation);
             });
         });
@@ -63,7 +64,7 @@ ServicePage = class extends Page {
         dialog.setTitle("Edit Operation");
 
         dialog.edit(this._operationsView.getSelectedItem(), operation => {
-            WorkspaceService.saveOperation(operation, () => this._operationsView.setSelectedItem(operation));
+            WorkspaceService.updateServiceOperation(operation, () => this._operationsView.setSelectedItem(operation));
         });
     }
 
@@ -71,7 +72,7 @@ ServicePage = class extends Page {
         const dialog = document.getElementById("operation-delete");
         dialog.open(() => {
             const operation = this._operationsView.getSelectedItem();
-            WorkspaceService.deleteOperation(operation.id, () => this._operationsView.deleteSelectedRow());
+            WorkspaceService.deleteServiceOperation(operation, () => this._operationsView.deleteSelectedRow());
         });
     }
 };

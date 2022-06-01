@@ -1,89 +1,91 @@
-(function () {
+class SideDialog extends HTMLElement {
+    constructor() {
+        super();
 
-    class SideDialog extends HTMLElement {
-        constructor() {
-            super();
+        this._titleView = this.getElementsByTagName("h2")[0];
+        this._form = this.getElementsByTagName("object-form")[0];
+        this._objectView = this.getElementsByTagName("object-view")[0];
 
-            this._titleView = this.getElementsByTagName("h2")[0];
-            this._form = this.getElementsByTagName("object-form")[0];
+        let positiveButton = this.querySelector("[name=positive]");
+        if (!positiveButton) {
+            throw "Invalid side dialog. Missing positive button.";
+        }
+        positiveButton.addEventListener("click", this._onPositiveButton.bind(this));
 
-            let positiveButton = this.querySelector("[name=positive]");
-            if (!positiveButton) {
-                throw "Invalid side dialog. Missing positive button.";
-            }
-            positiveButton.addEventListener("click", this._onPositiveButton.bind(this));
+        let negativeButton = this.querySelector("[name=negative]");
+        if (!negativeButton) {
+            throw "Invalid side dialog. Missing negative button.";
+        }
+        negativeButton.addEventListener("click", this._onNegativeButton.bind(this));
 
-            let negativeButton = this.querySelector("[name=negative]");
-            if (!negativeButton) {
-                throw "Invalid side dialog. Missing negative button.";
-            }
-            negativeButton.addEventListener("click", this._onNegativeButton.bind(this));
+        this._registeredHandlers = [];
+    }
 
-            this._registeredHandlers = [];
+    setTitle(title) {
+        this._titleView.textContent = title;
+    }
+
+    setHandler(buttonName, handler) {
+        // ensure handler is registered only once
+        if (this._registeredHandlers.indexOf(buttonName) !== -1) {
+            return;
         }
 
-        setTitle(title) {
-            this._titleView.textContent = title;
+        let button = this.querySelector(`[name=${buttonName}]`);
+        if (!button) {
+            throw `Invalid side dialog. Missing ${buttonName} button.`;
         }
+        this._registeredHandlers.push(buttonName);
 
-        setHandler(buttonName, handler) {
-            // ensure handler is registered only once
-            if (this._registeredHandlers.indexOf(buttonName) !== -1) {
-                return;
+        button.addEventListener("click", event => {
+            if (this._form.isValid()) {
+                handler(this._form.getObject(this._object));
             }
+        });
+    }
 
-            let button = this.querySelector(`[name=${buttonName}]`);
-            if (!button) {
-                throw `Invalid side dialog. Missing ${buttonName} button.`;
-            }
-            this._registeredHandlers.push(buttonName);
+    open(callback) {
+        this.classList.remove("hidden");
+        this._callback = callback;
+        this._object = {};
 
-            button.addEventListener("click", event => {
-                if (this._form.isValid()) {
-                    handler(this._form.getObject(this._object));
-                }
-            });
-        }
-
-        open(callback) {
-            this.classList.remove("hidden");
-            this._callback = callback;
-            this._object = {};
-
-            if (this._form) {
-                this._form.reset();
-            }
-        }
-
-        edit(object, callback) {
-            this.classList.remove("hidden");
-            this._callback = callback;
-            this._object = object;
-
-            if (!this._form) {
-                throw "Invalid side dialog. Missing form.";
-            }
-            this._form.setObject(object);
-        }
-
-        _onPositiveButton() {
-            if (this._form) {
-                if (!this._form.isValid()) {
-                    return;
-                }
-                this._callback(this._form.getObject(this._object));
-            }
-            else {
-                this._callback();
-            }
-            this._onNegativeButton();
-        }
-
-        _onNegativeButton() {
-            this.classList.add("hidden");
+        if (this._form) {
+            this._form.reset();
         }
     }
 
-    customElements.define("side-dialog", SideDialog);
+    edit(object, callback) {
+        this.classList.remove("hidden");
+        this._callback = callback;
+        this._object = object;
 
-})();
+        if (!this._form) {
+            throw "Invalid side dialog. Missing form.";
+        }
+        this._form.reset();
+        this._form.setObject(object);
+
+        if (this._objectView) {
+            this._objectView.setObject(object);
+        }
+    }
+
+    _onPositiveButton() {
+        if (this._form) {
+            if (!this._form.isValid()) {
+                return;
+            }
+            this._callback(this._form.getObject(this._object));
+        }
+        else {
+            this._callback();
+        }
+        this._onNegativeButton();
+    }
+
+    _onNegativeButton() {
+        this.classList.add("hidden");
+    }
+}
+
+customElements.define("side-dialog", SideDialog);

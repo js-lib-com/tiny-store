@@ -27,10 +27,18 @@ table th {
 table th,
 table td {
     white-space: nowrap;
-    padding: 8px 24px;
+    padding: var(--table-padding);
     text-align: left;
     font-size: var(--td-font-size);
     font-weight: var(--font-weight);
+}
+
+table.narrow th,
+table.narrow td {
+    padding: var(--table-narrow-padding);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 table td.accent {

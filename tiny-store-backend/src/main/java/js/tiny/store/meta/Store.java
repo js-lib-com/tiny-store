@@ -2,9 +2,9 @@ package js.tiny.store.meta;
 
 import org.bson.types.ObjectId;
 
-import js.tiny.store.dao.PersistedObject;
+import js.tiny.store.dao.IPersistedObject;
 
-public class Store implements PersistedObject {
+public class Store implements IPersistedObject {
 	private ObjectId id;
 
 	private String owner;

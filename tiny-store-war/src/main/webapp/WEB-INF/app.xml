@@ -5,4 +5,5 @@
 	<binding bind="dao.IDAO" to="dao.DaoFacade" />
 	<binding bind="dao.MongoDB" />
 	<binding bind="tool.Workspace" />
+	<binding bind="MetaChangeListener" />
 </app>

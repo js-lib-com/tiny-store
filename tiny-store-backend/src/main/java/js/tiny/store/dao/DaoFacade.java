@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import js.tiny.store.ChangeLog;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -11,10 +12,11 @@ import js.tiny.store.meta.StoreEntity;
 
 @ApplicationScoped
 public class DaoFacade implements IDAO {
-	private DAO<Store> storeDAO;
-	private DAO<StoreEntity> entityDAO;
-	private DAO<DataService> serviceDAO;
-	private DAO<ServiceOperation> operationDAO;
+	private final DAO<Store> storeDAO;
+	private final DAO<StoreEntity> entityDAO;
+	private final DAO<DataService> serviceDAO;
+	private final DAO<ServiceOperation> operationDAO;
+	private final DAO<ChangeLog> changeLogDAO;
 
 	@Inject
 	public DaoFacade(MongoDB mongo) {
@@ -22,6 +24,7 @@ public class DaoFacade implements IDAO {
 		this.entityDAO = new DAO<>(mongo, StoreEntity.class);
 		this.serviceDAO = new DAO<>(mongo, DataService.class);
 		this.operationDAO = new DAO<>(mongo, ServiceOperation.class);
+		this.changeLogDAO = new DAO<>(mongo, ChangeLog.class);
 	}
 
 	@Override
@@ -127,5 +130,20 @@ public class DaoFacade implements IDAO {
 	@Override
 	public List<DataService> findServicesByStore(String storeId) {
 		return serviceDAO.find("storeId", storeId);
+	}
+
+	@Override
+	public void createChangeLog(ChangeLog changeLog) {
+		changeLogDAO.create(changeLog);
+	}
+
+	@Override
+	public List<ChangeLog> getChangeLog(String storeId) {
+		return changeLogDAO.find("storeId", storeId);
+	}
+
+	@Override
+	public void deleteChangeLog(String storeId) {
+		changeLogDAO.delete("storeId", storeId);
 	}
 }

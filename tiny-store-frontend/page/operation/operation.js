@@ -123,7 +123,7 @@ OperationPage = class extends Page {
     }
 
     _saveOperation() {
-        WorkspaceService.saveOperation(this._operation);
+        WorkspaceService.updateServiceOperation(this._operation);
     }
 
     toString() {

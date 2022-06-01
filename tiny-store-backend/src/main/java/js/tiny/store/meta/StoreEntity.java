@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import js.tiny.store.dao.PersistedObject;
+import js.tiny.store.dao.IPersistedObject;
 
-public class StoreEntity implements PersistedObject {
+public class StoreEntity implements IPersistedObject {
 	private ObjectId id;
 	private String storeId;
-	
+
 	/** Entity qualified class name. */
 	private String className;
 	/** Name for table or collection storing this entity. */

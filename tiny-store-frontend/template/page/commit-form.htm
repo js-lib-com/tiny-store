@@ -1,0 +1,31 @@
+<commit-dialog id="commit-form" class="side-dialog hidden">
+    <h2>Commit Changes to Git</h2>
+
+    <div class="fill">
+        <object-form>
+            <textarea name="message" placeholder="message" required="true"></textarea>
+        </object-form>
+
+        <object-view>
+            <table-view data-list="changeLog">
+                <table class="narrow">
+                    <thead>
+                        <tr>
+                            <th>Change Log:</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-text="change"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </table-view>
+        </object-view>
+    </div>
+
+    <div>
+        <button type="button" name="positive">Commit</button>
+        <button type="button" name="negative">Cancel</button>
+    </div>
+</commit-dialog>

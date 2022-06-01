@@ -12,6 +12,10 @@ body * {
 	color: var(--danger-color);
 }
 
+.care {
+	color: var(--care-color);
+}
+
 .hidden {
 	display: none !important;
 }

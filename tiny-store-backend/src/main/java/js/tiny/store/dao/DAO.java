@@ -13,12 +13,13 @@ import org.bson.types.ObjectId;
 
 import com.mongodb.client.MongoCollection;
 
+import js.tiny.store.ChangeLog;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
-class DAO<T extends PersistedObject> {
+class DAO<T extends IPersistedObject> {
 	private final MongoCollection<T> collection;
 
 	public DAO(MongoDB mongo, Class<T> type) {
@@ -59,12 +60,17 @@ class DAO<T extends PersistedObject> {
 	public void delete(String id) {
 		collection.deleteOne(eq("_id", new ObjectId(id)));
 	}
-	
+
+	public void delete(String name, Object value) {
+		collection.deleteMany(eq(name, value));
+	}
+
 	private static final Map<Class<?>, String> COLLECTIONS = new HashMap<>();
 	static {
 		COLLECTIONS.put(Store.class, "store");
 		COLLECTIONS.put(StoreEntity.class, "entity");
 		COLLECTIONS.put(DataService.class, "service");
 		COLLECTIONS.put(ServiceOperation.class, "operation");
+		COLLECTIONS.put(ChangeLog.class, "changelog");
 	}
 }

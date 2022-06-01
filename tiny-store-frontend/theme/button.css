@@ -15,10 +15,7 @@ button.danger {
 	color: white;
 }
 
-button.danger:hover {
-	background-color: var(--danger-color);
-}
-
-button:hover {
-	background-color: rgb(3, 100, 174);
+button.care {
+	background-color: var(--care-color);
+	color: white;
 }

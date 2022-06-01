@@ -28,10 +28,6 @@ body>header .icon {
     filter: invert(100%);
 }
 
-body>header .icon:hover {
-    background-color: rgb(82, 137, 240);
-}
-
 .title {
     flex-grow: 1;
     line-height: 48px;
@@ -47,10 +43,6 @@ body>aside {
 
 body>aside .icon.selected {
     background-color: rgb(168, 192, 236);
-    background-color: #E0E0E0;
-}
-
-body>aside .icon:hover {
     background-color: #E0E0E0;
 }
 

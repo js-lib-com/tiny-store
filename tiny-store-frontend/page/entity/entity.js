@@ -22,6 +22,7 @@ EntityPage = class extends Page {
 
     _onEntityLoaded(entity) {
         this._entity = entity;
+        this._storeId = entity.storeId;
         this._setObject(entity);
         this._fieldsView.addItems(this._entity.fields);
     }
@@ -37,7 +38,7 @@ EntityPage = class extends Page {
         const dialog = document.getElementById("entity-form");
         dialog.setTitle("Edit Entity");
         dialog.edit(this._entity, entity => {
-            WorkspaceService.saveEntity(entity, () => this._setObject(entity));
+            WorkspaceService.updateStoreEntity(entity, () => this._setObject(entity));
         });
     }
 
@@ -47,7 +48,7 @@ EntityPage = class extends Page {
 
         dialog.open(field => {
             this._entity.fields.push(field);
-            WorkspaceService.saveEntity(this._entity, () => this._fieldsView.addItem(field));
+            WorkspaceService.updateStoreEntity(this._entity, () => this._fieldsView.addItem(field));
         });
     }
 
@@ -57,7 +58,7 @@ EntityPage = class extends Page {
 
         dialog.edit(this._fieldsView.getSelectedItem(), field => {
             this._entity.fields[this._fieldsView.getSelectedIndex()] = field;
-            WorkspaceService.saveEntity(this._entity, () => this._fieldsView.setSelectedItem(field));
+            WorkspaceService.updateStoreEntity(this._entity, () => this._fieldsView.setSelectedItem(field));
         });
     }
 
@@ -65,7 +66,7 @@ EntityPage = class extends Page {
         const dialog = document.getElementById("field-delete");
         dialog.open(() => {
             this._entity.fields.splice(this._fieldsView.getSelectedIndex(), 1);
-            WorkspaceService.saveEntity(this._entity, () => this._fieldsView.deleteSelectedRow());
+            WorkspaceService.updateStoreEntity(this._entity, () => this._fieldsView.deleteSelectedRow());
         });
     }
 };

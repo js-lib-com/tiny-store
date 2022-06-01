@@ -24,10 +24,6 @@ select:invalid {
     color: lightgray;
 }
 
-select:hover {
-    background: white;
-}
-
 option {
     background: white;
     border: solid 1px lightgray;

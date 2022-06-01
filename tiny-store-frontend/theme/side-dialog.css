@@ -1,16 +1,38 @@
-side-dialog {
+side-dialog,
+.side-dialog {
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow-y: auto;
 }
 
-side-dialog h2 {
+side-dialog table thead,
+.side-dialog table thead {
+    display: block;
+}
+
+side-dialog table thead tr,
+.side-dialog table thead tr {
+    display: block;
+    width: 100%;
+}
+
+side-dialog h2,
+.side-dialog h2 {
     width: 80%;
     border-bottom: solid 1px var(--border-color);
 }
 
-side-dialog .fill {
+side-dialog table,
+.side-dialog table {
+    display: block;
+    width: 90%;
+    margin-top: var(--control-space);
+    overflow: hidden;
+}
+
+side-dialog .fill,
+.side-dialog .fill {
     flex-grow: 1;
     margin-bottom: 40px;
 }

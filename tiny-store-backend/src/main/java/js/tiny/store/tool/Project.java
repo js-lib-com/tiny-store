@@ -48,11 +48,6 @@ import js.tiny.store.template.SourceTemplate;
 public class Project {
 	private static final Log log = LogFactory.getLog(Project.class);
 
-	private static final String SERVER_SOURCE_DIR = "server";
-	private static final String CLIENT_SOURCE_DIR = "client";
-	private static final String TARGET_DIR = "target";
-	private static final String WAR_CLASSES_DIR = "/WEB-INF/classes";
-	private static final String CLIENT_CLASSES_DIR = "target/client-classes";
 	private static final String JAVA_COMPILER = "1.8";
 
 	private final HttpClientBuilder clientBuilder;
@@ -64,17 +59,8 @@ public class Project {
 	private final File projectDir;
 	private final File runtimeDir;
 
-	private final File targetDir;
-	private final File serverSourceDir;
-	private final File clientSourceDir;
-
-	private final File warFile;
+	private final File serverWarFile;
 	private final File clientJarFile;
-
-	private File warDir;
-	private File warClassesDir;
-
-	private File clientClassesDir;
 
 	public Project(Context context, Store store, IDAO dao) throws IOException {
 		HttpClientBuilder clientBuilder = HttpClients.custom();
@@ -99,145 +85,129 @@ public class Project {
 		this.projectDir = new File(context.getWorkspaceDir(), store.getName());
 		this.runtimeDir = context.getRuntimeDir();
 
-		this.targetDir = new File(projectDir, TARGET_DIR);
-		if (!this.targetDir.exists() && !this.targetDir.mkdirs()) {
-			throw new IOException("Fail to create target directory " + this.targetDir);
-		}
-
-		this.serverSourceDir = new File(projectDir, SERVER_SOURCE_DIR);
-		if (!this.serverSourceDir.exists() && !this.serverSourceDir.mkdirs()) {
-			throw new IOException("Fail to create source directory " + this.serverSourceDir);
-		}
-
-		this.clientSourceDir = new File(projectDir, CLIENT_SOURCE_DIR);
-		if (!this.clientSourceDir.exists() && !this.clientSourceDir.mkdirs()) {
-			throw new IOException("Fail to create client source directory " + this.clientSourceDir);
-		}
-
 		// Tomcat uses pound (#) for multi-level context path
 		// it is replaced with path separator: app#1.0 -> app/1.0 used as http://api.server/app/1.0/service/operation
-		this.warFile = new File(targetDir, Strings.concat(store.getName(), '#', store.getVersion(), ".war"));
+		this.serverWarFile = new File(Files.serverTargetDir(projectDir), Strings.concat(store.getName(), '#', store.getVersion(), ".war"));
 		// client jar uses 'store' suffix: app-store-1.0.jar
-		this.clientJarFile = new File(targetDir, Strings.concat(store.getName(), "-store-", store.getVersion(), ".jar"));
+		this.clientJarFile = new File(Files.clientTargetDir(projectDir), Strings.concat(store.getName(), "-store-", store.getVersion(), ".jar"));
 
-		createFileSystem();
+		generateProjectFiles();
+	}
+
+	public File getProjectDir() {
+		return projectDir;
 	}
 
 	public void clean() throws IOException {
-		Files.removeFilesHierarchy(serverSourceDir);
-		Files.removeFilesHierarchy(clientSourceDir);
-		Files.removeFilesHierarchy(targetDir);
-		createFileSystem();
+		Files.removeFilesHierarchy(Files.serverModuleDir(projectDir));
+		Files.removeFilesHierarchy(Files.clientModuleDir(projectDir));
+		generateProjectFiles();
 	}
 
-	private void createFileSystem() throws IOException {
-		this.warDir = new File(targetDir, store.getName());
-		if (!this.warDir.exists() && !this.warDir.mkdirs()) {
-			throw new IOException("Fail to create output directory " + this.warDir);
-		}
-
-		this.warClassesDir = new File(warDir, WAR_CLASSES_DIR);
-		if (!this.warClassesDir.exists() && !this.warClassesDir.mkdirs()) {
-			throw new IOException("Fail to create classes directory " + this.warClassesDir);
-		}
-
-		this.clientClassesDir = new File(projectDir, CLIENT_CLASSES_DIR);
-		if (!this.clientClassesDir.exists() && !this.clientClassesDir.mkdirs()) {
-			throw new IOException("Fail to create client classes directory " + this.clientClassesDir);
-		}
+	private void generateProjectFiles() throws IOException {
+		generate("/parent-pom.xml.vtl", Files.parentPomFile(projectDir), properties("store", store));
+		generate("/server-pom.xml.vtl", Files.serverPomFile(projectDir), properties("store", store));
+		generate("/client-pom.xml.vtl", Files.clientPomFile(projectDir), properties("store", store));
+		generate("/README.md.vtl", Files.readmeFile(projectDir), properties("store", store));
 	}
 
 	public boolean generateSources() throws IOException {
-		List<StoreEntity> entities = dao.findEntitiesByStore(store.getId().toHexString());
+		generateProjectFiles();
+
+		List<StoreEntity> entities = dao.findEntitiesByStore(store.id());
 		for (StoreEntity entity : entities) {
-			generate("/entity.java.vtl", serverSourceDir, entity);
-			generate("/model.java.vtl", clientSourceDir, entity);
+			generate("/entity.java.vtl", entity, Files.serverSourceFile(projectDir, entity.getClassName()));
+			generate("/model.java.vtl", entity, Files.clientSourceFile(projectDir, entity.getClassName()));
 		}
 
-		List<DataService> services = dao.findServicesByStore(store.getId().toHexString());
+		List<DataService> services = dao.findServicesByStore(store.id());
 		for (DataService service : services) {
-			generate("/service-remote.java.vtl", Files.sourceFile(serverSourceDir, service.getInterfaceName()), store.getName(), service);
-			generate("/service-implementation.java.vtl", Files.sourceFile(serverSourceDir, service.getClassName()), store.getName(), service);
-			generate("/service-interface.java.vtl", Files.sourceFile(clientSourceDir, service.getInterfaceName()), store.getName(), service);
+			generate("/service-remote.java.vtl", service, Files.serverSourceFile(projectDir, service.getInterfaceName()));
+			generate("/service-implementation.java.vtl", service, Files.serverSourceFile(projectDir, service.getClassName()));
+			generate("/service-interface.java.vtl", service, Files.clientSourceFile(projectDir, service.getInterfaceName()));
 		}
 
-		generate("/web.xml.vtl", Files.webDescriptorFile(warDir));
-		generate("/app.xml.vtl", Files.appDescriptorFile(warDir));
+		generate("/web.xml.vtl", Files.webDescriptorFile(projectDir), properties("store", store));
+		generate("/app.xml.vtl", Files.appDescriptorFile(projectDir), properties("services", services));
 		// TODO: hack on connection string ampersand escape
-		generate("/context.xml.vtl", Files.contextFile(warDir), properties("store", store, "connectionString", Strings.escapeXML(store.getConnectionString())));
-		generate("/persistence.xml.vtl", Files.persistenceFile(warDir), properties("store", store, "entities", entities));
+		generate("/context.xml.vtl", Files.contextFile(projectDir), properties("store", store, "connectionString", Strings.escapeXML(store.getConnectionString())));
+		generate("/persistence.xml.vtl", Files.persistenceFile(projectDir), properties("store", store, "entities", entities));
 
 		return !entities.isEmpty() || !services.isEmpty();
 	}
 
-	private static Map<String, Object> properties(Object... values) {
-		Map<String, Object> properties = new HashMap<>();
-		for (int i = 0; i < values.length; i += 2) {
-			properties.put((String) values[i], values[i + 1]);
-		}
-		return properties;
-	}
-
-	private void generate(String template, File targetDir, StoreEntity entity) throws IOException {
+	private void generate(String template, StoreEntity entity, File targetFile) throws IOException {
 		SourceTemplate sourceTemplate = new SourceTemplate(template);
-		File sourceFile = Files.sourceFile(targetDir, entity.getClassName());
-		try (Writer writer = new FileWriter(sourceFile)) {
+		try (Writer writer = new FileWriter(targetFile)) {
 			sourceTemplate.generate(entity, writer);
 		}
 	}
 
-	private void generate(String template, File targetFile, String repositoryName, DataService service) throws IOException {
+	private void generate(String template, DataService service, File targetFile) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
-		List<ServiceOperation> operations = dao.findServiceOperations(service.getId().toHexString());
+		List<ServiceOperation> operations = dao.findServiceOperations(service.id());
 		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(repositoryName, service, operations, writer);
+			sourceFile.generate(store.getName(), service, operations, writer);
 		}
 	}
 
-	private void generate(String template, File targetFile) throws IOException {
-		SourceTemplate sourceFile = new SourceTemplate(template);
-
-		List<DataService> services = dao.findServicesByStore(store.getId().toHexString());
-
-		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(services, writer);
-		}
-	}
-
-	private void generate(String template, File targetFile, Map<String, Object> properties) throws IOException {
+	private static void generate(String template, File targetFile, Map<String, Object> properties) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
 		try (Writer writer = new FileWriter(targetFile)) {
 			sourceFile.generate(properties, writer);
 		}
 	}
 
-	public boolean compileSources() throws IOException {
+	private static Map<String, Object> properties(Object... values) {
+		Map<String, Object> properties = new HashMap<>();
+		for (int i = 0; i + 1 < values.length; i += 2) {
+			properties.put((String) values[i], values[i + 1]);
+		}
+		return properties;
+	}
+
+	// --------------------------------------------------------------------------------------------
+
+	public boolean compileServerSources() throws IOException {
 		File librariesDir = new File(runtimeDir, "libx");
 		if (!librariesDir.exists()) {
 			librariesDir = new File(runtimeDir, "lib");
 		}
-		return compile(serverSourceDir, warClassesDir, new File(librariesDir, "js-jee-api-1.1.jar"), new File(librariesDir, "js-transaction-api-1.3.jar"));
+		File[] libraries = new File[] { //
+				new File(librariesDir, "js-jee-api-1.1.jar"), //
+				new File(librariesDir, "js-transaction-api-1.3.jar") //
+		};
+		return compile(Files.serverSourceDir(projectDir), Files.serverClassDir(projectDir), libraries);
 	}
 
-	public void buildWar() throws IOException {
+	public void buildServerWar() throws IOException {
 		Manifest manifest = new Manifest();
 		// manifest version is critical; without it war file is properly generated but Tomcat refuses to process it
 		manifest.getMainAttributes().putValue("Manifest-Version", "1.0");
 		manifest.getMainAttributes().putValue("Created-By", "Tiny Store");
 
-		try (JarOutputStream war = new JarOutputStream(new FileOutputStream(warFile), manifest)) {
+		File warDir = Files.serverWarDir(projectDir, serverWarFile);
+		Files.removeFilesHierarchy(warDir);
+
+		Files.copy(Files.webDescriptorFile(projectDir), Files.warWebDescriptorFile(warDir));
+		Files.copy(Files.appDescriptorFile(projectDir), Files.warAppDescriptorFile(warDir));
+		Files.copy(Files.contextFile(projectDir), Files.warContextFile(warDir));
+		Files.copy(Files.persistenceFile(projectDir), Files.warPersistenceFile(warDir));
+		Files.copyFiles(Files.serverClassDir(projectDir), Files.warClassDir(warDir));
+
+		try (JarOutputStream war = new JarOutputStream(new FileOutputStream(serverWarFile), manifest)) {
 			addArchiveEntries(war, warDir, warDir);
 		}
 	}
 
-	public void deployWar() throws IOException {
+	public void deployServerWar() throws IOException {
 		File webappsDir = new File(runtimeDir, "webapps");
-		Files.copy(warFile, new File(webappsDir, warFile.getName()));
+		Files.copy(serverWarFile, new File(webappsDir, serverWarFile.getName()));
 	}
 
-	public void undeployWar() {
+	public void undeployServerWar() {
 		File webappsDir = new File(runtimeDir, "webapps");
-		File deployedWarFile = new File(webappsDir, warFile.getName());
+		File deployedWarFile = new File(webappsDir, serverWarFile.getName());
 		log.info("Undeploy WAR |%s|.", deployedWarFile);
 		if (!deployedWarFile.delete()) {
 			log.error("Fail to delete file |%s|.", deployedWarFile);
@@ -245,7 +215,7 @@ public class Project {
 	}
 
 	public boolean compileClientSources() throws IOException {
-		return compile(clientSourceDir, clientClassesDir);
+		return compile(Files.clientSourceDir(projectDir), Files.clientClassDir(projectDir));
 	}
 
 	private static boolean compile(File sourceDir, File classDir, File... libraries) throws IOException {
@@ -279,8 +249,9 @@ public class Project {
 		manifest.getMainAttributes().putValue("Manifest-Version", "1.0");
 		manifest.getMainAttributes().putValue("Created-By", "Tiny Store");
 
-		try (JarOutputStream war = new JarOutputStream(new FileOutputStream(clientJarFile), manifest)) {
-			addArchiveEntries(war, clientClassesDir, clientClassesDir);
+		File binariesDir = Files.clientClassDir(projectDir);
+		try (JarOutputStream jar = new JarOutputStream(new FileOutputStream(clientJarFile), manifest)) {
+			addArchiveEntries(jar, binariesDir, binariesDir);
 		}
 	}
 
@@ -302,18 +273,26 @@ public class Project {
 		}
 	}
 
-	private void addArchiveEntries(JarOutputStream archive, File binariesDir, File dir) throws IOException {
-		File[] files = dir.listFiles();
+	/**
+	 * 
+	 * @param archive archive output stream,
+	 * @param baseDir base directory for source files tree,
+	 * @param currentDir current directory from source files tree.
+	 * @throws IOException
+	 */
+	private void addArchiveEntries(JarOutputStream archive, File baseDir, File currentDir) throws IOException {
+		File[] files = currentDir.listFiles();
 		if (files == null) {
 			return;
 		}
 
 		for (File file : files) {
 			if (file.isDirectory()) {
-				addArchiveEntries(archive, binariesDir, file);
+				addArchiveEntries(archive, baseDir, file);
 				continue;
 			}
-			JarEntry entry = new JarEntry(Files.getRelativePath(binariesDir, file, true));
+			// uses base directory to create relative paths for archive entry
+			JarEntry entry = new JarEntry(Files.getRelativePath(baseDir, file, true));
 			archive.putNextEntry(entry);
 			Files.append(file, archive);
 			// do not bother to close entry on exception since project build is aborted anyway

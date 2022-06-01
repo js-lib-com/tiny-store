@@ -5,16 +5,18 @@ h1 {
 	color: cornflowerblue;
 }
 
-h1.line-break {
-	margin-top: var(--line-break);
-}
-
 h2 {
 	margin: 0;
 	font-size: var(--h2-font-size);
 	font-weight: var(--font-weight);
 }
 
-h2.line-break {
+h3 {
+	margin: 0;
+	font-size: var(--h3-font-size);
+	font-weight: var(--font-weight);
+}
+
+.line-break {
 	margin-top: var(--line-break);
 }

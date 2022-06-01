@@ -17,10 +17,10 @@ WorkspaceService = {
 		}
 	},
 
-	 saveStore: function(store) {
+	 updateStore: function(store) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/saveStore.rmi";
+		var url = "js/tiny/store/WorkspaceService/updateStore.rmi";
 		var parameters = [store];
 
 		var response = fetch(url, {
@@ -52,10 +52,10 @@ WorkspaceService = {
 		}
 	},
 
-	 createEntity: function(storeId, entity) {
+	 createStoreEntity: function(storeId, entity) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
-		var url = "js/tiny/store/WorkspaceService/createEntity.rmi";
+		var url = "js/tiny/store/WorkspaceService/createStoreEntity.rmi";
 		var parameters = [storeId, entity];
 
 		var response = fetch(url, {
@@ -70,10 +70,10 @@ WorkspaceService = {
 		}
 	},
 
-	 saveEntity: function(entity) {
+	 updateStoreEntity: function(entity) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/saveEntity.rmi";
+		var url = "js/tiny/store/WorkspaceService/updateStoreEntity.rmi";
 		var parameters = [entity];
 
 		var response = fetch(url, {
@@ -87,11 +87,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteEntity: function(entityId) {
+	 deleteStoreEntity: function(entity) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/deleteEntity.rmi";
-		var parameters = [entityId];
+		var url = "js/tiny/store/WorkspaceService/deleteStoreEntity.rmi";
+		var parameters = [entity];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -104,10 +104,10 @@ WorkspaceService = {
 		}
 	},
 
-	 createService: function(storeId, service) {
+	 createDataService: function(storeId, service) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
-		var url = "js/tiny/store/WorkspaceService/createService.rmi";
+		var url = "js/tiny/store/WorkspaceService/createDataService.rmi";
 		var parameters = [storeId, service];
 
 		var response = fetch(url, {
@@ -140,10 +140,10 @@ WorkspaceService = {
 		}
 	},
 
-	 saveService: function(service) {
+	 updateDataService: function(service) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/saveService.rmi";
+		var url = "js/tiny/store/WorkspaceService/updateDataService.rmi";
 		var parameters = [service];
 
 		var response = fetch(url, {
@@ -157,11 +157,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteService: function(serviceId) {
+	 deleteDataService: function(service) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/deleteService.rmi";
-		var parameters = [serviceId];
+		var url = "js/tiny/store/WorkspaceService/deleteDataService.rmi";
+		var parameters = [service];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -282,10 +282,10 @@ WorkspaceService = {
 		}
 	},
 
-	 createOperation: function(service, operation) {
+	 createServiceOperation: function(service, operation) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
-		var url = "js/tiny/store/WorkspaceService/createOperation.rmi";
+		var url = "js/tiny/store/WorkspaceService/createServiceOperation.rmi";
 		var parameters = [service, operation];
 
 		var response = fetch(url, {
@@ -300,10 +300,10 @@ WorkspaceService = {
 		}
 	},
 
-	 saveOperation: function(operation) {
+	 updateServiceOperation: function(operation) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/saveOperation.rmi";
+		var url = "js/tiny/store/WorkspaceService/updateServiceOperation.rmi";
 		var parameters = [operation];
 
 		var response = fetch(url, {
@@ -317,11 +317,11 @@ WorkspaceService = {
 		}
 	},
 
-	 deleteOperation: function(operationId) {
+	 deleteServiceOperation: function(operation) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/deleteOperation.rmi";
-		var parameters = [operationId];
+		var url = "js/tiny/store/WorkspaceService/deleteServiceOperation.rmi";
+		var parameters = [operation];
 
 		var response = fetch(url, {
 			method: 'POST',
@@ -392,6 +392,58 @@ WorkspaceService = {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/WorkspaceService/buildProject.rmi";
+		var parameters = [storeId];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
+		}
+	},
+
+	 commitChanges: function(storeId, message) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/WorkspaceService/commitChanges.rmi";
+		var parameters = [storeId, message];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			response.then(__callback__.call(__scope__));
+		}
+	},
+
+	 pushChanges: function(storeId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/pushChanges.rmi";
+		var parameters = [storeId];
+
+		var response = fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(parameters)
+		});
+
+		if (__callback__) {
+			response.then(__callback__.call(__scope__));
+		}
+	},
+
+	 getChangeLog: function(storeId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/WorkspaceService/getChangeLog.rmi";
 		var parameters = [storeId];
 
 		var response = fetch(url, {
