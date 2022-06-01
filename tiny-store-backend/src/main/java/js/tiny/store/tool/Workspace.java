@@ -45,13 +45,7 @@ public class Workspace {
 			log.info("Clone store %s from Git repository %s.", store.getName(), gitURL);
 			// TODO: extract server URL from git URL and retrieve credentials
 			CredentialsProvider credentials = new UsernamePasswordCredentialsProvider("irotaru", "Mami1964!@#$");
-			Git git = Git.cloneRepository().setURI(gitURL).setDirectory(projectDir).setCredentialsProvider(credentials).call();
-
-			// create project and its initial files and push to git repository
-			getProject(projectName);
-			git.add().addFilepattern(".").call();
-			git.commit().setAll(true).setMessage("Initial import.").call();
-			git.push().setCredentialsProvider(credentials).call();
+			Git.cloneRepository().setURI(gitURL).setDirectory(projectDir).setCredentialsProvider(credentials).call();
 		}
 	}
 

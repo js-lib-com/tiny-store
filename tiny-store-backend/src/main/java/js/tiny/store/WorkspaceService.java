@@ -58,6 +58,10 @@ public class WorkspaceService {
 		store.setVersion(new Version(1, 0));
 		dao.createStore(store);
 		workspace.createProject(store);
+		if (store.getGitURL() != null) {
+			commitChanges(store.id(), "Initial import.");
+			pushChanges(store.id());
+		}
 		return store;
 	}
 
