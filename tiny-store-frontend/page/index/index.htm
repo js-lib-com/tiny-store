@@ -15,6 +15,10 @@
 		<li id="create-store"><img src="@image/add" /><label>Create Store</label></li>
 		<li id="edit-store"><img src="@image/edit" /><label>Edit Store</label></li>
 		<li id="delete-store"><img src="@image/delete" /><label>Delete Store</label></li>
+
+		<li id="build-project"><img src="@image/build" /><label>Build Project</label></li>
+		<li id="commit-changes"><img src="@image/build" /><label>Commit Changes</label></li>
+		<li id="push-changes"><img src="@image/build" /><label>Push Changes</label></li>
 	</action-bar>
 
 	<section w:content="content">
@@ -25,6 +29,8 @@
 	<div w:content="side-dialogs">
 		<side-dialog w:compo="page/index/store-form" />
 		<side-dialog w:compo="page/index/store-delete" />
+		<side-dialog w:compo="template/page/commit-form" />
+		<side-dialog w:compo="template/page/push-confirm" />
 	</div>
 
 </div>

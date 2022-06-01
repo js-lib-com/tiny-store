@@ -12,6 +12,9 @@ IndexPage = class extends Page {
 		this._actionBar.setHandler("create-store", this._onCreateStore);
 		this._actionBar.setHandler("edit-store", this._onEditStore);
 		this._actionBar.setHandler("delete-store", this._onDeleteStore);
+		this._actionBar.setHandler("build-project", this._onBuildProject);
+		this._actionBar.setHandler("commit-changes", this._onCommitChanges);
+		this._actionBar.setHandler("push-changes", this._onPushChanges);
 		this._onStoreSelect({ detail: { selected: false } });
 
 		WorkspaceService.getStores(stores => this._storesView.setItems(stores));
@@ -23,6 +26,9 @@ IndexPage = class extends Page {
 		this._actionBar.show("create-store", !selected);
 		this._actionBar.show("edit-store", selected);
 		this._actionBar.show("delete-store", selected);
+		this._actionBar.show("build-project", selected);
+		this._actionBar.show("commit-changes", selected);
+		this._actionBar.show("push-changes", selected);
 	}
 
 	_onCreateStore() {
@@ -56,6 +62,18 @@ IndexPage = class extends Page {
 			const store = this._storesView.getSelectedItem();
 			WorkspaceService.deleteStore(store.id, () => this._storesView.deleteSelectedRow());
 		});
+	}
+
+	_onBuildProject() {
+		WorkspaceService.buildProject(this._storesView.getSelectedId(), this._alert);
+	}
+
+	_onCommitChanges() {
+		super._onCommitChanges(this._storesView.getSelectedId());
+	}
+
+	_onPushChanges() {
+		super._onPushChanges(this._storesView.getSelectedId());
 	}
 };
 

@@ -14,6 +14,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
@@ -250,7 +251,7 @@ public class WorkspaceService {
 		return true;
 	}
 
-	public void commitChanges(String storeId, String message) throws IOException, NoFilepatternException, GitAPIException {
+	public boolean commitChanges(String storeId, String message) throws IOException, NoFilepatternException, GitAPIException {
 		Store store = dao.getStore(storeId);
 		Project project = workspace.getProject(store.getName());
 		project.clean();
@@ -282,23 +283,31 @@ public class WorkspaceService {
 
 			if (!changed) {
 				log.warn("Attempt to commit no changes.");
-				return;
+				return false;
 			}
 			git.add().addFilepattern(".").call();
 			git.commit().setAll(true).setMessage(message).call();
+		} catch (RepositoryNotFoundException e) {
+			log.warn(e);
+			return false;
 		}
 
 		dao.deleteChangeLog(storeId);
+		return true;
 	}
 
-	public void pushChanges(String storeId) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
+	public boolean pushChanges(String storeId) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		Store store = dao.getStore(storeId);
 		// String gitURL = store.getGitURL();
 		// TODO: extract server URL from git URL and retrieve credentials from servers configuration
 		CredentialsProvider credentials = new UsernamePasswordCredentialsProvider("irotaru", "Mami1964!@#$");
 		try (Git git = Git.open(workspace.getProjectDir(store.getName()).getAbsoluteFile())) {
 			git.push().setCredentialsProvider(credentials).call();
+		} catch (RepositoryNotFoundException e) {
+			log.warn(e);
+			return false;
 		}
+		return true;
 	}
 
 	public List<ChangeLog> getChangeLog(String storeId) {

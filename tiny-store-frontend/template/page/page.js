@@ -41,20 +41,29 @@ class Page {
 		element.classList[show ? "remove" : "add"]("hidden");
 	}
 
-	_onCommitChanges() {
-		WorkspaceService.getChangeLog(this._storeId, changeLog => {
+	_onCommitChanges(event) {
+		const storeId = typeof event == "string" ? event : this._storeId;
+		WorkspaceService.getChangeLog(storeId, changeLog => {
 			const dialog = document.getElementById("commit-form");
 			dialog.edit({ changeLog: changeLog }, commit => {
-				WorkspaceService.commitChanges(this._storeId, commit.message);
+				WorkspaceService.commitChanges(storeId, commit.message, this._alert);
 			});
 		});
 	}
 
-	_onPushChanges() {
+	_onPushChanges(event) {
+		const storeId = typeof event == "string" ? event : this._storeId;
 		const dialog = document.getElementById("push-confirm");
 		dialog.open(() => {
-			WorkspaceService.pushChanges(this._storeId);
+			WorkspaceService.pushChanges(storeId, this._alert);
 		});
+	}
+
+	_alert(message) {
+		if (typeof message != "string") {
+			message = JSON.stringify(message);
+		}
+		alert(message);
 	}
 };
 

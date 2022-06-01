@@ -419,7 +419,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			response.then(__callback__.call(__scope__));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
@@ -436,7 +437,8 @@ WorkspaceService = {
 		});
 
 		if (__callback__) {
-			response.then(__callback__.call(__scope__));
+			var json = response.then(response => response.json());
+			json.then(data => __callback__.call(__scope__, data));
 		}
 	},
 
