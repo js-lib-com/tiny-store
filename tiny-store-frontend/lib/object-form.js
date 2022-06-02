@@ -55,6 +55,16 @@
             this._inputs.forEach(input => {
                 input.classList.remove("invalid");
                 input.value = '';
+
+                const options = input.options;
+                if (options) {
+                    for (let i = 0; i < options.length; ++i) {
+                        if (options[i].defaultSelected) {
+                            input.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
             });
         }
     };
