@@ -35,7 +35,7 @@ EntityPage = class extends Page {
     }
 
     _onEditEntity() {
-        const dialog = document.getElementById("entity-form");
+        const dialog = this.getCompo("entity-form");
         dialog.setTitle("Edit Entity");
         dialog.edit(this._entity, entity => {
             WorkspaceService.updateStoreEntity(entity, () => this._setObject(entity));
@@ -43,7 +43,7 @@ EntityPage = class extends Page {
     }
 
     _onCreateField() {
-        const dialog = document.getElementById("field-form");
+        const dialog = this.getCompo("field-form");
         dialog.setTitle("Create Field");
 
         dialog.open(field => {
@@ -53,7 +53,7 @@ EntityPage = class extends Page {
     }
 
     _onEditField() {
-        const dialog = document.getElementById("field-form");
+        const dialog = this.getCompo("field-form");
         dialog.setTitle("Edit Field");
 
         dialog.edit(this._fieldsView.getSelectedItem(), field => {
@@ -63,7 +63,7 @@ EntityPage = class extends Page {
     }
 
     _onDeleteField() {
-        const dialog = document.getElementById("field-delete");
+        const dialog = this.getCompo("field-delete");
         dialog.open(() => {
             this._entity.fields.splice(this._fieldsView.getSelectedIndex(), 1);
             WorkspaceService.updateStoreEntity(this._entity, () => this._fieldsView.deleteSelectedRow());

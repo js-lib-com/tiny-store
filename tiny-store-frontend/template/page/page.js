@@ -14,6 +14,7 @@ class Page {
 		this._sideMenu.setAction("push-changes", this._onPushChanges, this);
 
 		this._actionBar = document.getElementsByTagName("action-bar")[0];
+		this._compoSelect = document.getElementsByTagName("compo-select")[0];
 
 		const breadCrumbs = document.getElementsByTagName("bread-crumbs")[0];
 		breadCrumbs.setPath(Page.PAGE_BREAD_CRUMBS[location.pathname]);
@@ -26,6 +27,10 @@ class Page {
 	getActionBar() {
 		this._actionBar.setHandlersScope(this);
 		return this._actionBar;
+	}
+
+	getCompo(compoName) {
+		return this._compoSelect.get(compoName);
 	}
 
 	_setObject(object) {
@@ -44,22 +49,22 @@ class Page {
 	_onCommitChanges(event) {
 		const storeId = typeof event == "string" ? event : this._storeId;
 		WorkspaceService.getChangeLog(storeId, changeLog => {
-			const dialog = document.getElementById("commit-form");
+			const dialog = this.getCompo("commit-form");
 			dialog.edit({ changeLog: changeLog }, commit => {
-				WorkspaceService.commitChanges(storeId, commit.message, this._alert);
+				WorkspaceService.commitChanges(storeId, commit.message, this.alert);
 			});
 		});
 	}
 
 	_onPushChanges(event) {
 		const storeId = typeof event == "string" ? event : this._storeId;
-		const dialog = document.getElementById("push-confirm");
+		const dialog = this.getCompo("push-confirm");
 		dialog.open(() => {
-			WorkspaceService.pushChanges(storeId, this._alert);
+			WorkspaceService.pushChanges(storeId, this.alert);
 		});
 	}
 
-	_alert(message) {
+	alert(message) {
 		if (typeof message != "string") {
 			message = JSON.stringify(message);
 		}

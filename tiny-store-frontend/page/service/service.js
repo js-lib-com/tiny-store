@@ -37,7 +37,7 @@ ServicePage = class extends Page {
     }
 
     _onEditService() {
-        const dialog = document.getElementById("service-form");
+        const dialog = this.getCompo("service-form");
         dialog.setTitle("Edit Service");
         dialog.edit(this._service, service => {
             WorkspaceService.updateDataService(service, () => this._setObject(service));
@@ -45,7 +45,7 @@ ServicePage = class extends Page {
     }
 
     _onCreateOperation() {
-        const dialog = document.getElementById("operation-form");
+        const dialog = this.getCompo("operation-form");
         dialog.setTitle("Create Operation");
 
         const operation = {
@@ -60,7 +60,7 @@ ServicePage = class extends Page {
     }
 
     _onEditOperation() {
-        const dialog = document.getElementById("operation-form");
+        const dialog = this.getCompo("operation-form");
         dialog.setTitle("Edit Operation");
 
         dialog.edit(this._operationsView.getSelectedItem(), operation => {
@@ -69,7 +69,7 @@ ServicePage = class extends Page {
     }
 
     _onDeleteOperation() {
-        const dialog = document.getElementById("operation-delete");
+        const dialog = this.getCompo("operation-delete");
         dialog.open(() => {
             const operation = this._operationsView.getSelectedItem();
             WorkspaceService.deleteServiceOperation(operation, () => this._operationsView.deleteSelectedRow());

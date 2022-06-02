@@ -49,7 +49,7 @@ StorePage = class extends Page {
 	}
 
 	_onEditStore() {
-		const dialog = document.getElementById("store-form");
+		const dialog = this.getCompo("store-form");
 		dialog.setHandler("test", this._onTestStore.bind(this));
 		dialog.edit(this._store, store => {
 			WorkspaceService.updateStore(store, () => this._setObject(store));
@@ -57,18 +57,18 @@ StorePage = class extends Page {
 	}
 
 	_onDeleteStore() {
-		const dialog = document.getElementById("store-delete");
+		const dialog = this.getCompo("store-delete");
 		dialog.open(() => {
 			WorkspaceService.deleteStore(this._store.id, () => location.assign("index.htm"));
 		});
 	}
 
 	_onTestStore(store) {
-		WorkspaceService.testDataSource(store, this._alert);
+		WorkspaceService.testDataSource(store, this.alert);
 	}
 
 	_onCreateService() {
-		const dialog = document.getElementById("service-form");
+		const dialog = this.getCompo("service-form");
 		dialog.setTitle("Create Service");
 
 		const service = {
@@ -85,7 +85,7 @@ StorePage = class extends Page {
 	}
 
 	_onEditService() {
-		const dialog = document.getElementById("service-form");
+		const dialog = this.getCompo("service-form");
 		dialog.setTitle("Edit Service");
 
 		dialog.edit(this._servicesView.getSelectedItem(), service => {
@@ -96,7 +96,7 @@ StorePage = class extends Page {
 	}
 
 	_onDeleteService() {
-		const dialog = document.getElementById("service-delete");
+		const dialog = this.getCompo("service-delete");
 		dialog.open(() => {
 			const service = this._servicesView.getSelectedItem();
 			WorkspaceService.deleteDataService(service, () => {
@@ -116,7 +116,7 @@ StorePage = class extends Page {
 	}
 
 	_onCreateDAO() {
-		const dialog = document.getElementById("dao-form");
+		const dialog = this.getCompo("dao-form");
 
 		const entity = this._entitiesView.getSelectedItem();
 		const entityName = entity.className.split('.').pop();
@@ -136,7 +136,7 @@ StorePage = class extends Page {
 	}
 
 	_onCreateEntity() {
-		const dialog = document.getElementById("entity-form");
+		const dialog = this.getCompo("entity-form");
 		dialog.setTitle("Create Entity");
 
 		const entity = {
@@ -151,7 +151,7 @@ StorePage = class extends Page {
 	}
 
 	_onEditEntity() {
-		const dialog = document.getElementById("entity-form");
+		const dialog = this.getCompo("entity-form");
 		dialog.setTitle("Edit Entity");
 
 		dialog.edit(this._entitiesView.getSelectedItem(), entity => {
@@ -163,7 +163,7 @@ StorePage = class extends Page {
 
 	_onDeleteEntity() {
 		this._show("entity-delete", true);
-		const dialog = document.getElementById("entity-delete");
+		const dialog = this.getCompo("entity-delete");
 		dialog.open(() => {
 			const entity = this._entitiesView.getSelectedItem();
 			WorkspaceService.deleteStoreEntity(entity, () => {

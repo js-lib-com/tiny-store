@@ -34,7 +34,7 @@ OperationPage = class extends Page {
     }
 
     _onEditOperation() {
-        const dialog = document.getElementById("operation-form");
+        const dialog = this.getCompo("operation-form");
         dialog.edit(this._operation, () => {
             this._setObject(this._operation);
             this._saveOperation();
@@ -51,7 +51,7 @@ OperationPage = class extends Page {
     }
 
     _onAddParameter() {
-        const dialog = document.getElementById("parameter-form");
+        const dialog = this.getCompo("parameter-form");
         dialog.setTitle("Create Parameter");
 
         const parameter = {
@@ -66,7 +66,7 @@ OperationPage = class extends Page {
     }
 
     _onEditParameter() {
-        const dialog = document.getElementById("parameter-form");
+        const dialog = this.getCompo("parameter-form");
         dialog.setTitle("Edit Parameter");
         dialog.edit(this._parametersListView.getSelectedItem(), parameter => {
             this._operation.parameters[this._parametersListView.getSelectedIndex()] = parameter;
@@ -76,7 +76,7 @@ OperationPage = class extends Page {
     }
 
     _onDeleteParameter() {
-        const dialog = document.getElementById("parameter-delete");
+        const dialog = this.getCompo("parameter-delete");
         dialog.open(() => {
             this._operation.parameters.splice(this._parametersListView.getSelectedIndex(), 1);
             this._parametersListView.deleteSelectedRow();
@@ -94,7 +94,7 @@ OperationPage = class extends Page {
     }
 
     _onAddException() {
-        const dialog = document.getElementById("exception-form");
+        const dialog = this.getCompo("exception-form");
         dialog.setTitle("Create Exception");
         dialog.open(exception => {
             this._operation.exceptions.push(exception);
@@ -104,7 +104,7 @@ OperationPage = class extends Page {
     }
 
     _onEditException() {
-        const dialog = document.getElementById("exception-form");
+        const dialog = this.getCompo("exception-form");
         dialog.setTitle("Edit Exception");
         dialog.edit(this._exceptionsListView.getSelectedItem(), exception => {
             this._operation.exceptions[this._exceptionsListView.getSelectedIndex()] = exception;
@@ -114,7 +114,7 @@ OperationPage = class extends Page {
     }
 
     _onDeleteException() {
-        const dialog = document.getElementById("exception-delete");
+        const dialog = this.getCompo("exception-delete");
         dialog.open(() => {
             this._operation.exceptions.splice(this._exceptionsListView.getSelectedIndex(), 1);
             this._exceptionsListView.deleteSelectedRow();

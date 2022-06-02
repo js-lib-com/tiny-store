@@ -32,7 +32,7 @@ IndexPage = class extends Page {
 	}
 
 	_onCreateStore() {
-		const dialog = document.getElementById("store-form");
+		const dialog = this.getCompo("store-form");
 		dialog.setTitle("Create Store");
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
@@ -42,7 +42,7 @@ IndexPage = class extends Page {
 	}
 
 	_onEditStore() {
-		const dialog = document.getElementById("store-form");
+		const dialog = this.getCompo("store-form");
 		dialog.setTitle("Edit Store");
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
@@ -52,11 +52,11 @@ IndexPage = class extends Page {
 	}
 
 	_onTestStore(store) {
-		WorkspaceService.testDataSource(store, this._alert);
+		WorkspaceService.testDataSource(store, this.alert);
 	}
 
 	_onDeleteStore() {
-		const dialog = document.getElementById("store-delete");
+		const dialog = this.getCompo("store-delete");
 		dialog.open(() => {
 			const store = this._storesView.getSelectedItem();
 			WorkspaceService.deleteStore(store.id, () => this._storesView.deleteSelectedRow());
@@ -64,7 +64,7 @@ IndexPage = class extends Page {
 	}
 
 	_onBuildProject() {
-		WorkspaceService.buildProject(this._storesView.getSelectedId(), this._alert);
+		WorkspaceService.buildProject(this._storesView.getSelectedId(), this.alert);
 	}
 
 	_onCommitChanges() {
