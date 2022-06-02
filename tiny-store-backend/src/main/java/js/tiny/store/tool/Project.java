@@ -122,9 +122,9 @@ public class Project {
 
 		List<DataService> services = dao.findServicesByStore(store.id());
 		for (DataService service : services) {
-			generate("/service-remote.java.vtl", service, Files.serverSourceFile(projectDir, service.getInterfaceName()));
+			generate("/service-server-interface.java.vtl", service, Files.serverSourceFile(projectDir, service.getInterfaceName()));
 			generate("/service-implementation.java.vtl", service, Files.serverSourceFile(projectDir, service.getClassName()));
-			generate("/service-interface.java.vtl", service, Files.clientSourceFile(projectDir, service.getInterfaceName()));
+			generate("/service-client-interface.java.vtl", service, Files.clientSourceFile(projectDir, service.getInterfaceName()));
 		}
 
 		generate("/web.xml.vtl", Files.webDescriptorFile(projectDir), properties("store", store));
