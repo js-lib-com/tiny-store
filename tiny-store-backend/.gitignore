@@ -2,4 +2,5 @@
 /.settings/
 /.project
 /.classpath
-/velocity*.log
+/velocity.log
+/velocity.log.*

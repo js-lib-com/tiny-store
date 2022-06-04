@@ -2,7 +2,6 @@ package js.tiny.store.tool;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -11,8 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
 import javax.tools.DiagnosticListener;
@@ -108,6 +105,7 @@ public class Project {
 		generate("/parent-pom.xml.vtl", Files.parentPomFile(projectDir), properties("store", store));
 		generate("/server-pom.xml.vtl", Files.serverPomFile(projectDir), properties("store", store));
 		generate("/client-pom.xml.vtl", Files.clientPomFile(projectDir), properties("store", store));
+		generate("/gitignore.vtl", Files.gitIgnoreFile(projectDir), properties());
 		generate("/README.md.vtl", Files.readmeFile(projectDir), properties("store", store));
 	}
 
@@ -189,15 +187,13 @@ public class Project {
 		File warDir = Files.serverWarDir(projectDir, serverWarFile);
 		Files.removeFilesHierarchy(warDir);
 
-		Files.copy(Files.webDescriptorFile(projectDir), Files.warWebDescriptorFile(warDir));
 		Files.copy(Files.appDescriptorFile(projectDir), Files.warAppDescriptorFile(warDir));
-		Files.copy(Files.contextFile(projectDir), Files.warContextFile(warDir));
 		Files.copy(Files.persistenceFile(projectDir), Files.warPersistenceFile(warDir));
+		Files.copy(Files.webDescriptorFile(projectDir), Files.warWebDescriptorFile(warDir));
+		Files.copy(Files.contextFile(projectDir), Files.warContextFile(warDir));
 		Files.copyFiles(Files.serverClassDir(projectDir), Files.warClassDir(warDir));
 
-		try (JarOutputStream war = new JarOutputStream(new FileOutputStream(serverWarFile), manifest)) {
-			addArchiveEntries(war, warDir, warDir);
-		}
+		Files.createJavaArchive(manifest, warDir, serverWarFile);
 	}
 
 	public void deployServerWar() throws IOException {
@@ -248,11 +244,7 @@ public class Project {
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().putValue("Manifest-Version", "1.0");
 		manifest.getMainAttributes().putValue("Created-By", "Tiny Store");
-
-		File binariesDir = Files.clientClassDir(projectDir);
-		try (JarOutputStream jar = new JarOutputStream(new FileOutputStream(clientJarFile), manifest)) {
-			addArchiveEntries(jar, binariesDir, binariesDir);
-		}
+		Files.createJavaArchive(manifest, Files.clientClassDir(projectDir), clientJarFile);
 	}
 
 	public void deployClientJar() throws IOException {
@@ -270,33 +262,6 @@ public class Project {
 					throw new IOException(String.format("Fail to upload file %s", clientJarFile));
 				}
 			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param archive archive output stream,
-	 * @param baseDir base directory for source files tree,
-	 * @param currentDir current directory from source files tree.
-	 * @throws IOException
-	 */
-	private void addArchiveEntries(JarOutputStream archive, File baseDir, File currentDir) throws IOException {
-		File[] files = currentDir.listFiles();
-		if (files == null) {
-			return;
-		}
-
-		for (File file : files) {
-			if (file.isDirectory()) {
-				addArchiveEntries(archive, baseDir, file);
-				continue;
-			}
-			// uses base directory to create relative paths for archive entry
-			JarEntry entry = new JarEntry(Files.getRelativePath(baseDir, file, true));
-			archive.putNextEntry(entry);
-			Files.append(file, archive);
-			// do not bother to close entry on exception since project build is aborted anyway
-			archive.closeEntry();
 		}
 	}
 }

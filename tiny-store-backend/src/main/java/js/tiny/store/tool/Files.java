@@ -3,10 +3,14 @@ package js.tiny.store.tool;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 public class Files extends js.util.Files {
 	private static final String PARENT_POM_FILE = "pom.xml";
@@ -217,6 +221,44 @@ public class Files extends js.util.Files {
 			}
 			File targetFile = new File(targetDir, Files.getRelativePath(baseDir, sourceFile));
 			Files.copy(sourceFile, targetFile);
+		}
+	}
+
+	public static void createJavaArchive(Manifest manifest, File explodedSourceArchiveDir, File targetArchiveFile) throws IOException {
+		final File baseDir = explodedSourceArchiveDir;
+		final File currentDir = explodedSourceArchiveDir;
+		try (JarOutputStream archiveOutputStream = new JarOutputStream(new FileOutputStream(targetArchiveFile), manifest)) {
+			addArchiveEntries(archiveOutputStream, baseDir, currentDir);
+		}
+	}
+
+	/**
+	 * Recursively add files from source directory as entry to target Java archive.
+	 * 
+	 * @param archive archive output stream,
+	 * @param baseDir base directory for source files tree,
+	 * @param currentDir current directory from source files tree.
+	 * @throws IOException
+	 */
+	private static void addArchiveEntries(JarOutputStream archive, File baseDir, File currentDir) throws IOException {
+		File[] files = currentDir.listFiles();
+		if (files == null) {
+			return;
+		}
+
+		for (File file : files) {
+			if (file.isDirectory()) {
+				addArchiveEntries(archive, baseDir, file);
+				continue;
+			}
+			// uses base directory to create relative paths for archive entry
+			JarEntry entry = new JarEntry(Files.getRelativePath(baseDir, file, true));
+			try {
+				archive.putNextEntry(entry);
+				Files.append(file, archive);
+			} finally {
+				archive.closeEntry();
+			}
 		}
 	}
 }
