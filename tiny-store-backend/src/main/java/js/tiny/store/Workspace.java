@@ -1,6 +1,7 @@
 package js.tiny.store;
 
 import java.beans.PropertyVetoException;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -35,28 +36,47 @@ import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.Version;
+import js.tiny.store.tool.Files;
 import js.tiny.store.tool.Project;
 import js.tiny.store.tool.Strings;
-import js.tiny.store.tool.Workspace;
 import js.util.Classes;
 
 @ApplicationScoped
 @Remote
 @PermitAll
-public class WorkspaceService {
-	private static final Log log = LogFactory.getLog(WorkspaceService.class);
+public class Workspace {
+	private static final Log log = LogFactory.getLog(Workspace.class);
+
+	private final Context context;
+	private final Database db;
 
 	@Inject
-	private Workspace workspace;
-
-	@Inject
-	private Database db;
+	public Workspace(Context context, Database db) {
+		this.context = context;
+		this.db = db;
+	}
 
 	public Store createStore(Store store) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		store.setOwner("irotaru");
 		store.setVersion(new Version(1, 0));
 		db.createStore(store);
-		workspace.createProject(store);
+
+		// by convention project name is the store name
+		String projectName = store.getName();
+		File projectDir = new File(context.getWorkspaceDir(), projectName);
+		if (!projectDir.exists() && !projectDir.mkdirs()) {
+			throw new IOException("Fail to create project directory " + projectDir);
+		}
+		log.debug("Create project directory |%s|.", projectDir);
+
+		String gitURL = store.getGitURL();
+		if (gitURL != null) {
+			log.info("Clone store %s from Git repository %s.", store.getName(), gitURL);
+			// TODO: extract server URL from git URL and retrieve credentials
+			CredentialsProvider credentials = new UsernamePasswordCredentialsProvider("irotaru", "Mami1964!@#$");
+			Git.cloneRepository().setURI(gitURL).setDirectory(projectDir).setCredentialsProvider(credentials).call();
+		}
+
 		if (store.getGitURL() != null) {
 			commitChanges(store.id(), "Initial import.");
 			pushChanges(store.id());
@@ -88,7 +108,13 @@ public class WorkspaceService {
 	public List<Store> deleteStore(String storeId) throws IOException {
 		Store store = db.getStore(storeId);
 		// by convention project name is the store name
-		workspace.deleteProject(store.getName());
+		String projectName = store.getName();
+
+		Project project = new Project(context, store, db);
+		project.undeployServerWar();
+
+		File projectDir = new File(context.getWorkspaceDir(), projectName);
+		Files.removeFilesHierarchy(projectDir).delete();
 
 		db.deleteStore(storeId);
 		return db.findStoresByOwner("irotaru");
@@ -149,7 +175,7 @@ public class WorkspaceService {
 
 	public boolean buildProject(String storeId) throws IOException {
 		Store store = db.getStore(storeId);
-		Project project = workspace.getProject(store.getName());
+		Project project = new Project(context, store, db);
 		project.clean();
 
 		if (project.generateSources()) {
@@ -173,7 +199,7 @@ public class WorkspaceService {
 
 	public boolean commitChanges(String storeId, String message) throws IOException, NoFilepatternException, GitAPIException {
 		Store store = db.getStore(storeId);
-		Project project = workspace.getProject(store.getName());
+		Project project = new Project(context, store, db);
 		project.clean();
 		project.generateSources();
 
@@ -221,12 +247,19 @@ public class WorkspaceService {
 		// String gitURL = store.getGitURL();
 		// TODO: extract server URL from git URL and retrieve credentials from servers configuration
 		CredentialsProvider credentials = new UsernamePasswordCredentialsProvider("irotaru", "Mami1964!@#$");
-		try (Git git = Git.open(workspace.getProjectDir(store.getName()).getAbsoluteFile())) {
+
+		File projectDir = new File(context.getWorkspaceDir(), store.getName());
+		try (Git git = Git.open(projectDir.getAbsoluteFile())) {
 			git.push().setCredentialsProvider(credentials).call();
 		} catch (RepositoryNotFoundException e) {
 			log.warn(e);
 			return false;
 		}
 		return true;
+	}
+
+	public Project getProject(String projectName) throws IOException {
+		Store store = db.getStoreByName(projectName);
+		return new Project(context, store, db);
 	}
 }

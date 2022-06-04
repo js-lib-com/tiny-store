@@ -51,7 +51,7 @@ class Page {
 		Database.getChangeLog(storeId, changeLog => {
 			const dialog = this.getCompo("commit-form");
 			dialog.edit({ changeLog: changeLog }, commit => {
-				WorkspaceService.commitChanges(storeId, commit.message, this.alert);
+				Workspace.commitChanges(storeId, commit.message, this.alert);
 			});
 		});
 	}
@@ -60,7 +60,7 @@ class Page {
 		const storeId = typeof event == "string" ? event : this._storeId;
 		const dialog = this.getCompo("push-confirm");
 		dialog.open(() => {
-			WorkspaceService.pushChanges(storeId, this.alert);
+			Workspace.pushChanges(storeId, this.alert);
 		});
 	}
 

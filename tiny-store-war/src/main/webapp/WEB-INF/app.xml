@@ -1,9 +1,8 @@
 <app package="js.tiny.store">
 	<binding bind="Application" />
 	<binding bind="Context" />
-	<binding bind="WorkspaceService" />
+	<binding bind="Workspace" />
 	<binding bind="dao.Database" to="dao.DatabaseImpl" />
 	<binding bind="dao.MongoDB" />
-	<binding bind="tool.Workspace" />
 	<binding bind="MetaChangeListener" />
 </app>

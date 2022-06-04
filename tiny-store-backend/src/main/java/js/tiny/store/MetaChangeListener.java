@@ -38,7 +38,7 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 
 	private String getStoreId(String methodName, Object[] arguments) {
 		if (arguments.length == 0) {
-			throw new IllegalArgumentException(String.format("Missing argument on method %s#%s.", WorkspaceService.class.getCanonicalName(), methodName));
+			throw new IllegalArgumentException(String.format("Missing argument on method %s#%s.", Workspace.class.getCanonicalName(), methodName));
 		}
 
 		if (arguments[0] instanceof String) {
@@ -62,12 +62,12 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 			return service.getStoreId();
 		}
 
-		throw new IllegalArgumentException(String.format("Invalid signature for method %s#%s. Cannot infer store ID from arguments.", WorkspaceService.class.getCanonicalName(), methodName));
+		throw new IllegalArgumentException(String.format("Invalid signature for method %s#%s. Cannot infer store ID from arguments.", Workspace.class.getCanonicalName(), methodName));
 	}
 
 	private String getClassName(String methodName, Object[] arguments, Object value) {
 		if (arguments.length == 0) {
-			throw new IllegalArgumentException(String.format("Missing argument on method %s#%s.", WorkspaceService.class.getCanonicalName(), methodName));
+			throw new IllegalArgumentException(String.format("Missing argument on method %s#%s.", Workspace.class.getCanonicalName(), methodName));
 		}
 
 		if (arguments[0] instanceof DataService) {

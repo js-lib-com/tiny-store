@@ -52,19 +52,19 @@ StorePage = class extends Page {
 		const dialog = this.getCompo("store-form");
 		dialog.setHandler("test", this._onTestStore.bind(this));
 		dialog.edit(this._store, store => {
-			WorkspaceService.updateStore(store, () => this._setObject(store));
+			Workspace.updateStore(store, () => this._setObject(store));
 		});
 	}
 
 	_onDeleteStore() {
 		const dialog = this.getCompo("store-delete");
 		dialog.open(() => {
-			WorkspaceService.deleteStore(this._store.id, () => location.assign("index.htm"));
+			Workspace.deleteStore(this._store.id, () => location.assign("index.htm"));
 		});
 	}
 
 	_onTestStore(store) {
-		WorkspaceService.testDataSource(store, this.alert);
+		Workspace.testDataSource(store, this.alert);
 	}
 
 	_onCreateService() {
@@ -129,7 +129,7 @@ StorePage = class extends Page {
 		};
 
 		dialog.edit(service, service => {
-			WorkspaceService.createDaoService(this._store.id, entity, service, service => {
+			Workspace.createDaoService(this._store.id, entity, service, service => {
 				this._servicesView.addItem(service);
 			});
 		});
@@ -173,7 +173,7 @@ StorePage = class extends Page {
 	}
 
 	_onBuildProject() {
-		WorkspaceService.buildProject(this._store.id, result => alert(JSON.stringify(result)));
+		Workspace.buildProject(this._store.id, result => alert(JSON.stringify(result)));
 	}
 };
 

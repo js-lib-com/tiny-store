@@ -16,7 +16,7 @@ IndexPage = class extends Page {
 		this._actionBar.setHandler("push-changes", this._onPushChanges);
 		this._onStoreSelect({ detail: { selected: false } });
 
-		WorkspaceService.getStores(stores => this._storesView.setItems(stores));
+		Workspace.getStores(stores => this._storesView.setItems(stores));
 	}
 
 	_onStoreSelect(event) {
@@ -35,7 +35,7 @@ IndexPage = class extends Page {
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
 		dialog.open(store => {
-			WorkspaceService.createStore(store, store => this._storesView.addItem(store));
+			Workspace.createStore(store, store => this._storesView.addItem(store));
 		});
 	}
 
@@ -45,16 +45,16 @@ IndexPage = class extends Page {
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
 		dialog.edit(this._storesView.getSelectedItem(), store => {
-			WorkspaceService.updateStore(store, () => this._storesView.setSelectedItem(store));
+			Workspace.updateStore(store, () => this._storesView.setSelectedItem(store));
 		});
 	}
 
 	_onTestStore(store) {
-		WorkspaceService.testDataSource(store, this.alert);
+		Workspace.testDataSource(store, this.alert);
 	}
 
 	_onBuildProject() {
-		WorkspaceService.buildProject(this._storesView.getSelectedId(), this.alert);
+		Workspace.buildProject(this._storesView.getSelectedId(), this.alert);
 	}
 
 	_onCommitChanges() {

@@ -1,8 +1,8 @@
-WorkspaceService = {
+Workspace = {
 	 createStore: function(store) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/createStore.rmi";
+		var url = "js/tiny/store/Workspace/createStore.rmi";
 		var parameters = [store];
 
 		var response = fetch(url, {
@@ -20,7 +20,7 @@ WorkspaceService = {
 	 updateStore: function(store) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/updateStore.rmi";
+		var url = "js/tiny/store/Workspace/updateStore.rmi";
 		var parameters = [store];
 
 		var response = fetch(url, {
@@ -37,7 +37,7 @@ WorkspaceService = {
 	 deleteStore: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/deleteStore.rmi";
+		var url = "js/tiny/store/Workspace/deleteStore.rmi";
 		var parameters = [storeId];
 
 		var response = fetch(url, {
@@ -55,7 +55,7 @@ WorkspaceService = {
 	 getStores: function() {
 		var __callback__ = arguments[0];
 		var __scope__ = arguments[1] || window;
-		var url = "js/tiny/store/WorkspaceService/getStores.rmi";
+		var url = "js/tiny/store/Workspace/getStores.rmi";
 		var parameters = [];
 
 		var response = fetch(url, {
@@ -73,7 +73,7 @@ WorkspaceService = {
 	 createDaoService: function(storeId, entity, service) {
 		var __callback__ = arguments[3];
 		var __scope__ = arguments[4] || window;
-		var url = "js/tiny/store/WorkspaceService/createDaoService.rmi";
+		var url = "js/tiny/store/Workspace/createDaoService.rmi";
 		var parameters = [storeId, entity, service];
 
 		var response = fetch(url, {
@@ -91,7 +91,7 @@ WorkspaceService = {
 	 testDataSource: function(store) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/testDataSource.rmi";
+		var url = "js/tiny/store/Workspace/testDataSource.rmi";
 		var parameters = [store];
 
 		var response = fetch(url, {
@@ -109,7 +109,7 @@ WorkspaceService = {
 	 buildProject: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/buildProject.rmi";
+		var url = "js/tiny/store/Workspace/buildProject.rmi";
 		var parameters = [storeId];
 
 		var response = fetch(url, {
@@ -127,7 +127,7 @@ WorkspaceService = {
 	 commitChanges: function(storeId, message) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
-		var url = "js/tiny/store/WorkspaceService/commitChanges.rmi";
+		var url = "js/tiny/store/Workspace/commitChanges.rmi";
 		var parameters = [storeId, message];
 
 		var response = fetch(url, {
@@ -145,7 +145,7 @@ WorkspaceService = {
 	 pushChanges: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/WorkspaceService/pushChanges.rmi";
+		var url = "js/tiny/store/Workspace/pushChanges.rmi";
 		var parameters = [storeId];
 
 		var response = fetch(url, {

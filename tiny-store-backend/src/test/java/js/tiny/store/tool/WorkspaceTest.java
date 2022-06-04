@@ -13,8 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import js.tiny.store.Context;
-import js.tiny.store.dao.DatabaseImpl;
+import js.tiny.store.Workspace;
 import js.tiny.store.dao.Database;
+import js.tiny.store.dao.DatabaseImpl;
 import js.tiny.store.dao.MongoDB;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,7 +23,7 @@ public class WorkspaceTest {
 	@Mock
 	private Context context;
 	
-	private Database dao;
+	private Database database;
 	private Workspace workspace;
 
 	@Before
@@ -33,8 +34,8 @@ public class WorkspaceTest {
 		when(context.getRuntimeDir()).thenReturn(new File("D:/runtime/tiny-store/"));
 		
 		MongoDB mongo = new MongoDB(context);
-		dao = new DatabaseImpl(mongo);
-		workspace = new Workspace(context, dao);
+		database = new DatabaseImpl(mongo);
+		workspace = new Workspace(context, database);
 	}
 
 	@Test
