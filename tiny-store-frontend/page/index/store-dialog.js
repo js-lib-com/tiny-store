@@ -6,16 +6,18 @@
 
             const form = this.getElementsByTagName("object-form")[0];
 
+            this._displayInput = form.getElementByName("display");
+            this._packageNameInput = form.getElementByName("packageName");
+            this._restPathInput = form.getElementByName("restPath");
+            this._gitUrlInput = form.getElementByName("gitURL");
+            
             const nameInput = form.getElementByName("name");
             nameInput.addEventListener("change", this._onNameChanged.bind(this));
 
             const deploymentSelect = form.getElementByName("deploymentType");
             deploymentSelect.addEventListener("change", this._onDeploymentChange.bind(this));
+            this._onDeploymentChange({ target: deploymentSelect });
 
-            this._displayInput = form.getElementByName("display");
-            this._packageNameInput = form.getElementByName("packageName");
-            this._restPathInput = form.getElementByName("restPath");
-            this._gitUrlInput = form.getElementByName("gitURL");
         }
 
         _onNameChanged(event) {
