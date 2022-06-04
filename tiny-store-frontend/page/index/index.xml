@@ -5,4 +5,5 @@
 
 	<script src="gen/js/tiny/store/WorkspaceService.js" />
 	<script src="lib/format.js" />
+	<script src="page/index/store-dialog.js" />
 </page>

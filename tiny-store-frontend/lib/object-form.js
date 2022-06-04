@@ -3,15 +3,27 @@
     class ObjectForm extends HTMLElement {
         constructor() {
             super();
+
             this._inputs = [];
+            this._inputsByNameIndex = {};
+
             let input = this.firstElementChild;
             while (input) {
                 if (input.hasAttribute("name")) {
                     this._inputs.push(input);
+                    this._inputsByNameIndex[input.getAttribute("name")] = input;
                     input.addEventListener("focus", event => event.target.classList.remove("invalid"));
                 }
                 input = input.nextElementSibling;
             }
+        }
+
+        getElementByName(name) {
+            const input = this._inputsByNameIndex[name];
+            if (!input) {
+                throw `Missing input element with name ${name}.`;
+            }
+            return input;
         }
 
         setObject(object) {

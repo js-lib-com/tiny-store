@@ -1,19 +1,19 @@
-<side-dialog id="store-form" class="hidden">
+<store-dialog id="store-form" class="side-dialog hidden">
     <h2>Create Store</h2>
 
     <object-form class="fill">
         <input name="name" placeholder="unique store name" required="true" />
         <input name="display" placeholder="display name" required="true" />
         <textarea name="description" placeholder="description"></textarea>
-        <input name="restPath" placeholder="REST path" />
 
         <select name="deploymentType" required="true">
             <option selected="selected">SERVICE</option>
             <option>HOSTED</option>
             <option>EMBEDDED</option>
         </select>
+        <input name="restPath" placeholder="REST path" />
         <input name="gitURL" placeholder="Git URL" />
-        <input name="mavenServer" placeholder="Maven server" />
+        <input name="mavenServer" placeholder="Maven server" required="true" />
         <input name="packageName" placeholder="package" required="true" />
 
         <textarea name="connectionString" placeholder="database connection" required="true"></textarea>
@@ -26,4 +26,4 @@
         <button type="button" name="positive">Save</button>
         <button type="button" name="negative">Cancel</button>
     </div>
-</side-dialog>
+</store-dialog>
