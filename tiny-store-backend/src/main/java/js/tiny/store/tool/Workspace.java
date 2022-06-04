@@ -15,7 +15,7 @@ import jakarta.inject.Inject;
 import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.store.Context;
-import js.tiny.store.dao.IDAO;
+import js.tiny.store.dao.Database;
 import js.tiny.store.meta.Store;
 
 @ApplicationScoped
@@ -23,10 +23,10 @@ public class Workspace {
 	private static final Log log = LogFactory.getLog(Workspace.class);
 
 	private final Context context;
-	private final IDAO dao;
+	private final Database dao;
 
 	@Inject
-	public Workspace(Context context, IDAO dao) {
+	public Workspace(Context context, Database dao) {
 		this.context = context;
 		this.dao = dao;
 	}

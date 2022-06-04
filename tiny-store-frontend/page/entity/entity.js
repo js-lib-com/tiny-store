@@ -6,7 +6,7 @@ EntityPage = class extends Page {
         this._fieldsView.addEventListener("select", this._onFieldSelect.bind(this));
 
         const className = location.search.substring(1);
-        WorkspaceService.getEntity(className, this._onEntityLoaded.bind(this));
+        Database.getStoreEntity(className, this._onEntityLoaded.bind(this));
 
         const sideMenu = this.getSideMenu();
         sideMenu.setLink("store-page", () => `store.htm?${this._entity.storeId}`);
@@ -38,7 +38,7 @@ EntityPage = class extends Page {
         const dialog = this.getCompo("entity-form");
         dialog.setTitle("Edit Entity");
         dialog.edit(this._entity, entity => {
-            WorkspaceService.updateStoreEntity(entity, () => this._setObject(entity));
+            Database.updateStoreEntity(entity, () => this._setObject(entity));
         });
     }
 
@@ -48,7 +48,7 @@ EntityPage = class extends Page {
 
         dialog.open(field => {
             this._entity.fields.push(field);
-            WorkspaceService.updateStoreEntity(this._entity, () => this._fieldsView.addItem(field));
+            Database.updateStoreEntity(this._entity, () => this._fieldsView.addItem(field));
         });
     }
 
@@ -58,7 +58,7 @@ EntityPage = class extends Page {
 
         dialog.edit(this._fieldsView.getSelectedItem(), field => {
             this._entity.fields[this._fieldsView.getSelectedIndex()] = field;
-            WorkspaceService.updateStoreEntity(this._entity, () => this._fieldsView.setSelectedItem(field));
+            Database.updateStoreEntity(this._entity, () => this._fieldsView.setSelectedItem(field));
         });
     }
 
@@ -66,7 +66,7 @@ EntityPage = class extends Page {
         const dialog = this.getCompo("field-delete");
         dialog.open(() => {
             this._entity.fields.splice(this._fieldsView.getSelectedIndex(), 1);
-            WorkspaceService.updateStoreEntity(this._entity, () => this._fieldsView.deleteSelectedRow());
+            Database.updateStoreEntity(this._entity, () => this._fieldsView.deleteSelectedRow());
         });
     }
 };

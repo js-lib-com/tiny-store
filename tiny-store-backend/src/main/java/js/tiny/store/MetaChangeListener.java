@@ -6,17 +6,17 @@ import java.time.Instant;
 import jakarta.inject.Inject;
 import js.tiny.container.interceptor.PostInvokeInterceptor;
 import js.tiny.container.spi.IManagedMethod;
-import js.tiny.store.dao.IDAO;
+import js.tiny.store.dao.Database;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
 public class MetaChangeListener implements PostInvokeInterceptor {
-	private final IDAO dao;
+	private final Database dao;
 
 	@Inject
-	public MetaChangeListener(IDAO dao) {
+	public MetaChangeListener(Database dao) {
 		this.dao = dao;
 	}
 

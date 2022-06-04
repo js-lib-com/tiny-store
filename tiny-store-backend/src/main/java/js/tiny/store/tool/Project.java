@@ -35,7 +35,7 @@ import org.apache.http.impl.client.HttpClients;
 import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.store.Context;
-import js.tiny.store.dao.IDAO;
+import js.tiny.store.dao.Database;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -51,7 +51,7 @@ public class Project {
 	private final RequestConfig requestConfig;
 
 	private final Store store;
-	private final IDAO dao;
+	private final Database dao;
 
 	private final File projectDir;
 	private final File runtimeDir;
@@ -59,7 +59,7 @@ public class Project {
 	private final File serverWarFile;
 	private final File clientJarFile;
 
-	public Project(Context context, Store store, IDAO dao) throws IOException {
+	public Project(Context context, Store store, Database dao) throws IOException {
 		HttpClientBuilder clientBuilder = HttpClients.custom();
 		RequestConfig.Builder configBuilder = RequestConfig.custom();
 		if (context.hasProxy()) {
@@ -112,13 +112,13 @@ public class Project {
 	public boolean generateSources() throws IOException {
 		generateProjectFiles();
 
-		List<StoreEntity> entities = dao.findEntitiesByStore(store.id());
+		List<StoreEntity> entities = dao.getStoreEntities(store.id());
 		for (StoreEntity entity : entities) {
 			generate("/entity.java.vtl", entity, Files.serverSourceFile(projectDir, entity.getClassName()));
 			generate("/model.java.vtl", entity, Files.clientSourceFile(projectDir, entity.getClassName()));
 		}
 
-		List<DataService> services = dao.findServicesByStore(store.id());
+		List<DataService> services = dao.getStoreServices(store.id());
 		for (DataService service : services) {
 			generate("/service-server-interface.java.vtl", service, Files.serverSourceFile(projectDir, service.getInterfaceName()));
 			generate("/service-implementation.java.vtl", service, Files.serverSourceFile(projectDir, service.getClassName()));
@@ -143,7 +143,7 @@ public class Project {
 
 	private void generate(String template, DataService service, File targetFile) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
-		List<ServiceOperation> operations = dao.findServiceOperations(service.id());
+		List<ServiceOperation> operations = dao.getServiceOperations(service.id());
 		try (Writer writer = new FileWriter(targetFile)) {
 			sourceFile.generate(store.getName(), service, operations, writer);
 		}

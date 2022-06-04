@@ -9,7 +9,7 @@ OperationPage = class extends Page {
         this._exceptionsListView.addEventListener("select", this._onExceptionSelect.bind(this));
 
         const operationId = location.search.substring(1);
-        WorkspaceService.getOperation(operationId, this._onOperationLoaded, this);
+        Database.getServiceOperation(operationId, this._onOperationLoaded, this);
 
         const sideMenu = this.getSideMenu();
         sideMenu.setLink("service-page", () => `service.htm?${this._operation.serviceId}`);
@@ -123,7 +123,7 @@ OperationPage = class extends Page {
     }
 
     _saveOperation() {
-        WorkspaceService.updateServiceOperation(this._operation);
+        Database.updateServiceOperation(this._operation);
     }
 
     toString() {

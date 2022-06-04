@@ -8,9 +8,9 @@ StorePage = class extends Page {
 		this._entitiesView.addEventListener("select", this._onEntitySelect.bind(this));
 
 		const storeId = location.search.substring(1);
-		WorkspaceService.getStore(storeId, this._onStoreLoaded.bind(this));
-		WorkspaceService.getStoreServices(storeId, services => this._servicesView.setItems(services));
-		WorkspaceService.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
+		Database.getStore(storeId, this._onStoreLoaded.bind(this));
+		Database.getStoreServices(storeId, services => this._servicesView.setItems(services));
+		Database.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
 
 		this._sideMenu = this.getSideMenu();
 		this._sideMenu.setLink("index-page", () => `index.htm`);
@@ -78,7 +78,7 @@ StorePage = class extends Page {
 		};
 
 		dialog.edit(service, service => {
-			WorkspaceService.createDataService(this._store.id, service, service => {
+			Database.createDataService(this._store.id, service, service => {
 				this._servicesView.addItem(service);
 			});
 		});
@@ -89,7 +89,7 @@ StorePage = class extends Page {
 		dialog.setTitle("Edit Service");
 
 		dialog.edit(this._servicesView.getSelectedItem(), service => {
-			WorkspaceService.updateDataService(service, () => {
+			Database.updateDataService(service, () => {
 				this._servicesView.setSelectedItem(service);
 			});
 		});
@@ -99,7 +99,7 @@ StorePage = class extends Page {
 		const dialog = this.getCompo("service-delete");
 		dialog.open(() => {
 			const service = this._servicesView.getSelectedItem();
-			WorkspaceService.deleteDataService(service, () => {
+			Database.deleteDataService(service, () => {
 				this._servicesView.deleteSelectedRow();
 			});
 		});
@@ -144,7 +144,7 @@ StorePage = class extends Page {
 		};
 
 		dialog.edit(entity, entity => {
-			WorkspaceService.createStoreEntity(this._store.id, entity, entity => {
+			Database.createStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});
 		});
@@ -155,7 +155,7 @@ StorePage = class extends Page {
 		dialog.setTitle("Edit Entity");
 
 		dialog.edit(this._entitiesView.getSelectedItem(), entity => {
-			WorkspaceService.updateStoreEntity(entity, () => {
+			Database.updateStoreEntity(entity, () => {
 				this._entitiesView.setSelectedItem(entity);
 			});
 		});
@@ -166,7 +166,7 @@ StorePage = class extends Page {
 		const dialog = this.getCompo("entity-delete");
 		dialog.open(() => {
 			const entity = this._entitiesView.getSelectedItem();
-			WorkspaceService.deleteStoreEntity(entity, () => {
+			Database.deleteStoreEntity(entity, () => {
 				this._entitiesView.deleteSelectedRow();
 			});
 		});

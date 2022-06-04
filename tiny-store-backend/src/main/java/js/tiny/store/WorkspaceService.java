@@ -3,7 +3,6 @@ package js.tiny.store;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ import js.lang.GType;
 import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.container.interceptor.Intercepted;
-import js.tiny.store.dao.IDAO;
+import js.tiny.store.dao.Database;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -51,12 +50,12 @@ public class WorkspaceService {
 	private Workspace workspace;
 
 	@Inject
-	private IDAO dao;
+	private Database db;
 
 	public Store createStore(Store store) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		store.setOwner("irotaru");
 		store.setVersion(new Version(1, 0));
-		dao.createStore(store);
+		db.createStore(store);
 		workspace.createProject(store);
 		if (store.getGitURL() != null) {
 			commitChanges(store.id(), "Initial import.");
@@ -68,60 +67,40 @@ public class WorkspaceService {
 	@Intercepted(MetaChangeListener.class)
 	public void updateStore(Store store) {
 		store.setOwner("irotaru");
-		dao.saveStore(store);
+		db.updateStore(store);
 
 		// update REST enabled state to all store services and their operations and parameters
 		boolean restEnabled = store.getRestPath() != null;
-		for (DataService service : dao.findServicesByStore(store.id())) {
+		for (DataService service : db.getStoreServices(store.id())) {
 			if (service.isRestEnabled() != restEnabled) {
 				service.setRestEnabled(restEnabled);
-				dao.saveService(service);
+				db.updateDataService(service);
 				// if service REST enabled state was changed consider also service operations and related parameters
-				for (ServiceOperation operation : dao.findServiceOperations(service.id())) {
+				for (ServiceOperation operation : db.getServiceOperations(service.id())) {
 					operation.setRestEnabled(restEnabled);
 					operation.getParameters().forEach(parameter -> parameter.setRestEnabled(restEnabled));
-					dao.saveServiceOperation(operation);
+					db.updateServiceOperation(operation);
 				}
 			}
 		}
 	}
 
 	public List<Store> deleteStore(String storeId) throws IOException {
-		Store store = dao.getStore(storeId);
+		Store store = db.getStore(storeId);
 		// by convention project name is the store name
 		workspace.deleteProject(store.getName());
 
-		dao.deleteStore(storeId);
-		return dao.findStoresByOwner("irotaru");
+		db.deleteStore(storeId);
+		return db.findStoresByOwner("irotaru");
 	}
 
-	@Intercepted(MetaChangeListener.class)
-	public StoreEntity createStoreEntity(String storeId, StoreEntity entity) throws IOException, NoFilepatternException, GitAPIException {
-		entity.setStoreId(storeId);
-		entity.setFields(new ArrayList<>(0));
-		return dao.createEntity(entity);
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public void updateStoreEntity(StoreEntity entity) {
-		dao.saveEntity(entity);
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public void deleteStoreEntity(StoreEntity entity) {
-		dao.deleteEntity(entity.id());
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public DataService createDataService(String storeId, DataService service) {
-		service.setStoreId(storeId);
-		return dao.createService(service);
+	public List<Store> getStores() throws IOException {
+		return db.findStoresByOwner("irotaru");
 	}
 
 	@Intercepted(MetaChangeListener.class)
 	public DataService createDaoService(String storeId, StoreEntity entity, DataService service) throws IOException {
-		service.setStoreId(storeId);
-		DataService createdService = dao.createService(service);
+		DataService createdService = db.createDataService(storeId, service);
 
 		Map<String, String> variables = new HashMap<>();
 		variables.put("entity-class", entity.getClassName());
@@ -133,71 +112,10 @@ public class WorkspaceService {
 		List<ServiceOperation> operations = json.parse(operationsJson, new GType(List.class, ServiceOperation.class));
 		operations.forEach(operation -> {
 			operation.setServiceId(createdService.id());
-			dao.createOperation(operation);
+			db.createOperation(operation);
 		});
 
 		return createdService;
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public void updateDataService(DataService service) {
-		dao.saveService(service);
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public void deleteDataService(DataService service) {
-		dao.deleteService(service.id());
-	}
-
-	public List<Store> getStores() throws IOException {
-		return dao.findStoresByOwner("irotaru");
-	}
-
-	public Store getStore(String id) {
-		return dao.getStore(id);
-	}
-
-	public List<DataService> getStoreServices(String storeId) {
-		return dao.findServicesByStore(storeId);
-	}
-
-	public StoreEntity getEntity(String className) {
-		return dao.getStoreEntity(className);
-	}
-
-	public List<StoreEntity> getStoreEntities(String storeId) {
-		return dao.findEntitiesByStore(storeId);
-	}
-
-	public DataService getService(String serviceId) {
-		return dao.getDataService(serviceId);
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public ServiceOperation createServiceOperation(DataService service, ServiceOperation operation) {
-		operation.setServiceId(service.id());
-		operation.setRestEnabled(service.isRestEnabled());
-		operation.setParameters(new ArrayList<>());
-		operation.setExceptions(new ArrayList<>());
-		return dao.createOperation(operation);
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public void updateServiceOperation(ServiceOperation operation) {
-		dao.saveServiceOperation(operation);
-	}
-
-	@Intercepted(MetaChangeListener.class)
-	public void deleteServiceOperation(ServiceOperation operation) {
-		dao.deleteOperation(operation.id());
-	}
-
-	public List<ServiceOperation> getServiceOperations(String serviceId) {
-		return dao.findServiceOperations(serviceId);
-	}
-
-	public ServiceOperation getOperation(String operationId) {
-		return dao.getServiceOperation(operationId);
 	}
 
 	public boolean testDataSource(Store store) throws PropertyVetoException {
@@ -230,7 +148,7 @@ public class WorkspaceService {
 	}
 
 	public boolean buildProject(String storeId) throws IOException {
-		Store store = dao.getStore(storeId);
+		Store store = db.getStore(storeId);
 		Project project = workspace.getProject(store.getName());
 		project.clean();
 
@@ -254,7 +172,7 @@ public class WorkspaceService {
 	}
 
 	public boolean commitChanges(String storeId, String message) throws IOException, NoFilepatternException, GitAPIException {
-		Store store = dao.getStore(storeId);
+		Store store = db.getStore(storeId);
 		Project project = workspace.getProject(store.getName());
 		project.clean();
 		project.generateSources();
@@ -294,12 +212,12 @@ public class WorkspaceService {
 			return false;
 		}
 
-		dao.deleteChangeLog(storeId);
+		db.deleteChangeLog(storeId);
 		return true;
 	}
 
 	public boolean pushChanges(String storeId) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
-		Store store = dao.getStore(storeId);
+		Store store = db.getStore(storeId);
 		// String gitURL = store.getGitURL();
 		// TODO: extract server URL from git URL and retrieve credentials from servers configuration
 		CredentialsProvider credentials = new UsernamePasswordCredentialsProvider("irotaru", "Mami1964!@#$");
@@ -310,9 +228,5 @@ public class WorkspaceService {
 			return false;
 		}
 		return true;
-	}
-
-	public List<ChangeLog> getChangeLog(String storeId) {
-		return dao.getChangeLog(storeId);
 	}
 }

@@ -1,8 +1,8 @@
 package js.tiny.store.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.tiny.store.ChangeLog;
 import js.tiny.store.meta.DataService;
@@ -10,8 +10,7 @@ import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
-@ApplicationScoped
-public class DaoFacade implements IDAO {
+public class DatabaseImpl implements Database {
 	private final DAO<Store> storeDAO;
 	private final DAO<StoreEntity> entityDAO;
 	private final DAO<DataService> serviceDAO;
@@ -19,7 +18,7 @@ public class DaoFacade implements IDAO {
 	private final DAO<ChangeLog> changeLogDAO;
 
 	@Inject
-	public DaoFacade(MongoDB mongo) {
+	public DatabaseImpl(MongoDB mongo) {
 		this.storeDAO = new DAO<>(mongo, Store.class);
 		this.entityDAO = new DAO<>(mongo, StoreEntity.class);
 		this.serviceDAO = new DAO<>(mongo, DataService.class);
@@ -48,7 +47,7 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void saveStore(Store store) {
+	public void updateStore(Store store) {
 		storeDAO.update(store);
 	}
 
@@ -73,17 +72,26 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public void saveServiceOperation(ServiceOperation operation) {
+	public ServiceOperation createServiceOperation(DataService service, ServiceOperation operation) {
+		operation.setServiceId(service.id());
+		operation.setRestEnabled(service.isRestEnabled());
+		operation.setParameters(new ArrayList<>());
+		operation.setExceptions(new ArrayList<>());
+		return operationDAO.create(operation);
+	}
+
+	@Override
+	public void updateServiceOperation(ServiceOperation operation) {
 		operationDAO.update(operation);
 	}
 
 	@Override
-	public void deleteOperation(String operationId) {
-		operationDAO.delete(operationId);
+	public void deleteServiceOperation(ServiceOperation operation) {
+		operationDAO.delete(operation.id());
 	}
 
 	@Override
-	public List<ServiceOperation> findServiceOperations(String serviceId) {
+	public List<ServiceOperation> getServiceOperations(String serviceId) {
 		return operationDAO.find("serviceId", serviceId);
 	}
 
@@ -93,42 +101,45 @@ public class DaoFacade implements IDAO {
 	}
 
 	@Override
-	public StoreEntity createEntity(StoreEntity entity) {
+	public StoreEntity createStoreEntity(String storeId, StoreEntity entity) {
+		entity.setStoreId(storeId);
+		entity.setFields(new ArrayList<>(0));
 		return entityDAO.create(entity);
 	}
 
 	@Override
-	public void saveEntity(StoreEntity entity) {
+	public void updateStoreEntity(StoreEntity entity) {
 		entityDAO.update(entity);
 	}
 
 	@Override
-	public void deleteEntity(String entityId) {
-		entityDAO.delete(entityId);
+	public void deleteStoreEntity(StoreEntity entity) {
+		entityDAO.delete(entity.id());
 	}
 
 	@Override
-	public List<StoreEntity> findEntitiesByStore(String storeId) {
+	public List<StoreEntity> getStoreEntities(String storeId) {
 		return entityDAO.find("storeId", storeId);
 	}
 
 	@Override
-	public DataService createService(DataService service) {
+	public DataService createDataService(String storeId, DataService service) {
+		service.setStoreId(storeId);
 		return serviceDAO.create(service);
 	}
 
 	@Override
-	public void saveService(DataService service) {
+	public void updateDataService(DataService service) {
 		serviceDAO.update(service);
 	}
 
 	@Override
-	public void deleteService(String serviceId) {
-		serviceDAO.delete(serviceId);
+	public void deleteDataService(DataService service) {
+		serviceDAO.delete(service.id());
 	}
 
 	@Override
-	public List<DataService> findServicesByStore(String storeId) {
+	public List<DataService> getStoreServices(String storeId) {
 		return serviceDAO.find("storeId", storeId);
 	}
 

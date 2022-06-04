@@ -6,8 +6,8 @@ ServicePage = class extends Page {
         this._operationsView.addEventListener("select", this._onOperationSelect.bind(this));
 
         const serviceId = location.search.substring(1);
-        WorkspaceService.getService(serviceId, this._onServiceLoaded.bind(this));
-        WorkspaceService.getServiceOperations(serviceId, operations => this._operationsView.setItems(operations));
+        Database.getDataService(serviceId, this._onServiceLoaded.bind(this));
+        Database.getServiceOperations(serviceId, operations => this._operationsView.setItems(operations));
 
         this._sideMenu = this.getSideMenu();
         this._sideMenu.setLink("store-page", () => `store.htm?${this._service.storeId}`);
@@ -40,7 +40,7 @@ ServicePage = class extends Page {
         const dialog = this.getCompo("service-form");
         dialog.setTitle("Edit Service");
         dialog.edit(this._service, service => {
-            WorkspaceService.updateDataService(service, () => this._setObject(service));
+            Database.updateDataService(service, () => this._setObject(service));
         });
     }
 
@@ -53,7 +53,7 @@ ServicePage = class extends Page {
         };
 
         dialog.edit(operation, operation => {
-            WorkspaceService.createServiceOperation(this._service, operation, operation => {
+            Database.createServiceOperation(this._service, operation, operation => {
                 this._operationsView.addItem(operation);
             });
         });
@@ -64,7 +64,7 @@ ServicePage = class extends Page {
         dialog.setTitle("Edit Operation");
 
         dialog.edit(this._operationsView.getSelectedItem(), operation => {
-            WorkspaceService.updateServiceOperation(operation, () => this._operationsView.setSelectedItem(operation));
+            Database.updateServiceOperation(operation, () => this._operationsView.setSelectedItem(operation));
         });
     }
 
@@ -72,7 +72,7 @@ ServicePage = class extends Page {
         const dialog = this.getCompo("operation-delete");
         dialog.open(() => {
             const operation = this._operationsView.getSelectedItem();
-            WorkspaceService.deleteServiceOperation(operation, () => this._operationsView.deleteSelectedRow());
+            Database.deleteServiceOperation(operation, () => this._operationsView.deleteSelectedRow());
         });
     }
 };

@@ -4,6 +4,7 @@
 	<description>Page template description.</description>
 
 	<head>
+		<script src="gen/js/tiny/store/dao/Database.js" />
 		<script src="lib/opp.js"></script>
 		<script src="lib/object-view.js"></script>
 		<script src="lib/object-form.js"></script>

@@ -2,7 +2,7 @@
 	<binding bind="Application" />
 	<binding bind="Context" />
 	<binding bind="WorkspaceService" />
-	<binding bind="dao.IDAO" to="dao.DaoFacade" />
+	<binding bind="dao.Database" to="dao.DatabaseImpl" />
 	<binding bind="dao.MongoDB" />
 	<binding bind="tool.Workspace" />
 	<binding bind="MetaChangeListener" />
