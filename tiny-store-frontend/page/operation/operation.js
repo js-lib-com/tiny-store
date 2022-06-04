@@ -14,7 +14,7 @@ OperationPage = class extends Page {
         const sideMenu = this.getSideMenu();
         sideMenu.setLink("service-page", () => `service.htm?${this._operation.serviceId}`);
 
-        this._actionBar = this.getActionBar();
+        this._actionBar = this.getActionBar("OperationPage");
         this._actionBar.setHandler("edit-operation", this._onEditOperation);
 
         this._actionBar.setHandler("add-parameter", this._onAddParameter);

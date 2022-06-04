@@ -11,7 +11,7 @@ EntityPage = class extends Page {
         const sideMenu = this.getSideMenu();
         sideMenu.setLink("store-page", () => `store.htm?${this._entity.storeId}`);
 
-        this._actionBar = this.getActionBar();
+        this._actionBar = this.getActionBar("EntityPage");
         this._actionBar.setHandler("edit-entity", this._onEditEntity);
 
         this._actionBar.setHandler("create-field", this._onCreateField);

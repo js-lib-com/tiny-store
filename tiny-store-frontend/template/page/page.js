@@ -24,8 +24,8 @@ class Page {
 		return this._sideMenu;
 	}
 
-	getActionBar() {
-		this._actionBar.setHandlersScope(this);
+	getActionBar(scopeName) {
+		this._actionBar.setHandlersScope(this, scopeName);
 		return this._actionBar;
 	}
 

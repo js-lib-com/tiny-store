@@ -8,10 +8,9 @@ IndexPage = class extends Page {
 		this._sideMenu = this.getSideMenu();
 		this._sideMenu.setLink("store-page", () => `store.htm?${this._storesView.getSelectedId()}`);
 
-		this._actionBar = this.getActionBar();
+		this._actionBar = this.getActionBar("IndexPage");
 		this._actionBar.setHandler("create-store", this._onCreateStore);
 		this._actionBar.setHandler("edit-store", this._onEditStore);
-		this._actionBar.setHandler("delete-store", this._onDeleteStore);
 		this._actionBar.setHandler("build-project", this._onBuildProject);
 		this._actionBar.setHandler("commit-changes", this._onCommitChanges);
 		this._actionBar.setHandler("push-changes", this._onPushChanges);
@@ -25,7 +24,6 @@ IndexPage = class extends Page {
 		this._sideMenu.enable("store-page", selected);
 		this._actionBar.show("create-store", !selected);
 		this._actionBar.show("edit-store", selected);
-		this._actionBar.show("delete-store", selected);
 		this._actionBar.show("build-project", selected);
 		this._actionBar.show("commit-changes", selected);
 		this._actionBar.show("push-changes", selected);
@@ -53,14 +51,6 @@ IndexPage = class extends Page {
 
 	_onTestStore(store) {
 		WorkspaceService.testDataSource(store, this.alert);
-	}
-
-	_onDeleteStore() {
-		const dialog = this.getCompo("store-delete");
-		dialog.open(() => {
-			const store = this._storesView.getSelectedItem();
-			WorkspaceService.deleteStore(store.id, () => this._storesView.deleteSelectedRow());
-		});
 	}
 
 	_onBuildProject() {

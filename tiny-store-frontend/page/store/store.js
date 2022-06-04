@@ -17,7 +17,7 @@ StorePage = class extends Page {
 		this._sideMenu.setLink("service-page", () => `service.htm?${this._servicesView.getSelectedId()}`);
 		this._sideMenu.setLink("entity-page", () => `entity.htm?${this._entitiesView.getSelectedId()}`);
 
-		this._actionBar = this.getActionBar();
+		this._actionBar = this.getActionBar("StorePage");
 		this._actionBar.setHandler("edit-store", this._onEditStore);
 		this._actionBar.setHandler("delete-store", this._onDeleteStore);
 		this._actionBar.setHandler("build-project", this._onBuildProject);

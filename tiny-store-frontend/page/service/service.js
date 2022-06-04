@@ -13,7 +13,7 @@ ServicePage = class extends Page {
         this._sideMenu.setLink("store-page", () => `store.htm?${this._service.storeId}`);
         this._sideMenu.setLink("operation-page", () => `operation.htm?${this._operationsView.getSelectedId()}`);
 
-        this._actionBar = this.getActionBar();
+        this._actionBar = this.getActionBar("ServicePage");
         this._actionBar.setHandler("edit-service", this._onEditService);
         this._actionBar.setHandler("create-operation", this._onCreateOperation);
         this._actionBar.setHandler("edit-operation", this._onEditOperation);

@@ -16,14 +16,15 @@
             }
         }
 
-        setHandlersScope(handlersScope) {
+        setHandlersScope(handlersScope, scopeName) {
             this._handlersScope = handlersScope;
+            this._scopeName = scopeName;
         }
 
         setHandler(actionId, handler) {
             const action = this._actions[actionId];
             if (!action) {
-                throw `Missing action element with id ${actionId}.`;
+                throw `Missing action element with id ${actionId} from ${this._scopeName} action bar.`;
             }
             action.addEventListener("click", handler.bind(this._handlersScope));
         }
@@ -31,7 +32,7 @@
         show(actionId, show) {
             const action = this._actions[actionId];
             if (!action) {
-                throw `Missing action element with id ${actionId}.`;
+                throw `Missing action element with id ${actionId} from ${this._scopeName} action bar.`;
             }
             action.classList[show ? "remove" : "add"]("hidden");
         }
