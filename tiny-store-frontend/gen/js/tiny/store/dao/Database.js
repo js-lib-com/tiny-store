@@ -5,15 +5,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/createStore.rmi";
 		var parameters = [store];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 updateStore: function(store) {
@@ -22,15 +14,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/updateStore.rmi";
 		var parameters = [store];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 deleteStore: function(storeId) {
@@ -39,15 +23,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/deleteStore.rmi";
 		var parameters = [storeId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getStore: function(storeId) {
@@ -56,16 +32,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getStore.rmi";
 		var parameters = [storeId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getStoreByName: function(name) {
@@ -74,16 +41,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getStoreByName.rmi";
 		var parameters = [name];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 findStoresByOwner: function(ownerName) {
@@ -92,16 +50,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/findStoresByOwner.rmi";
 		var parameters = [ownerName];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 createStoreEntity: function(storeId, entity) {
@@ -110,16 +59,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/createStoreEntity.rmi";
 		var parameters = [storeId, entity];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 updateStoreEntity: function(entity) {
@@ -128,15 +68,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/updateStoreEntity.rmi";
 		var parameters = [entity];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 deleteStoreEntity: function(entity) {
@@ -145,15 +77,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/deleteStoreEntity.rmi";
 		var parameters = [entity];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getStoreEntity: function(entityId) {
@@ -162,16 +86,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getStoreEntity.rmi";
 		var parameters = [entityId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getStoreEntities: function(storeId) {
@@ -180,16 +95,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getStoreEntities.rmi";
 		var parameters = [storeId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 createDataService: function(storeId, service) {
@@ -198,16 +104,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/createDataService.rmi";
 		var parameters = [storeId, service];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 updateDataService: function(service) {
@@ -216,15 +113,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/updateDataService.rmi";
 		var parameters = [service];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 deleteDataService: function(service) {
@@ -233,15 +122,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/deleteDataService.rmi";
 		var parameters = [service];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getDataService: function(serviceId) {
@@ -250,16 +131,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getDataService.rmi";
 		var parameters = [serviceId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getStoreServices: function(storeId) {
@@ -268,16 +140,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getStoreServices.rmi";
 		var parameters = [storeId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 createOperation: function(operation) {
@@ -286,16 +149,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/createOperation.rmi";
 		var parameters = [operation];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 createServiceOperation: function(service, operation) {
@@ -304,16 +158,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/createServiceOperation.rmi";
 		var parameters = [service, operation];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 updateServiceOperation: function(operation) {
@@ -322,15 +167,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/updateServiceOperation.rmi";
 		var parameters = [operation];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 deleteServiceOperation: function(operation) {
@@ -339,15 +176,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/deleteServiceOperation.rmi";
 		var parameters = [operation];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getServiceOperations: function(serviceId) {
@@ -356,16 +185,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getServiceOperations.rmi";
 		var parameters = [serviceId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getServiceOperation: function(operationId) {
@@ -374,16 +194,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getServiceOperation.rmi";
 		var parameters = [operationId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 createChangeLog: function(changeLog) {
@@ -392,15 +203,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/createChangeLog.rmi";
 		var parameters = [changeLog];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 deleteChangeLog: function(storeId) {
@@ -409,15 +212,7 @@ Database = {
 		var url = "js/tiny/store/dao/Database/deleteChangeLog.rmi";
 		var parameters = [storeId];
 
-		var response = fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(parameters)
-		});
-
-		if (__callback__) {
-			response.then(__callback__.call(__scope__));
-		}
+		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
 	 getChangeLog: function(storeId) {
@@ -426,15 +221,37 @@ Database = {
 		var url = "js/tiny/store/dao/Database/getChangeLog.rmi";
 		var parameters = [storeId];
 
-		var response = fetch(url, {
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	fetch: function(url, parameters, callback, scope) {
+		var responsePromise = fetch(url, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(parameters)
 		});
 
-		if (__callback__) {
-			var json = response.then(response => response.json());
-			json.then(data => __callback__.call(__scope__, data));
-		}
+		var responseOK = true;
+		var jsonPromise = responsePromise.then(response => { 
+			if(!response.ok) {
+				responseOK = false;
+			}
+			if(response.headers.get("Content-Type")) { 
+				return response.json(); 
+			}
+		});
+
+		jsonPromise.then(json => {
+			if(!responseOK) {
+				if(this.errorHandler) {
+					this.errorHandler(json);
+				}
+				console.error(json);
+				return;
+			}
+			if (callback) {
+				callback.call(scope, json);
+			}
+		});
 	}
 };

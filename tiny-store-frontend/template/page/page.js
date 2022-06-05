@@ -9,6 +9,8 @@ class Page {
 	};
 
 	constructor() {
+		Database.errorHandler = error => this.alert(error.message);
+
 		this._sideMenu = document.getElementsByTagName("side-menu")[0];
 		this._sideMenu.setAction("commit-changes", this._onCommitChanges, this);
 		this._sideMenu.setAction("push-changes", this._onPushChanges, this);
