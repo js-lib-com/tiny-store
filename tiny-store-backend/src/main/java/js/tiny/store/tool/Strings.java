@@ -26,7 +26,7 @@ public class Strings extends js.util.Strings {
 	}
 
 	public static String getParameterizedName(TypeDef type) {
-		if(type.getCollection() == null) {
+		if (type.getCollection() == null) {
 			return getSimpleName(type.getName());
 		}
 		return concat(getSimpleName(type.getCollection()), '<', getSimpleName(type.getName()), '>');
@@ -59,5 +59,28 @@ public class Strings extends js.util.Strings {
 
 	public static boolean isPrimitive(String name) {
 		return PRIMITIVES.contains(name);
+	}
+
+	public static String memberToUndescroreCase(String memberName) {
+		if (memberName == null) {
+			return null;
+		}
+		final int length = memberName.length();
+		StringBuilder builder = new StringBuilder(length);
+
+		for (int i = 0; i < length; i++) {
+			char c = memberName.charAt(i);
+			if (Character.isLowerCase(c)) {
+				builder.append(c);
+				continue;
+			}
+
+			c = Character.toLowerCase(c);
+			if (i > 0) {
+				builder.append('_');
+			}
+			builder.append(c);
+		}
+		return builder.toString();
 	}
 }

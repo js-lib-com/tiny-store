@@ -7,6 +7,7 @@ import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.ChangeLog;
+import js.tiny.store.EntityValidator;
 import js.tiny.store.MetaChangeListener;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
@@ -32,10 +33,10 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ EntityValidator.class, MetaChangeListener.class })
 	StoreEntity createStoreEntity(String storeId, StoreEntity entity);
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ EntityValidator.class, MetaChangeListener.class })
 	void updateStoreEntity(StoreEntity entity);
 
 	@Intercepted(MetaChangeListener.class)
@@ -55,7 +56,7 @@ public interface Database {
 
 	@Intercepted(MetaChangeListener.class)
 	void deleteDataService(DataService service);
-	
+
 	DataService getDataService(String serviceId);
 
 	List<DataService> getStoreServices(String storeId);
