@@ -43,9 +43,17 @@ public class EntityValidator implements PreInvokeInterceptor {
 		Store store = database.getStore(storeId);
 		StoreEntity entity = entity(managedMethod, arguments);
 
+		assertUniqueClass(entity);
 		assertUniqueField(entity);
 		assertTableExists(store, entity);
 		assertColumnsExist(store, entity);
+	}
+
+	private void assertUniqueClass(StoreEntity entity) throws ValidatorException {
+		StoreEntity existingEntity = database.getStoreEntityByClassName(entity.getClassName());
+		if (existingEntity != null) {
+			throw new ValidatorException("Store entity %s already existing.", entity.getClassName());
+		}
 	}
 
 	private static void assertUniqueField(StoreEntity entity) throws ValidatorException {

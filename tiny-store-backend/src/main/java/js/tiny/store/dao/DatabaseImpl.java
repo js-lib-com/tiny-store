@@ -123,6 +123,11 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
+	public StoreEntity getStoreEntityByClassName(String className) {
+		return entityDAO.get("className", className);
+	}
+
+	@Override
 	public DataService createDataService(String storeId, DataService service) {
 		service.setStoreId(storeId);
 		return serviceDAO.create(service);

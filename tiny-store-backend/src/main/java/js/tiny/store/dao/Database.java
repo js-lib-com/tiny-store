@@ -46,6 +46,8 @@ public interface Database {
 
 	List<StoreEntity> getStoreEntities(String storeId);
 
+	StoreEntity getStoreEntityByClassName(String className);
+
 	// --------------------------------------------------------------------------------------------
 
 	@Intercepted(MetaChangeListener.class)
