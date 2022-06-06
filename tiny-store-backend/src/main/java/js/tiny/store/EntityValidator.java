@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -42,6 +43,7 @@ public class EntityValidator implements PreInvokeInterceptor {
 		Store store = database.getStore(storeId);
 		StoreEntity entity = entity(managedMethod, arguments);
 
+		assertUniqueField(entity);
 		assertTableExists(store, entity);
 		assertColumnsExist(store, entity);
 
@@ -52,6 +54,18 @@ public class EntityValidator implements PreInvokeInterceptor {
 		}
 		if (entity.getDescription() == null) {
 			throw new ValidatorException("Description is mandatory.");
+		}
+	}
+
+	private static void assertUniqueField(StoreEntity entity) throws ValidatorException {
+		List<EntityField> fields = entity.getFields();
+		// the number of fields is reasonable small so brute force solution is acceptable
+		for (int i = 0; i < fields.size(); i++) {
+			for (int j = i + 1; j < fields.size(); j++) {
+				if (fields.get(i).getName().equals(fields.get(j).getName())) {
+					throw new ValidatorException("Duplicated store entity field %s:%s.", entity.getClassName(), fields.get(i).getName());
+				}
+			}
 		}
 	}
 
