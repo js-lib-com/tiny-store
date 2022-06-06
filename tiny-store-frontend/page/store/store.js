@@ -138,12 +138,8 @@ StorePage = class extends Page {
 	_onCreateEntity() {
 		const dialog = this.getCompo("entity-form");
 		dialog.setTitle("Create Entity");
-
-		const entity = {
-			className: `${this._store.packageName}.`,
-		};
-
-		dialog.edit(entity, entity => {
+		dialog.open(entity => {
+			entity.className = `${this._store.packageName}.${entity.className}`;
 			Database.createStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});

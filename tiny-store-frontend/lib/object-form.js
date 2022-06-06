@@ -54,11 +54,17 @@
         isValid() {
             let valid = true;
             this._inputs.forEach(input => {
-                if (input.hasAttribute("required")) {
-                    const inputValid = !!input.value.trim();
-                    input.classList[inputValid ? "remove" : "add"]("invalid");
-                    valid = inputValid && valid;
+                let inputValid = true;
+                const value = input.value.trim();
+                if (value && input.hasAttribute("pattern")) {
+                    const expression = new RegExp(input.getAttribute("pattern"));
+                    inputValid = expression.test(value);
                 }
+                if (inputValid && input.hasAttribute("required")) {
+                    inputValid = !!value;
+                }
+                input.classList.toggle("invalid", !inputValid);
+                valid = inputValid && valid;
             });
             return valid;
         }

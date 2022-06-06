@@ -29,7 +29,7 @@ VersionFormat = {
     format(version) {
         return `${version.major}.${version.minor}`;
     }
-}
+};
 
 TimeFormat = {
     format(date) {
