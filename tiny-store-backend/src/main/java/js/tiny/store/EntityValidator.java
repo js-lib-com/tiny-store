@@ -46,19 +46,13 @@ public class EntityValidator implements PreInvokeInterceptor {
 		assertUniqueField(entity);
 		assertTableExists(store, entity);
 		assertColumnsExist(store, entity);
-
-		if (isCreate(managedMethod)) {
-
-		} else {
-
-		}
-		if (entity.getDescription() == null) {
-			throw new ValidatorException("Description is mandatory.");
-		}
 	}
 
 	private static void assertUniqueField(StoreEntity entity) throws ValidatorException {
 		List<EntityField> fields = entity.getFields();
+		if (fields == null) {
+			return;
+		}
 		// the number of fields is reasonable small so brute force solution is acceptable
 		for (int i = 0; i < fields.size(); i++) {
 			for (int j = i + 1; j < fields.size(); j++) {
@@ -82,6 +76,9 @@ public class EntityValidator implements PreInvokeInterceptor {
 
 	private static void assertColumnsExist(Store store, StoreEntity entity) throws ValidatorException {
 		sql(store, connection -> {
+			if (entity.getFields() == null) {
+				return;
+			}
 			for (EntityField field : entity.getFields()) {
 				String tableName = tableName(entity);
 				String fieldName = fieldName(field);
@@ -151,10 +148,6 @@ public class EntityValidator implements PreInvokeInterceptor {
 				log.error(e);
 			}
 		}
-	}
-
-	private static boolean isCreate(IManagedMethod managedMethod) {
-		return managedMethod.getName().startsWith("create");
 	}
 
 	private static String storeId(IManagedMethod managedMethod, Object[] arguments) {
