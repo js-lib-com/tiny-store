@@ -9,7 +9,7 @@ public interface IPersistedObject {
 	ObjectId getId();
 
 	public default String id() {
-		return getId().toHexString();
+		return getId() != null ? getId().toHexString() : null;
 	}
 
 }

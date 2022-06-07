@@ -128,6 +128,11 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
+	public List<StoreEntity> findStoreEntityByClassName(String className) {
+		return entityDAO.find("className", className);
+	}
+
+	@Override
 	public DataService createDataService(String storeId, DataService service) {
 		service.setStoreId(storeId);
 		return serviceDAO.create(service);
@@ -146,6 +151,26 @@ public class DatabaseImpl implements Database {
 	@Override
 	public List<DataService> getStoreServices(String storeId) {
 		return serviceDAO.find("storeId", storeId);
+	}
+
+	@Override
+	public DataService getDataServiceByClassName(String className) {
+		return serviceDAO.get("className", className);
+	}
+
+	@Override
+	public DataService getDataServiceByInterfaceName(String interfaceName) {
+		return serviceDAO.get("interfaceName", interfaceName);
+	}
+
+	@Override
+	public List<DataService> findDataServiceByClassName(String className) {
+		return serviceDAO.find("className", className);
+	}
+
+	@Override
+	public List<DataService> findDataServiceByInterfaceName(String interfaceName) {
+		return serviceDAO.find("interfaceName", interfaceName);
 	}
 
 	@Override

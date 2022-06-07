@@ -5,5 +5,7 @@
 	<binding bind="dao.Database" to="dao.DatabaseImpl" />
 	<binding bind="dao.MongoDB" />
 	<binding bind="MetaChangeListener" />
-	<binding bind="EntityValidator" />
+	<binding bind="StoreEntityValidator" />
+	<binding bind="DataServiceValidator" />
+	<binding bind="ServiceOperationValidator" />
 </app>

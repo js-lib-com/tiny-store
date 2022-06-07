@@ -7,8 +7,10 @@ import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.ChangeLog;
-import js.tiny.store.EntityValidator;
+import js.tiny.store.DataServiceValidator;
 import js.tiny.store.MetaChangeListener;
+import js.tiny.store.ServiceOperationValidator;
+import js.tiny.store.StoreEntityValidator;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -33,10 +35,10 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted({ EntityValidator.class, MetaChangeListener.class })
+	@Intercepted({ StoreEntityValidator.class, MetaChangeListener.class })
 	StoreEntity createStoreEntity(String storeId, StoreEntity entity);
 
-	@Intercepted({ EntityValidator.class, MetaChangeListener.class })
+	@Intercepted({ StoreEntityValidator.class, MetaChangeListener.class })
 	void updateStoreEntity(StoreEntity entity);
 
 	@Intercepted(MetaChangeListener.class)
@@ -48,12 +50,14 @@ public interface Database {
 
 	StoreEntity getStoreEntityByClassName(String className);
 
+	List<StoreEntity> findStoreEntityByClassName(String className);
+
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ DataServiceValidator.class, MetaChangeListener.class })
 	DataService createDataService(String storeId, DataService service);
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ DataServiceValidator.class, MetaChangeListener.class })
 	void updateDataService(DataService service);
 
 	@Intercepted(MetaChangeListener.class)
@@ -63,15 +67,23 @@ public interface Database {
 
 	List<DataService> getStoreServices(String storeId);
 
+	DataService getDataServiceByClassName(String className);
+
+	DataService getDataServiceByInterfaceName(String interfaceName);
+
+	List<DataService> findDataServiceByClassName(String className);
+
+	List<DataService> findDataServiceByInterfaceName(String interfaceName);
+
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ ServiceOperationValidator.class, MetaChangeListener.class })
 	ServiceOperation createOperation(ServiceOperation operation);
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ ServiceOperationValidator.class, MetaChangeListener.class })
 	ServiceOperation createServiceOperation(DataService service, ServiceOperation operation);
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ ServiceOperationValidator.class, MetaChangeListener.class })
 	void updateServiceOperation(ServiceOperation operation);
 
 	@Intercepted(MetaChangeListener.class)

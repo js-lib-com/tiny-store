@@ -27,13 +27,13 @@ import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.tool.Classes;
 import js.tiny.store.tool.Strings;
 
-public class EntityValidator implements PreInvokeInterceptor {
-	private static final Log log = LogFactory.getLog(EntityValidator.class);
+public class StoreEntityValidator implements PreInvokeInterceptor {
+	private static final Log log = LogFactory.getLog(StoreEntityValidator.class);
 
 	private final Database database;
 
 	@Inject
-	public EntityValidator(Database database) {
+	public StoreEntityValidator(Database database) {
 		this.database = database;
 	}
 
@@ -45,14 +45,23 @@ public class EntityValidator implements PreInvokeInterceptor {
 
 		assertUniqueClass(entity);
 		assertUniqueField(entity);
+		// TODO: add primary key validation
 		assertTableExists(store, entity);
 		assertColumnsExist(store, entity);
 	}
 
 	private void assertUniqueClass(StoreEntity entity) throws ValidatorException {
-		StoreEntity existingEntity = database.getStoreEntityByClassName(entity.getClassName());
-		if (existingEntity != null) {
-			throw new ValidatorException("Store entity %s already existing.", entity.getClassName());
+		if (entity.id() == null) {
+			StoreEntity existingEntity = database.getStoreEntityByClassName(entity.getClassName());
+			if (existingEntity != null) {
+				throw new ValidatorException("Store entity %s already existing.", entity.getClassName());
+			}
+		}
+
+		for (StoreEntity existingEntity : database.findStoreEntityByClassName(entity.getClassName())) {
+			if (!existingEntity.id().equals(entity.id())) {
+				throw new ValidatorException("Store entity %s already existing.", entity.getClassName());
+			}
 		}
 	}
 
@@ -101,12 +110,12 @@ public class EntityValidator implements PreInvokeInterceptor {
 				if (columnType == null) {
 					throw new IllegalStateException("Not mapped SQL type " + rs.getString("TYPE_NAME"));
 				}
+				if (field.getType().getCollection() != null) {
+					throw new ValidatorException("Collection %s not supported on entity field type %s.", field.getType().getCollection(), field.getType().getName());
+				}
 				Class<?> fieldType = Classes.forOptionalName(field.getType().getName());
 				if (fieldType == null) {
 					throw new ValidatorException("Class not found for entity field type %s.", field.getType().getName());
-				}
-				if (field.getType().getCollection() != null) {
-					throw new ValidatorException("Collection %s not supported on entity field type %s.", field.getType().getCollection(), field.getType().getName());
 				}
 				if (!js.util.Types.isKindOf(columnType, fieldType)) {
 					throw new ValidatorException("Incompatible type on table column %s:%s. Table column type is %s while entity field type is %s.", tableName, fieldName, columnType.getCanonicalName(), fieldType.getCanonicalName());
