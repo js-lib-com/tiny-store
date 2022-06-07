@@ -69,17 +69,17 @@
 	},
 	{
 		"dataOpcode": "DELETE",
-		"description": "Delete existing ${entity-name} by ID.",
+		"description": "Delete existing ${entity-name}.",
 		"exceptions": [],
 		"name": "delete",
 		"parameters": [
 			{
-				"name": "id",
+				"name": "${entity-name}",
 				"restParameter": "PATH_PARAM",
 				"type": {
-					"name": "${entity-id-type}"
+					"name": "${entity-class}"
 				},
-				"description": "database identity"
+				"description": "entity instance"
 			}
 		],
 		"restMethod": "DELETE",

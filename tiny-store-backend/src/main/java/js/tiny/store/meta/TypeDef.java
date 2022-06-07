@@ -1,5 +1,7 @@
 package js.tiny.store.meta;
 
+import java.util.Objects;
+
 public class TypeDef {
 	/** Optional qualified name for collection class, null if type is not a collection. */
 	private String collection;
@@ -32,6 +34,23 @@ public class TypeDef {
 
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(collection, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TypeDef other = (TypeDef) obj;
+		return Objects.equals(collection, other.collection) && Objects.equals(name, other.name);
 	}
 
 	@Override

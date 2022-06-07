@@ -114,14 +114,10 @@ public class ${service.implementationName} implements ${service.interfaceName} {
 		em.merge(${operation.parameter.name});
 #elseif($operation.dataOpcode == "DELETE")
 ## ---------------------------------
-#if($operation.parameter.primitive)
-		Object entity = em.find(${operation.parameter.type}.class, ${operation.parameter.name});
-		if(entity != null) {
-			em.remove(entity);
+		if(!em.contains(${operation.parameter.name})) {
+			${operation.parameter.name} = em.merge(${operation.parameter.name});
 		}
-#else
 		em.remove(${operation.parameter.name});
-#end 
 #end		
 	}
 #end
