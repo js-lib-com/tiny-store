@@ -72,13 +72,29 @@ StorePage = class extends Page {
 		dialog.setTitle("Create Service");
 
 		const service = {
-			restEnabled: this._store.restPath != null,
-			interfaceName: `${this._store.packageName}.`,
-			className: `${this._store.packageName}.impl.`
+			restEnabled: this._store.restPath != null
 		};
 
 		dialog.edit(service, service => {
 			Database.createDataService(this._store.id, service, service => {
+				this._servicesView.addItem(service);
+			});
+		});
+	}
+
+	_onCreateDAO() {
+		const dialog = this.getCompo("dao-form");
+
+		const entity = this._entitiesView.getSelectedItem();
+		const service = {
+			className: `${entity.className}DAO`,
+			description: `Data access for ${entity.className} entity.`,
+			restEnabled: this._store.restPath != null,
+			restPath: entity.className.toLowerCase()
+		};
+
+		dialog.edit(service, service => {
+			Workspace.createDaoService(this._store.id, entity, service, service => {
 				this._servicesView.addItem(service);
 			});
 		});
@@ -115,31 +131,10 @@ StorePage = class extends Page {
 		this._actionBar.show("build-project", !selected);
 	}
 
-	_onCreateDAO() {
-		const dialog = this.getCompo("dao-form");
-
-		const entity = this._entitiesView.getSelectedItem();
-		const entityName = entity.className.split('.').pop();
-
-		const service = {
-			interfaceName: `${this._store.packageName}.I${entityName}DAO`,
-			className: `${this._store.packageName}.impl.${entityName}DAO`,
-			description: `Data access for ${entityName} entity.`,
-			restPath: entityName.toLowerCase()
-		};
-
-		dialog.edit(service, service => {
-			Workspace.createDaoService(this._store.id, entity, service, service => {
-				this._servicesView.addItem(service);
-			});
-		});
-	}
-
 	_onCreateEntity() {
 		const dialog = this.getCompo("entity-form");
 		dialog.setTitle("Create Entity");
 		dialog.open(entity => {
-			entity.className = `${this._store.packageName}.${entity.className}`;
 			Database.createStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});

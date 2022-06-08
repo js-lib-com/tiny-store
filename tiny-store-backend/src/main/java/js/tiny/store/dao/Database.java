@@ -48,9 +48,9 @@ public interface Database {
 
 	List<StoreEntity> getStoreEntities(String storeId);
 
-	StoreEntity getStoreEntityByClassName(String className);
+	StoreEntity getStoreEntityByClassName(String storeId, String className);
 
-	List<StoreEntity> findStoreEntityByClassName(String className);
+	List<StoreEntity> findStoreEntityByClassName(String storeId, String className);
 
 	// --------------------------------------------------------------------------------------------
 
@@ -67,13 +67,9 @@ public interface Database {
 
 	List<DataService> getStoreServices(String storeId);
 
-	DataService getDataServiceByClassName(String className);
+	DataService getDataServiceByClassName(String storeId, String className);
 
-	DataService getDataServiceByInterfaceName(String interfaceName);
-
-	List<DataService> findDataServiceByClassName(String className);
-
-	List<DataService> findDataServiceByInterfaceName(String interfaceName);
+	List<DataService> findDataServiceByClassName(String storeId, String className);
 
 	// --------------------------------------------------------------------------------------------
 

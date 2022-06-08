@@ -220,6 +220,7 @@ public class Files extends js.util.Files {
 				continue;
 			}
 			File targetFile = new File(targetDir, Files.getRelativePath(baseDir, sourceFile));
+			targetFile.getParentFile().mkdirs();
 			Files.copy(sourceFile, targetFile);
 		}
 	}

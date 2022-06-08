@@ -8,9 +8,11 @@ public class DataService implements IPersistedObject {
 	private ObjectId id;
 	private String storeId;
 
-	/** Qualified class name for data service interface, used as primary key. */
-	private String interfaceName;
-	/** Qualified class name for data service implementation. */
+	/**
+	 * Simple class name for data service implementation. Implementation qualified name is created from store package name and
+	 * this simple name. Simple interface name is always the implementation name prefixed with 'I'. Interface qualified name is
+	 * obtained the same as implementation.
+	 */
 	private String className;
 	private String description;
 	private boolean restEnabled;
@@ -32,14 +34,6 @@ public class DataService implements IPersistedObject {
 
 	public void setStoreId(String storeId) {
 		this.storeId = storeId;
-	}
-
-	public String getInterfaceName() {
-		return interfaceName;
-	}
-
-	public void setInterfaceName(String interfaceName) {
-		this.interfaceName = interfaceName;
 	}
 
 	public String getClassName() {

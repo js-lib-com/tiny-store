@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.Store;
 import js.tiny.store.tool.Strings;
 
 public class DataServiceTemplate {
@@ -20,23 +21,20 @@ public class DataServiceTemplate {
 	private final SortedSet<String> imports;
 	private final List<ServiceOperationTemplate> operations;
 
-	public DataServiceTemplate(String repositoryName, DataService dataService, List<ServiceOperation> operations) {
-		this.repositoryName = repositoryName;
+	public DataServiceTemplate(Store store, DataService dataService, List<ServiceOperation> operations) {
+		this.repositoryName = store.getName();
 		this.dataService = dataService;
 
-		this.implementationPackage = Strings.getPackageName(dataService.getClassName());
+		this.implementationPackage = store.getPackageName();
 		this.implementationName = Strings.getSimpleName(dataService.getClassName());
-		this.interfacePackage = Strings.getPackageName(dataService.getInterfaceName());
-		this.interfaceName = Strings.getSimpleName(dataService.getInterfaceName());
+		this.interfacePackage = this.implementationPackage;
+		this.interfaceName = 'I' + this.implementationName;
 
 		this.operations = new ArrayList<>();
-		operations.forEach(operation -> this.operations.add(new ServiceOperationTemplate(operation)));
+		operations.forEach(operation -> this.operations.add(new ServiceOperationTemplate(store, operation)));
 
 		this.imports = new TreeSet<>();
 		this.operations.forEach(operation -> imports.addAll(operation.getImports()));
-		if (!this.implementationPackage.equals(Strings.getPackageName(dataService.getInterfaceName()))) {
-			imports.add(dataService.getInterfaceName());
-		}
 	}
 
 	public String getRepositoryName() {

@@ -10,10 +10,13 @@ import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
 import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
+import js.tiny.store.tool.Strings;
 
 public class ServiceOperationValidator implements PreInvokeInterceptor {
 	private final Database database;
+	private Store store;
 
 	@Inject
 	public ServiceOperationValidator(Database database) {
@@ -22,6 +25,9 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 
 	@Override
 	public void preInvoke(IManagedMethod managedMethod, Object[] arguments) throws Exception {
+		String storeId = storeId(managedMethod, arguments);
+		store = database.getStore(storeId);
+
 		DataService service = service(managedMethod, arguments);
 		ServiceOperation operation = operation(managedMethod, arguments);
 
@@ -50,6 +56,10 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 
 	}
 
+	private String className(DataService service) {
+		return Strings.concat(store.getPackageName(), '.', service.getClassName());
+	}
+
 	private void assertCreateParameters(DataService service, ServiceOperation operation) throws ValidatorException {
 		List<OperationParameter> parameters = operation.getParameters();
 		if (parameters == null) {
@@ -58,15 +68,16 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		}
 
 		if (parameters.size() != 1) {
-			throw new ValidatorException("Create service operation %s#%s should have exactly one entity parameter.", service.getClassName(), operation.getName());
+			throw new ValidatorException("Create service operation %s#%s should have exactly one entity parameter.", className(service), operation.getName());
 		}
 
 		OperationParameter parameter = parameters.get(0);
 		if (parameter.getType().getCollection() != null) {
-			throw new ValidatorException("Create service operation %s#%s does not support %s as parameter.", service.getClassName(), operation.getName(), parameter.getType().getCollection());
+			throw new ValidatorException("Create service operation %s#%s does not support %s as parameter.", className(service), operation.getName(), parameter.getType().getCollection());
 		}
 
-		StoreEntity entity = database.getStoreEntityByClassName(parameter.getType().getName());
+		String entityName = Strings.getSimpleName(parameter.getType().getName());
+		StoreEntity entity = database.getStoreEntityByClassName(store.id(), entityName);
 		if (entity == null) {
 			throw new ValidatorException("Entity %s is not defined.", parameter.getType().getName());
 		}
@@ -100,15 +111,16 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		}
 
 		if (parameters.size() != 1) {
-			throw new ValidatorException("Delete service operation %s#%s should have exactly one entity parameter.", service.getClassName(), operation.getName());
+			throw new ValidatorException("Delete service operation %s#%s should have exactly one entity parameter.", className(service), operation.getName());
 		}
 
 		OperationParameter parameter = parameters.get(0);
 		if (parameter.getType().getCollection() != null) {
-			throw new ValidatorException("Delete service operation %s#%s does not support %s as parameter.", service.getClassName(), operation.getName(), parameter.getType().getCollection());
+			throw new ValidatorException("Delete service operation %s#%s does not support %s as parameter.", className(service), operation.getName(), parameter.getType().getCollection());
 		}
 
-		StoreEntity entity = database.getStoreEntityByClassName(parameter.getType().getName());
+		String entityName = Strings.getSimpleName(parameter.getType().getName());
+		StoreEntity entity = database.getStoreEntityByClassName(store.id(), entityName);
 		if (entity == null) {
 			throw new ValidatorException("Entity %s is not defined.", parameter.getType().getName());
 		}
@@ -121,10 +133,10 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		}
 
 		if (value.getType().getName() != null || value.getType().getCollection() != null) {
-			throw new ValidatorException("Delete service operation %s#%s should be void.", service.getClassName(), operation.getName());
+			throw new ValidatorException("Delete service operation %s#%s should be void.", className(service), operation.getName());
 		}
 	}
-	
+
 	private void assertUniqueOperation(DataService service, ServiceOperation operation) throws ValidatorException {
 		List<ServiceOperation> operations = database.getServiceOperations(service.id());
 		if (operation.getId() == null) {
@@ -144,10 +156,24 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		for (int i = 0; i < operations.size(); i++) {
 			for (int j = i + 1; j < operations.size(); j++) {
 				if (operations.get(i).getName().equals(operations.get(j).getName())) {
-					throw new ValidatorException("Data service operation %s:%s already existing.", service.getClassName(), operations.get(i).getName());
+					throw new ValidatorException("Data service operation %s#%s already existing.", className(service), operations.get(i).getName());
 				}
 			}
 		}
+	}
+
+	private String storeId(IManagedMethod managedMethod, Object[] arguments) {
+		for (Object argument : arguments) {
+			if (argument instanceof DataService) {
+				return ((DataService) argument).getStoreId();
+			}
+			if (argument instanceof ServiceOperation) {
+				String serviceId = ((ServiceOperation) argument).getServiceId();
+				DataService service = database.getDataService(serviceId);
+				return service.getStoreId();
+			}
+		}
+		throw new IllegalArgumentException(String.format("Invalid method signature for |%s|. Cannot infer store ID.", managedMethod));
 	}
 
 	private ServiceOperation operation(IManagedMethod managedMethod, Object[] arguments) {

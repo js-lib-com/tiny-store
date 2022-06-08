@@ -31,6 +31,7 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 	private static final Log log = LogFactory.getLog(StoreEntityValidator.class);
 
 	private final Database database;
+	private Store store;
 
 	@Inject
 	public StoreEntityValidator(Database database) {
@@ -40,32 +41,33 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 	@Override
 	public void preInvoke(IManagedMethod managedMethod, Object[] arguments) throws Exception {
 		String storeId = storeId(managedMethod, arguments);
-		Store store = database.getStore(storeId);
+		store = database.getStore(storeId);
+
 		StoreEntity entity = entity(managedMethod, arguments);
 
 		assertUniqueClass(entity);
 		assertUniqueField(entity);
 		// TODO: add primary key validation
-		assertTableExists(store, entity);
-		assertColumnsExist(store, entity);
+		assertTableExists(entity);
+		assertColumnsExist(entity);
+	}
+
+	private String className(StoreEntity entity) {
+		return Strings.concat(store.getPackageName(), '.', entity.getClassName());
 	}
 
 	private void assertUniqueClass(StoreEntity entity) throws ValidatorException {
-		if (entity.id() == null) {
-			StoreEntity existingEntity = database.getStoreEntityByClassName(entity.getClassName());
-			if (existingEntity != null) {
-				throw new ValidatorException("Store entity %s already existing.", entity.getClassName());
-			}
+		StoreEntity existingEntity = database.getStoreEntityByClassName(store.id(), entity.getClassName());
+		if (existingEntity == null) {
+			return;
 		}
-
-		for (StoreEntity existingEntity : database.findStoreEntityByClassName(entity.getClassName())) {
-			if (!existingEntity.id().equals(entity.id())) {
-				throw new ValidatorException("Store entity %s already existing.", entity.getClassName());
-			}
+		// entity.id() is null for create operation
+		if (!existingEntity.id().equals(entity.id())) {
+			throw new ValidatorException("Store entity %s already existing.", className(entity));
 		}
 	}
 
-	private static void assertUniqueField(StoreEntity entity) throws ValidatorException {
+	private void assertUniqueField(StoreEntity entity) throws ValidatorException {
 		List<EntityField> fields = entity.getFields();
 		if (fields == null) {
 			return;
@@ -74,13 +76,13 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 		for (int i = 0; i < fields.size(); i++) {
 			for (int j = i + 1; j < fields.size(); j++) {
 				if (fields.get(i).getName().equals(fields.get(j).getName())) {
-					throw new ValidatorException("Duplicated store entity field %s:%s.", entity.getClassName(), fields.get(i).getName());
+					throw new ValidatorException("Duplicated store entity field %s#%s.", className(entity), fields.get(i).getName());
 				}
 			}
 		}
 	}
 
-	private static void assertTableExists(Store store, StoreEntity entity) throws ValidatorException {
+	private void assertTableExists(StoreEntity entity) throws ValidatorException {
 		sql(store, connection -> {
 			String tableName = tableName(entity);
 			DatabaseMetaData dbmeta = connection.getMetaData();
@@ -91,7 +93,7 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 		});
 	}
 
-	private static void assertColumnsExist(Store store, StoreEntity entity) throws ValidatorException {
+	private void assertColumnsExist(StoreEntity entity) throws ValidatorException {
 		sql(store, connection -> {
 			if (entity.getFields() == null) {
 				return;
@@ -103,7 +105,7 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 				DatabaseMetaData dbmeta = connection.getMetaData();
 				ResultSet rs = dbmeta.getColumns(null, null, tableName, fieldName);
 				if (!rs.next()) {
-					throw new ValidatorException("Missing table column %s:%s required by field %s.%s.", tableName, fieldName, entity.getClassName(), field.getName());
+					throw new ValidatorException("Missing table column %s:%s required by field %s#%s.", tableName, fieldName, className(entity), field.getName());
 				}
 
 				Class<?> columnType = SQL_TYPES.get(rs.getInt("DATA_TYPE"));

@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import js.tiny.store.meta.EntityField;
+import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 import js.tiny.store.tool.Strings;
@@ -18,10 +19,10 @@ public class StoreEntityTemplate {
 	private final SortedSet<String> imports;
 	private final List<EntityFieldTemplate> fields;
 
-	public StoreEntityTemplate(StoreEntity storeEntity) {
+	public StoreEntityTemplate(Store store, StoreEntity storeEntity) {
 		this.storeEntity = storeEntity;
 
-		this.packageName = Strings.getPackageName(storeEntity.getClassName());
+		this.packageName = store.getPackageName();
 		this.className = Strings.getSimpleName(storeEntity.getClassName());
 
 		SortedSet<String> imports = new TreeSet<>();
@@ -34,6 +35,9 @@ public class StoreEntityTemplate {
 				continue;
 			}
 			if (Strings.isPrimitive(type.getName())) {
+				continue;
+			}
+			if(type.getName().startsWith(packageName)) {
 				continue;
 			}
 			imports.add(type.getName());

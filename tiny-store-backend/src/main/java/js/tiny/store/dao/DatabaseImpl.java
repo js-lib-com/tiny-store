@@ -1,7 +1,9 @@
 package js.tiny.store.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.inject.Inject;
 import js.tiny.store.ChangeLog;
@@ -123,13 +125,19 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
-	public StoreEntity getStoreEntityByClassName(String className) {
-		return entityDAO.get("className", className);
+	public StoreEntity getStoreEntityByClassName(String storeId, String className) {
+		Map<String, Object> filter = new HashMap<>();
+		filter.put("storeId", storeId);
+		filter.put("className", className);
+		return entityDAO.get(filter);
 	}
 
 	@Override
-	public List<StoreEntity> findStoreEntityByClassName(String className) {
-		return entityDAO.find("className", className);
+	public List<StoreEntity> findStoreEntityByClassName(String storeId, String className) {
+		Map<String, Object> filter = new HashMap<>();
+		filter.put("storeId", storeId);
+		filter.put("className", className);
+		return entityDAO.find(filter);
 	}
 
 	@Override
@@ -154,23 +162,19 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
-	public DataService getDataServiceByClassName(String className) {
-		return serviceDAO.get("className", className);
+	public DataService getDataServiceByClassName(String storeId, String className) {
+		Map<String, Object> filter = new HashMap<>();
+		filter.put("storeId", storeId);
+		filter.put("className", className);
+		return serviceDAO.get(filter);
 	}
 
 	@Override
-	public DataService getDataServiceByInterfaceName(String interfaceName) {
-		return serviceDAO.get("interfaceName", interfaceName);
-	}
-
-	@Override
-	public List<DataService> findDataServiceByClassName(String className) {
-		return serviceDAO.find("className", className);
-	}
-
-	@Override
-	public List<DataService> findDataServiceByInterfaceName(String interfaceName) {
-		return serviceDAO.find("interfaceName", interfaceName);
+	public List<DataService> findDataServiceByClassName(String storeId, String className) {
+		Map<String, Object> filter = new HashMap<>();
+		filter.put("storeId", storeId);
+		filter.put("className", className);
+		return serviceDAO.find(filter);
 	}
 
 	@Override

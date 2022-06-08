@@ -15,6 +15,7 @@ import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
 import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 
@@ -26,6 +27,10 @@ public class SourceTemplateTest {
 		// given
 		StringWriter writer = new StringWriter();
 		sourceTemplate = new SourceTemplate("/entity.java.vtl");
+		
+		Store store = new Store();
+		store.setName("call");
+		store.setPackageName("ro.gnotis");
 		
 		EntityField identity = new EntityField();
 		identity.setName("id");
@@ -41,13 +46,13 @@ public class SourceTemplateTest {
 		field.setDescription("Humble employee.");
 		
 		StoreEntity entity = new StoreEntity();
-		entity.setClassName("ro.gnotis.Call");
+		entity.setClassName("Call");
 		entity.setAlias("call");
 		entity.setDescription("Recorded calls.");
 		entity.setFields(Arrays.asList(identity, field));
 		
 		// when
-		sourceTemplate.generate(entity, writer);
+		sourceTemplate.generate(store, entity, writer);
 		
 		// then
 		System.out.println(writer);
@@ -59,9 +64,12 @@ public class SourceTemplateTest {
 		StringWriter writer = new StringWriter();
 		sourceTemplate = new SourceTemplate("/service-implementation.java.vtl");
 		
+		Store store = new Store();
+		store.setName("call");
+		store.setPackageName("ro.gnotis");
+		
 		DataService service = new DataService();
-		service.setClassName("ro.gnotis.CallDAO");
-		service.setInterfaceName("ro.gnotis.intf.ICallDAO");
+		service.setClassName("CallDAO");
 		
 		OperationParameter parameter = new OperationParameter();
 		parameter.setType(new TypeDef(String.class.getCanonicalName()));
@@ -86,7 +94,7 @@ public class SourceTemplateTest {
 
 		
 		// when
-		sourceTemplate.generate("call", service, Arrays.asList(operation), writer);
+		sourceTemplate.generate(store, service, Arrays.asList(operation), writer);
 		
 		// then
 		System.out.println(writer);

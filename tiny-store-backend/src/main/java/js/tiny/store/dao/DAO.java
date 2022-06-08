@@ -34,9 +34,9 @@ class DAO<T extends IPersistedObject> {
 		return collection.find(eq(name, value)).first();
 	}
 
-	public T filterAnd(Map<String, String> filters) {
+	public T get(Map<String, Object> filters) {
 		List<Bson> equalExpressions = new ArrayList<>();
-		for (Map.Entry<String, String> entry : filters.entrySet()) {
+		for (Map.Entry<String, Object> entry : filters.entrySet()) {
 			equalExpressions.add(eq(entry.getKey(), entry.getValue()));
 		}
 		return collection.find(and(equalExpressions)).first();
@@ -45,6 +45,16 @@ class DAO<T extends IPersistedObject> {
 	public List<T> find(String name, Object value) {
 		List<T> list = new ArrayList<>();
 		collection.find(eq(name, value)).forEach(item -> list.add(item));
+		return list;
+	}
+
+	public List<T> find(Map<String, Object> filters) {
+		List<Bson> equalExpressions = new ArrayList<>();
+		for (Map.Entry<String, Object> entry : filters.entrySet()) {
+			equalExpressions.add(eq(entry.getKey(), entry.getValue()));
+		}
+		List<T> list = new ArrayList<>();
+		collection.find(and(equalExpressions)).forEach(item -> list.add(item));
 		return list;
 	}
 

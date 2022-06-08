@@ -11,6 +11,7 @@ import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
+import js.tiny.store.tool.Strings;
 
 public class MetaChangeListener implements PostInvokeInterceptor {
 	private final Database dao;
@@ -24,8 +25,9 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 	public void postInvoke(IManagedMethod managedMethod, Object[] arguments, Object value) throws Exception {
 		String methodName = managedMethod.getName();
 
-		String storeId = getStoreId(methodName, arguments);
-		String className = getClassName(methodName, arguments, value);
+		String storeId = storeId(methodName, arguments);
+		Store store = dao.getStore(storeId);
+		String className = Strings.concat(store.getPackageName(), '.', simpleName(methodName, arguments, value));
 		String memberName = getMemberName(arguments);
 
 		ChangeLog changeLog = new ChangeLog();
@@ -36,7 +38,7 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 		dao.createChangeLog(changeLog);
 	}
 
-	private String getStoreId(String methodName, Object[] arguments) {
+	private String storeId(String methodName, Object[] arguments) {
 		if (arguments.length == 0) {
 			throw new IllegalArgumentException(String.format("Missing argument on method %s#%s.", Workspace.class.getCanonicalName(), methodName));
 		}
@@ -65,20 +67,20 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 		throw new IllegalArgumentException(String.format("Invalid signature for method %s#%s. Cannot infer store ID from arguments.", Workspace.class.getCanonicalName(), methodName));
 	}
 
-	private String getClassName(String methodName, Object[] arguments, Object value) {
+	private String simpleName(String methodName, Object[] arguments, Object value) {
 		if (arguments.length == 0) {
 			throw new IllegalArgumentException(String.format("Missing argument on method %s#%s.", Workspace.class.getCanonicalName(), methodName));
 		}
 
 		if (arguments[0] instanceof DataService) {
-			return ((DataService) arguments[0]).getInterfaceName();
+			return ((DataService) arguments[0]).getClassName();
 		}
 		if (arguments[0] instanceof StoreEntity) {
 			return ((StoreEntity) arguments[0]).getClassName();
 		}
 
 		if (methodName.startsWith("create") && value instanceof DataService) {
-			return ((DataService) value).getInterfaceName();
+			return ((DataService) value).getClassName();
 		}
 		if (methodName.startsWith("create") && value instanceof StoreEntity) {
 			return ((StoreEntity) value).getClassName();
@@ -86,7 +88,7 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 
 		for (Object argument : arguments) {
 			if (argument instanceof DataService) {
-				return ((DataService) argument).getInterfaceName();
+				return ((DataService) argument).getClassName();
 			}
 			if (argument instanceof StoreEntity) {
 				return ((StoreEntity) argument).getClassName();
@@ -96,7 +98,7 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 		for (Object argument : arguments) {
 			if (argument instanceof ServiceOperation) {
 				String serviceId = ((ServiceOperation) argument).getServiceId();
-				return dao.getDataService(serviceId).getInterfaceName();
+				return dao.getDataService(serviceId).getClassName();
 			}
 		}
 

@@ -10,10 +10,12 @@ import js.tiny.store.meta.DataOpcode;
 import js.tiny.store.meta.OperationException;
 import js.tiny.store.meta.RestParameter;
 import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.Store;
 import js.tiny.store.meta.TypeDef;
 import js.tiny.store.tool.Strings;
 
 public class ServiceOperationTemplate {
+	private final Store store;
 	private final ServiceOperation serviceOperation;
 
 	private final SortedSet<String> imports;
@@ -27,7 +29,8 @@ public class ServiceOperationTemplate {
 	private final boolean pathParam;
 	private final OperationValueTemplate value;
 
-	public ServiceOperationTemplate(ServiceOperation serviceOperation) {
+	public ServiceOperationTemplate(Store store, ServiceOperation serviceOperation) {
+		this.store = store;
 		this.serviceOperation = serviceOperation;
 
 		this.imports = new TreeSet<>();
@@ -74,6 +77,9 @@ public class ServiceOperationTemplate {
 			return;
 		}
 		if (Strings.isPrimitive(className)) {
+			return;
+		}
+		if(className.startsWith(store.getPackageName())) {
 			return;
 		}
 		imports.add(className);

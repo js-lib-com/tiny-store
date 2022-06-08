@@ -6,7 +6,7 @@
 		<shared-cache-mode>NONE</shared-cache-mode>
 
 #foreach($entity in $entities)
-		<class>${entity.className}</class>
+		<class>${store.packageName}.${entity.className}</class>
 #end
 
 		<properties>

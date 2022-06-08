@@ -94,7 +94,9 @@ public class ${service.implementationName} implements ${service.interfaceName} {
 		return ${operation.parameter.name};
 #end
 #else
+#if(!$operation.value.void)
 		return null;
+#end		
 #end		
 #elseif($operation.dataOpcode == "READ")
 ## -------------------------------
@@ -115,9 +117,11 @@ public class ${service.implementationName} implements ${service.interfaceName} {
 #elseif($operation.dataOpcode == "DELETE")
 ## ---------------------------------
 		if(!em.contains(${operation.parameter.name})) {
-			${operation.parameter.name} = em.merge(${operation.parameter.name});
+			${operation.parameter.name} = em.find(${operation.parameter.type}.class, ${operation.parameter.name}.getId());
 		}
-		em.remove(${operation.parameter.name});
+		if(${operation.parameter.name} != null) {
+			em.remove(${operation.parameter.name});
+		}
 #end		
 	}
 #end

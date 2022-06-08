@@ -80,7 +80,6 @@ public class SourceFileTest {
 		when(field2.getAlias()).thenReturn("phone_number");
 
 		//when(service.getClassName()).thenReturn("ro.gnotis.omsx.CallDataService");
-		when(service.getInterfaceName()).thenReturn("ro.gnotis.omsx.ICallDataService");
 		when(service.getRestPath()).thenReturn("call");
 		when(service.getDescription()).thenReturn("Data related to customer call history.");
 

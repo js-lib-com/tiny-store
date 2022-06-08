@@ -114,19 +114,22 @@ public class Project {
 
 		List<StoreEntity> entities = dao.getStoreEntities(store.id());
 		for (StoreEntity entity : entities) {
-			generate("/entity.java.vtl", entity, Files.serverSourceFile(projectDir, entity.getClassName()));
-			generate("/model.java.vtl", entity, Files.clientSourceFile(projectDir, entity.getClassName()));
+			String className = Strings.concat(store.getPackageName(), '.', entity.getClassName());
+			generate("/entity.java.vtl", entity, Files.serverSourceFile(projectDir, className));
+			generate("/model.java.vtl", entity, Files.clientSourceFile(projectDir, className));
 		}
 
 		List<DataService> services = dao.getStoreServices(store.id());
 		for (DataService service : services) {
-			generate("/service-server-interface.java.vtl", service, Files.serverSourceFile(projectDir, service.getInterfaceName()));
-			generate("/service-implementation.java.vtl", service, Files.serverSourceFile(projectDir, service.getClassName()));
-			generate("/service-client-interface.java.vtl", service, Files.clientSourceFile(projectDir, service.getInterfaceName()));
+			String interfaceName = Strings.concat(store.getPackageName(), '.', 'I', service.getClassName());
+			String className = Strings.concat(store.getPackageName(), '.', service.getClassName());
+			generate("/service-server-interface.java.vtl", service, Files.serverSourceFile(projectDir, interfaceName));
+			generate("/service-implementation.java.vtl", service, Files.serverSourceFile(projectDir, className));
+			generate("/service-client-interface.java.vtl", service, Files.clientSourceFile(projectDir, interfaceName));
 		}
 
 		generate("/web.xml.vtl", Files.webDescriptorFile(projectDir), properties("store", store));
-		generate("/app.xml.vtl", Files.appDescriptorFile(projectDir), properties("services", services));
+		generate("/app.xml.vtl", Files.appDescriptorFile(projectDir), properties("store", store, "services", services));
 		// TODO: hack on connection string ampersand escape
 		generate("/context.xml.vtl", Files.contextFile(projectDir), properties("store", store, "connectionString", Strings.escapeXML(store.getConnectionString())));
 		generate("/persistence.xml.vtl", Files.persistenceFile(projectDir), properties("store", store, "entities", entities));
@@ -137,7 +140,7 @@ public class Project {
 	private void generate(String template, StoreEntity entity, File targetFile) throws IOException {
 		SourceTemplate sourceTemplate = new SourceTemplate(template);
 		try (Writer writer = new FileWriter(targetFile)) {
-			sourceTemplate.generate(entity, writer);
+			sourceTemplate.generate(store, entity, writer);
 		}
 	}
 
@@ -145,7 +148,7 @@ public class Project {
 		SourceTemplate sourceFile = new SourceTemplate(template);
 		List<ServiceOperation> operations = dao.getServiceOperations(service.id());
 		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(store.getName(), service, operations, writer);
+			sourceFile.generate(store, service, operations, writer);
 		}
 	}
 

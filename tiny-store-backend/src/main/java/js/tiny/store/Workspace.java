@@ -126,11 +126,13 @@ public class Workspace {
 
 	@Intercepted(MetaChangeListener.class)
 	public DataService createDaoService(String storeId, StoreEntity entity, DataService service) throws IOException {
+		Store store = db.getStore(storeId);
 		DataService createdService = db.createDataService(storeId, service);
 
 		Map<String, String> variables = new HashMap<>();
-		variables.put("entity-class", entity.getClassName());
-		variables.put("entity-name", Strings.getSimpleName(entity.getClassName()));
+		variables.put("entity-class", Strings.concat(store.getPackageName(), '.', entity.getClassName()));
+		variables.put("entity-name", entity.getClassName());
+		variables.put("entity-parameter", entity.getClassName().toLowerCase());
 		variables.put("entity-id-type", Strings.getParameterizedName(entity.getFields().get(0).getType()));
 		String operationsJson = Strings.injectVariables(Strings.load(Classes.getResourceAsReader("/dao-operations.json")), variables);
 

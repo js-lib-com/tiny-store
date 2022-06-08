@@ -98,20 +98,20 @@ Database = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
-	 getStoreEntityByClassName: function(className) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
+	 getStoreEntityByClassName: function(storeId, className) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/dao/Database/getStoreEntityByClassName.rmi";
-		var parameters = [className];
+		var parameters = [storeId, className];
 
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
-	 findStoreEntityByClassName: function(className) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
+	 findStoreEntityByClassName: function(storeId, className) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/dao/Database/findStoreEntityByClassName.rmi";
-		var parameters = [className];
+		var parameters = [storeId, className];
 
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
@@ -161,38 +161,20 @@ Database = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
-	 getDataServiceByClassName: function(className) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
+	 getDataServiceByClassName: function(storeId, className) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/dao/Database/getDataServiceByClassName.rmi";
-		var parameters = [className];
+		var parameters = [storeId, className];
 
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
-	 getDataServiceByInterfaceName: function(interfaceName) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/dao/Database/getDataServiceByInterfaceName.rmi";
-		var parameters = [interfaceName];
-
-		this.fetch(url, parameters, __callback__, __scope__);
-	},
-
-	 findDataServiceByClassName: function(className) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
+	 findDataServiceByClassName: function(storeId, className) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/dao/Database/findDataServiceByClassName.rmi";
-		var parameters = [className];
-
-		this.fetch(url, parameters, __callback__, __scope__);
-	},
-
-	 findDataServiceByInterfaceName: function(interfaceName) {
-		var __callback__ = arguments[1];
-		var __scope__ = arguments[2] || window;
-		var url = "js/tiny/store/dao/Database/findDataServiceByInterfaceName.rmi";
-		var parameters = [interfaceName];
+		var parameters = [storeId, className];
 
 		this.fetch(url, parameters, __callback__, __scope__);
 	},

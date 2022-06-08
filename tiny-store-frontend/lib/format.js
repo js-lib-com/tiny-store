@@ -5,6 +5,7 @@ FormatFactory = {
             case "type": return TypeFormat;
             case "version": return VersionFormat;
             case "time": return TimeFormat;
+            case "class-name": return ClassNameFormat;
             default: throw `Not defined formatter class ${formatName}.`;
         }
     }
@@ -38,5 +39,11 @@ TimeFormat = {
         }
         function x(number) { return number < 10 ? `0${number}` : number; }
         return `${x(date.getHours())}:${x(date.getMinutes())}:${x(date.getSeconds())}`;
+    }
+};
+
+ClassNameFormat = {
+    format(name) {
+        return name.substring(name.lastIndexOf('.') + 1);
     }
 };

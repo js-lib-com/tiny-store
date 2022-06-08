@@ -6,7 +6,7 @@
 		"name": "create",
 		"parameters": [
 			{
-				"name": "${entity-name}",
+				"name": "${entity-parameter}",
 				"restParameter": "ENTITY_PARAM",
 				"type": {
 					"name": "${entity-class}"
@@ -52,7 +52,7 @@
 		"name": "update",
 		"parameters": [
 			{
-				"name": "${entity-name}",
+				"name": "${entity-parameter}",
 				"restParameter": "ENTITY_PARAM",
 				"type": {
 					"name": "${entity-class}"
@@ -74,8 +74,8 @@
 		"name": "delete",
 		"parameters": [
 			{
-				"name": "${entity-name}",
-				"restParameter": "PATH_PARAM",
+				"name": "${entity-parameter}",
+				"restParameter": "ENTITY_PARAM",
 				"type": {
 					"name": "${entity-class}"
 				},

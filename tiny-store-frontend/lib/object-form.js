@@ -33,8 +33,11 @@
                     input.classList.toggle("hidden", !expression);
                 }
                 input.classList.remove("invalid");
-                const value = OPP.get(object, input.getAttribute("name"));
+                let value = OPP.get(object, input.getAttribute("name"));
                 if (value) {
+                    if (input.hasAttribute("data-format")) {
+                        value = FormatFactory.get(input.getAttribute("data-format")).format(value);
+                    }
                     input.value = value;
                 }
             });

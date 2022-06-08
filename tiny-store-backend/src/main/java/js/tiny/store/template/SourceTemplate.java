@@ -12,6 +12,7 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
+import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
 public class SourceTemplate {
@@ -33,16 +34,16 @@ public class SourceTemplate {
 		// Template template = engine.getTemplate(file.getPath());
 	}
 	
-	public void generate(StoreEntity entity, Writer writer) {
-		StoreEntityTemplate entityTemplate = new StoreEntityTemplate(entity);
+	public void generate(Store store, StoreEntity entity, Writer writer) {
+		StoreEntityTemplate entityTemplate = new StoreEntityTemplate(store, entity);
 		context.put("entity", entityTemplate);
 		
 		Template template = engine.getTemplate(templateName);
 		template.merge(context, writer);
 	}
 	
-	public void generate(String storeName, DataService service, List<ServiceOperation> operations, Writer writer) {
-		DataServiceTemplate serviceTemplate = new DataServiceTemplate(storeName, service, operations);
+	public void generate(Store store, DataService service, List<ServiceOperation> operations, Writer writer) {
+		DataServiceTemplate serviceTemplate = new DataServiceTemplate(store, service, operations);
 		context.put("service", serviceTemplate);
 		
 		Template template = engine.getTemplate(templateName);

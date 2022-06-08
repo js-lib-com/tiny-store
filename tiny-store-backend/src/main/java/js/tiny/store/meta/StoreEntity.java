@@ -10,7 +10,7 @@ public class StoreEntity implements IPersistedObject {
 	private ObjectId id;
 	private String storeId;
 
-	/** Entity qualified class name. */
+	/** Entity simple class name. Qualified name is created from store package name and this simple name. */
 	private String className;
 	/** Name for table or collection storing this entity. */
 	private String alias;
