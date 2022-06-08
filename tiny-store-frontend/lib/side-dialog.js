@@ -2,6 +2,8 @@ class SideDialog extends HTMLElement {
     constructor() {
         super();
 
+        this._autoClose = false;
+
         this._titleView = this.getElementsByTagName("h2")[0];
         this._form = this.getElementsByTagName("object-form")[0];
         this._objectView = this.getElementsByTagName("object-view")[0];
@@ -25,7 +27,8 @@ class SideDialog extends HTMLElement {
         this._titleView.textContent = title;
     }
 
-    setHandler(buttonName, handler) {
+    setHandler(buttonName, handler, { autoClose = false }) {
+        this._autoClose = autoClose;
         // ensure handler is registered only once
         if (this._registeredHandlers.indexOf(buttonName) !== -1) {
             return;
@@ -40,6 +43,9 @@ class SideDialog extends HTMLElement {
         button.addEventListener("click", event => {
             if (this._form.isValid()) {
                 handler(this._form.getObject(this._object));
+                if (this._autoClose) {
+                    this._onNegativeButton();
+                }
             }
         });
     }
@@ -84,6 +90,7 @@ class SideDialog extends HTMLElement {
     }
 
     _onNegativeButton() {
+        this._autoClose = false;
         this.classList.add("hidden");
     }
 }

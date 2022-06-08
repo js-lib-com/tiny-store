@@ -3,6 +3,8 @@ package js.tiny.store.tool;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.tiny.store.meta.EntityField;
+import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 
 public class Strings extends js.util.Strings {
@@ -61,7 +63,7 @@ public class Strings extends js.util.Strings {
 		return PRIMITIVES.contains(name);
 	}
 
-	public static String memberToUndescroreCase(String memberName) {
+	public static String memberToColumnName(String memberName) {
 		if (memberName == null) {
 			return null;
 		}
@@ -82,5 +84,45 @@ public class Strings extends js.util.Strings {
 			builder.append(c);
 		}
 		return builder.toString();
+	}
+
+	public static String columnToMemberName(String columnName) {
+		if (columnName == null) {
+			return null;
+		}
+		if (columnName.isEmpty()) {
+			return "";
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		boolean first = true;
+		for (String word : split(columnName, '_', '-')) {
+			if (first) {
+				first = false;
+				sb.append(word);
+				continue;
+			}
+
+			sb.append(Character.toUpperCase(word.charAt(0)));
+			sb.append(word.substring(1).toLowerCase());
+		}
+		return sb.toString();
+	}
+
+	public static String tableName(StoreEntity entity) {
+		String alias = entity.getAlias();
+		if (alias != null) {
+			return alias;
+		}
+		return Strings.getSimpleName(entity.getClassName()).toLowerCase();
+	}
+
+	public static String columnName(EntityField field) {
+		String alias = field.getAlias();
+		if (alias != null) {
+			return alias;
+		}
+		return Strings.memberToColumnName(field.getName());
 	}
 }

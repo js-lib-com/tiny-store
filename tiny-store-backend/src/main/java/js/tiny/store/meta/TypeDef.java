@@ -15,6 +15,10 @@ public class TypeDef {
 		this(null, name);
 	}
 
+	public TypeDef(Class<?> type) {
+		this(null, type.getCanonicalName());
+	}
+
 	public TypeDef(String collection, String name) {
 		this.collection = collection;
 		this.name = name;

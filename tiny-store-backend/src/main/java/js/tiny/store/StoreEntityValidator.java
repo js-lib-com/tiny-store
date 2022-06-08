@@ -1,16 +1,9 @@
 package js.tiny.store;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
@@ -26,6 +19,7 @@ import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.tool.Classes;
 import js.tiny.store.tool.Strings;
+import js.tiny.store.tool.WorkUnit;
 
 public class StoreEntityValidator implements PreInvokeInterceptor {
 	private static final Log log = LogFactory.getLog(StoreEntityValidator.class);
@@ -84,7 +78,7 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 
 	private void assertTableExists(StoreEntity entity) throws ValidatorException {
 		sql(store, connection -> {
-			String tableName = tableName(entity);
+			String tableName = Strings.tableName(entity);
 			DatabaseMetaData dbmeta = connection.getMetaData();
 			ResultSet tables = dbmeta.getTables(null, null, tableName, null);
 			if (!tables.next()) {
@@ -99,8 +93,8 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 				return;
 			}
 			for (EntityField field : entity.getFields()) {
-				String tableName = tableName(entity);
-				String fieldName = fieldName(field);
+				String tableName = Strings.tableName(entity);
+				String fieldName = Strings.columnName(field);
 
 				DatabaseMetaData dbmeta = connection.getMetaData();
 				ResultSet rs = dbmeta.getColumns(null, null, tableName, fieldName);
@@ -108,7 +102,7 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 					throw new ValidatorException("Missing table column %s:%s required by field %s#%s.", tableName, fieldName, className(entity), field.getName());
 				}
 
-				Class<?> columnType = SQL_TYPES.get(rs.getInt("DATA_TYPE"));
+				Class<?> columnType = Classes.sqlType(rs.getInt("DATA_TYPE"));
 				if (columnType == null) {
 					throw new IllegalStateException("Not mapped SQL type " + rs.getString("TYPE_NAME"));
 				}
@@ -124,27 +118,6 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 				}
 			}
 		});
-	}
-
-	private static String tableName(StoreEntity entity) {
-		String alias = entity.getAlias();
-		if (alias != null) {
-			return alias;
-		}
-		return Strings.getSimpleName(entity.getClassName()).toLowerCase();
-	}
-
-	private static String fieldName(EntityField field) {
-		String alias = field.getAlias();
-		if (alias != null) {
-			return alias;
-		}
-		return Strings.memberToUndescroreCase(field.getName());
-	}
-
-	@FunctionalInterface
-	private interface WorkUnit {
-		void execute(Connection connection) throws Exception;
 	}
 
 	private static void sql(Store store, WorkUnit workUnit) throws ValidatorException {
@@ -186,33 +159,5 @@ public class StoreEntityValidator implements PreInvokeInterceptor {
 			}
 		}
 		throw new IllegalArgumentException(String.format("Invalid method signature for |%s|. Missing store entity argument.", managedMethod));
-	}
-
-	private static Map<Integer, Class<?>> SQL_TYPES = new HashMap<>();
-	static {
-		SQL_TYPES.put(Types.BIGINT, long.class);
-		SQL_TYPES.put(Types.BIT, byte.class);
-		SQL_TYPES.put(Types.BLOB, byte[].class);
-		SQL_TYPES.put(Types.BOOLEAN, boolean.class);
-		SQL_TYPES.put(Types.CHAR, String.class);
-		SQL_TYPES.put(Types.CLOB, byte[].class);
-		SQL_TYPES.put(Types.DATE, Date.class);
-		SQL_TYPES.put(Types.DECIMAL, BigDecimal.class);
-		SQL_TYPES.put(Types.DOUBLE, double.class);
-		SQL_TYPES.put(Types.FLOAT, float.class);
-		SQL_TYPES.put(Types.INTEGER, int.class);
-		SQL_TYPES.put(Types.LONGNVARCHAR, String.class);
-		SQL_TYPES.put(Types.LONGVARBINARY, byte[].class);
-		SQL_TYPES.put(Types.LONGVARCHAR, String.class);
-		SQL_TYPES.put(Types.NCHAR, String.class);
-		SQL_TYPES.put(Types.NUMERIC, BigDecimal.class);
-		SQL_TYPES.put(Types.NVARCHAR, String.class);
-		SQL_TYPES.put(Types.REAL, double.class);
-		SQL_TYPES.put(Types.SMALLINT, short.class);
-		SQL_TYPES.put(Types.TIME, Timestamp.class);
-		SQL_TYPES.put(Types.TIMESTAMP, Timestamp.class);
-		SQL_TYPES.put(Types.TINYINT, byte.class);
-		SQL_TYPES.put(Types.VARBINARY, byte[].class);
-		SQL_TYPES.put(Types.VARCHAR, String.class);
 	}
 }

@@ -24,7 +24,7 @@ EntityPage = class extends Page {
         this._entity = entity;
         this._storeId = entity.storeId;
         this._setObject(entity);
-        this._fieldsView.addItems(this._entity.fields);
+        this._fieldsView.setItems(this._entity.fields);
     }
 
     _onFieldSelect(event) {
@@ -37,6 +37,13 @@ EntityPage = class extends Page {
     _onEditEntity() {
         const dialog = this.getCompo("entity-form");
         dialog.setTitle("Edit Entity");
+
+        dialog.setHandler("import", entity => {
+            Workspace.importStoreEntity(this._storeId, entity, entity => {
+                this._onEntityLoaded(entity);
+            });
+        }, { autoClose: true });
+
         dialog.edit(this._entity, entity => {
             Database.updateStoreEntity(entity, () => this._setObject(entity));
         });

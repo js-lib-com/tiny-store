@@ -122,6 +122,13 @@ StorePage = class extends Page {
 	_onCreateEntity() {
 		const dialog = this.getCompo("entity-form");
 		dialog.setTitle("Create Entity");
+		
+		dialog.setHandler("import", entity => {
+			Workspace.importStoreEntity(this._store.id, entity, entity => {
+				this._entitiesView.addItem(entity);
+			});
+		}, { autoClose: true });
+
 		dialog.open(entity => {
 			Database.createStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
@@ -132,6 +139,12 @@ StorePage = class extends Page {
 	_onEditEntity() {
 		const dialog = this.getCompo("entity-form");
 		dialog.setTitle("Edit Entity");
+
+		dialog.setHandler("import", entity => {
+			Workspace.importStoreEntity(this._store.id, entity, entity => {
+				this._entitiesView.setSelectedItem(entity);
+			});
+		}, { autoClose: true });
 
 		dialog.edit(this._entitiesView.getSelectedItem(), entity => {
 			Database.updateStoreEntity(entity, () => {

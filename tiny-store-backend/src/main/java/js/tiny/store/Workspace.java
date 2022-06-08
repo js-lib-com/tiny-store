@@ -3,10 +3,14 @@ package js.tiny.store;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
@@ -32,14 +36,18 @@ import js.log.LogFactory;
 import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.dao.Database;
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.EntityField;
+import js.tiny.store.meta.FieldFlag;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
+import js.tiny.store.meta.TypeDef;
 import js.tiny.store.meta.Version;
+import js.tiny.store.tool.Classes;
 import js.tiny.store.tool.Files;
 import js.tiny.store.tool.Project;
+import js.tiny.store.tool.StoreDB;
 import js.tiny.store.tool.Strings;
-import js.util.Classes;
 
 @ApplicationScoped
 @Remote
@@ -122,6 +130,67 @@ public class Workspace {
 
 	public List<Store> getStores() throws IOException {
 		return db.findStoresByOwner("irotaru");
+	}
+
+	public StoreEntity importStoreEntity(String storeId, StoreEntity entity) throws Exception {
+		if (entity.id() == null) {
+			db.createStoreEntity(storeId, entity);
+			assert entity.id() != null;
+			assert entity.getFields() != null;
+		}
+
+		List<String> existingColumnsName = entity.getFields().stream().map(field -> Strings.columnName(field)).collect(Collectors.toList());
+		Store store = db.getStore(storeId);
+		String tableName = Strings.tableName(entity);
+		AtomicBoolean dirtyEntity = new AtomicBoolean(false);
+
+		try (StoreDB storeDB = new StoreDB(store)) {
+			storeDB.sql(connection -> {
+				DatabaseMetaData dbmeta = connection.getMetaData();
+
+				String pkColumnName = null;
+				try (ResultSet rs = dbmeta.getPrimaryKeys(null, null, tableName)) {
+					while (rs.next()) {
+						if (pkColumnName != null) {
+							throw new IllegalStateException("Multiple primary keys on table " + tableName);
+						}
+						pkColumnName = rs.getString("COLUMN_NAME");
+					}
+				}
+
+				try (ResultSet rs = dbmeta.getColumns(null, null, tableName, null)) {
+					while (rs.next()) {
+						String columnName = rs.getString("COLUMN_NAME");
+						if (existingColumnsName.contains(columnName)) {
+							continue;
+						}
+
+						Class<?> columnType = Classes.sqlType(rs.getInt("DATA_TYPE"));
+						if (columnType == null) {
+							throw new IllegalStateException("Not mapped SQL type " + rs.getString("TYPE_NAME"));
+						}
+
+						EntityField field = new EntityField();
+						field.setName(Strings.columnToMemberName(columnName));
+						if (!field.getName().equals(columnName)) {
+							field.setAlias(columnName);
+						}
+						field.setType(new TypeDef(columnType));
+						if (columnName.equals(pkColumnName)) {
+							field.setFlag(FieldFlag.IDENTITY_KEY);
+						}
+
+						dirtyEntity.set(true);
+						entity.getFields().add(field);
+					}
+				}
+			});
+		}
+
+		if (dirtyEntity.get()) {
+			db.updateStoreEntity(entity);
+		}
+		return entity;
 	}
 
 	@Intercepted(MetaChangeListener.class)
