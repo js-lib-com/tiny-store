@@ -83,20 +83,8 @@ StorePage = class extends Page {
 	}
 
 	_onCreateDAO() {
-		const dialog = this.getCompo("dao-form");
-
-		const entity = this._entitiesView.getSelectedItem();
-		const service = {
-			className: `${entity.className}DAO`,
-			description: `Data access for ${entity.className} entity.`,
-			restEnabled: this._store.restPath != null,
-			restPath: entity.className.toLowerCase()
-		};
-
-		dialog.edit(service, service => {
-			Workspace.createDaoService(this._store.id, entity, service, service => {
-				this._servicesView.addItem(service);
-			});
+		Workspace.createDaoService(this._entitiesView.getSelectedItem(), service => {
+			this._servicesView.addItem(service);
 		});
 	}
 

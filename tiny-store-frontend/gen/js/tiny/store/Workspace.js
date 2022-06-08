@@ -35,11 +35,11 @@ Workspace = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
-	 createDaoService: function(storeId, entity, service) {
-		var __callback__ = arguments[3];
-		var __scope__ = arguments[4] || window;
+	 createDaoService: function(entity) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/Workspace/createDaoService.rmi";
-		var parameters = [storeId, entity, service];
+		var parameters = [entity];
 
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
