@@ -18,6 +18,10 @@ table tr.selected {
     background-color: #F8F8F8;
 }
 
+table tr.selected td {
+    color: var(--th-text-color);
+}
+
 table th,
 table td {
     padding: var(--table-padding);
@@ -28,10 +32,12 @@ table th {
     color: black;
     text-align: left;
     font-weight: var(--font-weight);
+    color: var(--th-text-color);
 }
 
 table td {
     vertical-align: top;
+    color: var(--td-text-color);
 }
 
 table td.large {
