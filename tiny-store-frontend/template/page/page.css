@@ -6,6 +6,7 @@ body {
     height: 100vh;
     margin: 0;
     padding: 0;
+    overflow: auto;
 }
 
 body>* {
@@ -53,6 +54,7 @@ body>object-view {
     grid-template-columns: var(--menu-width) 1fr;
     grid-template-rows: var(--caption-height) var(--nav-height) 1fr;
     overflow-y: hidden;
+    border-bottom: solid 1px lightgray;
 }
 
 body>object-view>.caption {
@@ -60,7 +62,7 @@ body>object-view>.caption {
     grid-row: 1;
     border-bottom: solid 1px lightgray;
     padding-left: 20px;
-    padding-top: 20px;
+    padding-top: 15px;
 }
 
 side-menu {
@@ -73,15 +75,11 @@ action-bar {
     grid-row: 2;
 }
 
-label {
-    font-size: 14px;
-}
-
 body>object-view>.content {
     grid-column: 2;
     grid-row: 3;
     overflow-y: auto;
-    padding: var(--content-padding) 0 0 var(--content-padding);
+    padding: var(--content-padding) var(--content-padding) 0 var(--content-padding);
     padding-top: 0;
 }
 
@@ -89,9 +87,9 @@ body>.side-dialogs {
     grid-column: 3;
     grid-row: 2;
     border-left: solid 1px lightgray;
-    margin: 0 0 0 var(--side-dialog-padding);
     padding: var(--side-dialog-padding);
     overflow: hidden;
+    border-bottom: solid 1px lightgray;
 }
 
 body>footer {
@@ -99,10 +97,9 @@ body>footer {
     grid-row: 3;
     display: flex;
     flex-direction: row;
-    line-height: 47px;
-    vertical-align: middle;
+    height: var(--bar-height);
+    line-height: var(--bar-height);
     padding: 0 20px;
-    border-top: solid 1px lightgray;
 }
 
 body>footer bread-crumbs {

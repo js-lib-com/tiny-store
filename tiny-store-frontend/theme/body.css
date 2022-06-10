@@ -1,10 +1,10 @@
-body {
-	box-sizing: border-box;
+html, body {
 	margin: 0;
+	font-family: "Segoe UI";
+	font-size: var(--font-size);
 }
 
 body * {
-	font-family: "Segoe UI";
 	color: rgb(50, 49, 48);
 }
 

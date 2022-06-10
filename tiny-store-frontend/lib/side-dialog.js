@@ -27,8 +27,8 @@ class SideDialog extends HTMLElement {
         this._titleView.textContent = title;
     }
 
-    setHandler(buttonName, handler, { autoClose = false }) {
-        this._autoClose = autoClose;
+    setHandler(buttonName, handler, config) {
+        this._autoClose = typeof config != "undefined" && config.autoClose;
         // ensure handler is registered only once
         if (this._registeredHandlers.indexOf(buttonName) !== -1) {
             return;

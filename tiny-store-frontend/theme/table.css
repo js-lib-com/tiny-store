@@ -1,5 +1,5 @@
 table {
-    min-width: 50%;
+    width: 100%;
     border-collapse: collapse;
     margin-top: 4px;
 }
@@ -18,27 +18,26 @@ table tr.selected {
     background-color: #F8F8F8;
 }
 
-table th {
-    font-size: var(--th-font-size);
-    font-weight: var(--font-weight);
-    color: black;
-}
-
 table th,
 table td {
-    white-space: nowrap;
     padding: var(--table-padding);
+    white-space: nowrap;
+}
+
+table th {
+    color: black;
     text-align: left;
-    font-size: var(--td-font-size);
     font-weight: var(--font-weight);
 }
 
-table.narrow th,
-table.narrow td {
-    padding: var(--table-narrow-padding);
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+table td {
+    vertical-align: top;
+}
+
+table td.large {
+    width: 100%;
+    vertical-align: top;
+    white-space: normal;
 }
 
 table td.accent {

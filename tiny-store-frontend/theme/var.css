@@ -1,12 +1,12 @@
 /** dimmensions */
 :root {
-    --bar-height: 48px;
+    --bar-height: 3rem;
     --header-height: var(--bar-height);
     --footer-height: var(--bar-height);
     --aside-width: var(--bar-height);
     --side-form-width: 500px;
     --menu-width: auto;
-    --caption-height: 128px;
+    --caption-height: 7rem;
     --nav-height: var(--bar-height);
     --menu-item-width: 200px;
     --menu-item-height: var(--bar-height);
@@ -15,23 +15,23 @@
     --dt-head-space: 4px;
     --content-padding: 40px;
     --side-dialog-padding: 20px;
-    --section-space: 40px;
-    --control-space: 36px;
-    --line-break: 40px;
-    --table-padding: 8px 24px;
-    --table-narrow-padding: 8px 8px;
+    --section-space: 2.5rem;
+    --control-space: 2rem;
+    --line-break: 2rem;
+    --table-padding: 8px 16px;
 }
 
 /** font sizes */
 :root {
+    --font-size: 15px;
     --font-weight: 400;
-    --h1-font-size: 1.4rem;
-    --h2-font-size: 1.1rem;
-    --h3-font-size: 1.0rem;
+    --h1-font-size: 1.6rem;
+    --h2-font-size: 1.4rem;
+    --h3-font-size: 1.1rem;
     --dl-font-size: 1.1rem;
     --p-font-size: 1rem;
-    --th-font-size: 16px;
-    --td-font-size: 14px;
+    --th-font-size: 1rem;
+    --td-font-size: 1rem;
 }
 
 /** colors */

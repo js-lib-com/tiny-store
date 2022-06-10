@@ -89,6 +89,8 @@
                 ++index;
             }
             row.__item__ = item;
+
+
         }
 
         getSelectedIndex() {
