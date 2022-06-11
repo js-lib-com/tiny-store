@@ -63,7 +63,7 @@ public class Strings extends js.util.Strings {
 		return PRIMITIVES.contains(name);
 	}
 
-	public static String memberToColumnName(String memberName) {
+	public static String memberToDatabaseCase(String memberName) {
 		if (memberName == null) {
 			return null;
 		}
@@ -86,7 +86,7 @@ public class Strings extends js.util.Strings {
 		return builder.toString();
 	}
 
-	public static String columnToMemberName(String columnName) {
+	public static String databaseToMemberName(String columnName) {
 		if (columnName == null) {
 			return null;
 		}
@@ -97,7 +97,7 @@ public class Strings extends js.util.Strings {
 		StringBuilder sb = new StringBuilder();
 
 		boolean first = true;
-		for (String word : split(columnName, '_', '-')) {
+		for (String word : split(columnName, '_')) {
 			if (first) {
 				first = false;
 				sb.append(word);
@@ -115,7 +115,7 @@ public class Strings extends js.util.Strings {
 		if (alias != null) {
 			return alias;
 		}
-		return Strings.getSimpleName(entity.getClassName()).toLowerCase();
+		return entity.getClassName();
 	}
 
 	public static String columnName(EntityField field) {
@@ -123,6 +123,6 @@ public class Strings extends js.util.Strings {
 		if (alias != null) {
 			return alias;
 		}
-		return Strings.memberToColumnName(field.getName());
+		return field.getName();
 	}
 }

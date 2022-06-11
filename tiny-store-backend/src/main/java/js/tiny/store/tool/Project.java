@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.jar.Manifest;
 
 import javax.tools.DiagnosticListener;
@@ -102,11 +100,11 @@ public class Project {
 	}
 
 	private void generateProjectFiles() throws IOException {
-		generate("/parent-pom.xml.vtl", Files.parentPomFile(projectDir), properties("store", store));
-		generate("/server-pom.xml.vtl", Files.serverPomFile(projectDir), properties("store", store));
-		generate("/client-pom.xml.vtl", Files.clientPomFile(projectDir), properties("store", store));
-		generate("/gitignore.vtl", Files.gitIgnoreFile(projectDir), properties());
-		generate("/README.md.vtl", Files.readmeFile(projectDir), properties("store", store));
+		generate("/parent-pom.xml.vtl", Files.parentPomFile(projectDir), store);
+		generate("/server-pom.xml.vtl", Files.serverPomFile(projectDir), store);
+		generate("/client-pom.xml.vtl", Files.clientPomFile(projectDir), store);
+		generate("/gitignore.vtl", Files.gitIgnoreFile(projectDir));
+		generate("/README.md.vtl", Files.readmeFile(projectDir), store);
 	}
 
 	public boolean generateSources() throws IOException {
@@ -115,58 +113,36 @@ public class Project {
 		List<StoreEntity> entities = dao.getStoreEntities(store.id());
 		for (StoreEntity entity : entities) {
 			String className = Strings.concat(store.getPackageName(), '.', entity.getClassName());
-			generate("/entity.java.vtl", entity, Files.serverSourceFile(projectDir, className));
-			generate("/model.java.vtl", entity, Files.clientSourceFile(projectDir, className));
+			generate("/entity.java.vtl", Files.serverSourceFile(projectDir, className), store, entity);
+			generate("/model.java.vtl", Files.clientSourceFile(projectDir, className), store, entity);
 		}
 
 		List<DataService> services = dao.getStoreServices(store.id());
 		for (DataService service : services) {
 			String interfaceName = Strings.concat(store.getPackageName(), '.', 'I', service.getClassName());
 			String className = Strings.concat(store.getPackageName(), '.', service.getClassName());
-			generate("/service-server-interface.java.vtl", service, Files.serverSourceFile(projectDir, interfaceName));
-			generate("/service-implementation.java.vtl", service, Files.serverSourceFile(projectDir, className));
-			generate("/service-client-interface.java.vtl", service, Files.clientSourceFile(projectDir, interfaceName));
+			List<ServiceOperation> operations = dao.getServiceOperations(service.id());
+			generate("/service-server-interface.java.vtl", Files.serverSourceFile(projectDir, interfaceName), store, service, operations);
+			generate("/service-implementation.java.vtl", Files.serverSourceFile(projectDir, className), store, service, operations);
+			generate("/service-client-interface.java.vtl", Files.clientSourceFile(projectDir, interfaceName), store, service, operations);
 		}
 
-		generate("/web.xml.vtl", Files.webDescriptorFile(projectDir), properties("store", store));
-		generate("/app.xml.vtl", Files.appDescriptorFile(projectDir), properties("store", store, "services", services));
+		generate("/web.xml.vtl", Files.webDescriptorFile(projectDir), store);
+		generate("/app.xml.vtl", Files.appDescriptorFile(projectDir), store, services);
 		// TODO: hack on connection string ampersand escape
-		generate("/context.xml.vtl", Files.contextFile(projectDir), properties("store", store, "connectionString", Strings.escapeXML(store.getConnectionString())));
-		generate("/persistence.xml.vtl", Files.persistenceFile(projectDir), properties("store", store, "entities", entities));
+		generate("/context.xml.vtl", Files.contextFile(projectDir), store);
+		generate("/persistence.xml.vtl", Files.persistenceFile(projectDir), store, entities);
 
 		return !entities.isEmpty() || !services.isEmpty();
 	}
 
-	private void generate(String template, StoreEntity entity, File targetFile) throws IOException {
-		SourceTemplate sourceTemplate = new SourceTemplate(template);
-		try (Writer writer = new FileWriter(targetFile)) {
-			sourceTemplate.generate(store, entity, writer);
-		}
-	}
-
-	private void generate(String template, DataService service, File targetFile) throws IOException {
-		SourceTemplate sourceFile = new SourceTemplate(template);
-		List<ServiceOperation> operations = dao.getServiceOperations(service.id());
-		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(store, service, operations, writer);
-		}
-	}
-
-	private static void generate(String template, File targetFile, Map<String, Object> properties) throws IOException {
+	private static void generate(String template, File targetFile, Object... arguments) throws IOException {
 		SourceTemplate sourceFile = new SourceTemplate(template);
 		try (Writer writer = new FileWriter(targetFile)) {
-			sourceFile.generate(properties, writer);
+			sourceFile.generate(writer, arguments);
 		}
 	}
-
-	private static Map<String, Object> properties(Object... values) {
-		Map<String, Object> properties = new HashMap<>();
-		for (int i = 0; i + 1 < values.length; i += 2) {
-			properties.put((String) values[i], values[i + 1]);
-		}
-		return properties;
-	}
-
+	
 	// --------------------------------------------------------------------------------------------
 
 	public boolean compileServerSources() throws IOException {

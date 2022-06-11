@@ -171,7 +171,7 @@ public class Workspace {
 						}
 
 						EntityField field = new EntityField();
-						field.setName(Strings.columnToMemberName(columnName));
+						field.setName(Strings.databaseToMemberName(columnName));
 						if (!field.getName().equals(columnName)) {
 							field.setAlias(columnName);
 						}
@@ -222,14 +222,14 @@ public class Workspace {
 	}
 
 	public boolean testDataSource(Store store) throws PropertyVetoException {
-		if (store.getConnectionString().startsWith("jdbc:")) {
+		if (store.getDatabaseURL().startsWith("jdbc:")) {
 			// jdbc data source
 			ComboPooledDataSource datasource = new ComboPooledDataSource();
 			datasource.setAcquireRetryAttempts(1);
 
-			datasource.setJdbcUrl(store.getConnectionString());
-			datasource.setUser(store.getUser());
-			datasource.setPassword(store.getPassword());
+			datasource.setJdbcUrl(store.getDatabaseURL());
+			datasource.setUser(store.getDatabaseUser());
+			datasource.setPassword(store.getDatabasePassword());
 
 			try {
 				datasource.getConnection();

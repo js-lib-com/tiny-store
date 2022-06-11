@@ -12,7 +12,7 @@ import js.tiny.store.tool.Strings;
 
 public class DataServiceTemplate {
 	private final String repositoryName;
-	private final DataService dataService;
+	private final DataService service;
 
 	private final String implementationPackage;
 	private final String implementationName;
@@ -20,13 +20,14 @@ public class DataServiceTemplate {
 	private final String interfaceName;
 	private final SortedSet<String> imports;
 	private final List<ServiceOperationTemplate> operations;
+	private final String restPath;
 
-	public DataServiceTemplate(Store store, DataService dataService, List<ServiceOperation> operations) {
+	public DataServiceTemplate(Store store, DataService service, List<ServiceOperation> operations) {
 		this.repositoryName = store.getName();
-		this.dataService = dataService;
+		this.service = service;
 
 		this.implementationPackage = store.getPackageName();
-		this.implementationName = Strings.getSimpleName(dataService.getClassName());
+		this.implementationName = Strings.getSimpleName(service.getClassName());
 		this.interfacePackage = this.implementationPackage;
 		this.interfaceName = 'I' + this.implementationName;
 
@@ -35,6 +36,9 @@ public class DataServiceTemplate {
 
 		this.imports = new TreeSet<>();
 		this.operations.forEach(operation -> imports.addAll(operation.getImports()));
+
+		String restPath = service.getRestPath();
+		this.restPath = restPath != null && !restPath.isEmpty() && restPath.charAt(0) == '/' ? restPath.substring(1) : restPath;
 	}
 
 	public String getRepositoryName() {
@@ -42,15 +46,15 @@ public class DataServiceTemplate {
 	}
 
 	public String getDescription() {
-		return dataService.getDescription();
+		return service.getDescription();
 	}
 
 	public boolean isRestEnabled() {
-		return dataService.isRestEnabled();
+		return service.isRestEnabled();
 	}
 
 	public String getRestPath() {
-		return dataService.getRestPath();
+		return restPath;
 	}
 
 	public String getImplementationPackage() {

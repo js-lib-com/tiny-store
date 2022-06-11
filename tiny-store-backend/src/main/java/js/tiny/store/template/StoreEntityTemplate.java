@@ -12,21 +12,21 @@ import js.tiny.store.meta.TypeDef;
 import js.tiny.store.tool.Strings;
 
 public class StoreEntityTemplate {
-	private final StoreEntity storeEntity;
+	private final StoreEntity entity;
 
 	private final String packageName;
 	private final String className;
 	private final SortedSet<String> imports;
 	private final List<EntityFieldTemplate> fields;
 
-	public StoreEntityTemplate(Store store, StoreEntity storeEntity) {
-		this.storeEntity = storeEntity;
+	public StoreEntityTemplate(Store store, StoreEntity entity) {
+		this.entity = entity;
 
 		this.packageName = store.getPackageName();
-		this.className = Strings.getSimpleName(storeEntity.getClassName());
+		this.className = Strings.getSimpleName(entity.getClassName());
 
 		SortedSet<String> imports = new TreeSet<>();
-		for (EntityField field : storeEntity.getFields()) {
+		for (EntityField field : entity.getFields()) {
 			final TypeDef type = field.getType();
 			if (type.getCollection() != null) {
 				imports.add(type.getCollection());
@@ -45,15 +45,15 @@ public class StoreEntityTemplate {
 		this.imports = imports.isEmpty() ? null : imports;
 
 		this.fields = new ArrayList<>();
-		storeEntity.getFields().forEach(field -> this.fields.add(new EntityFieldTemplate(field)));
+		entity.getFields().forEach(field -> this.fields.add(new EntityFieldTemplate(field)));
 	}
 
 	public String getDescription() {
-		return storeEntity.getDescription();
+		return entity.getDescription();
 	}
 
 	public String getAlias() {
-		return storeEntity.getAlias();
+		return entity.getAlias();
 	}
 
 	public String getPackageName() {

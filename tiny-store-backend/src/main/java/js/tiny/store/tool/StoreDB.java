@@ -18,9 +18,9 @@ public class StoreDB implements AutoCloseable {
 		this.datasource = new ComboPooledDataSource();
 		datasource.setAcquireRetryAttempts(1);
 
-		datasource.setJdbcUrl(store.getConnectionString());
-		datasource.setUser(store.getUser());
-		datasource.setPassword(store.getPassword());
+		datasource.setJdbcUrl(store.getDatabaseURL());
+		datasource.setUser(store.getDatabaseUser());
+		datasource.setPassword(store.getDatabasePassword());
 	}
 
 	public void sql(WorkUnit workUnit) throws Exception {

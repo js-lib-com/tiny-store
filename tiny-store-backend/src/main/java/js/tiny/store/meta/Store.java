@@ -24,9 +24,9 @@ public class Store implements IPersistedObject {
 	private String packageName;
 	private Version version;
 
-	private String connectionString;
-	private String user;
-	private String password;
+	private String databaseURL;
+	private String databaseUser;
+	private String databasePassword;
 
 	@Override
 	public ObjectId getId() {
@@ -118,27 +118,27 @@ public class Store implements IPersistedObject {
 		this.version = version;
 	}
 
-	public String getConnectionString() {
-		return connectionString;
+	public String getDatabaseURL() {
+		return databaseURL;
 	}
 
-	public void setConnectionString(String connectionString) {
-		this.connectionString = connectionString;
+	public void setDatabaseURL(String databaseURL) {
+		this.databaseURL = databaseURL;
 	}
 
-	public String getUser() {
-		return user;
+	public String getDatabaseUser() {
+		return databaseUser;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setDatabaseUser(String databaseUser) {
+		this.databaseUser = databaseUser;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getDatabasePassword() {
+		return databasePassword;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setDatabasePassword(String databasePassword) {
+		this.databasePassword = databasePassword;
 	}
 }

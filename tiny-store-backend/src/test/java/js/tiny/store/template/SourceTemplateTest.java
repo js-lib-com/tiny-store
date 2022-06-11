@@ -52,7 +52,7 @@ public class SourceTemplateTest {
 		entity.setFields(Arrays.asList(identity, field));
 		
 		// when
-		sourceTemplate.generate(store, entity, writer);
+		sourceTemplate.generate(writer, store, entity);
 		
 		// then
 		System.out.println(writer);
@@ -94,7 +94,7 @@ public class SourceTemplateTest {
 
 		
 		// when
-		sourceTemplate.generate(store, service, Arrays.asList(operation), writer);
+		sourceTemplate.generate(writer, store, service, Arrays.asList(operation));
 		
 		// then
 		System.out.println(writer);

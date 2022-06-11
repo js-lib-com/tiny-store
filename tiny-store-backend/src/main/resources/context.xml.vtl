@@ -7,9 +7,9 @@
 		auth="Container" 
 		type="com.mchange.v2.c3p0.ComboPooledDataSource"
 
-		jdbcUrl="${connectionString}"
-		user="${store.user}" 
-		password="${store.password}"
+		jdbcUrl="${store.databaseURL}"
+		user="${store.databaseUser}" 
+		password="${store.databasePassword}"
 	/>
 
 </Context>
