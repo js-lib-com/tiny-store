@@ -12,6 +12,7 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Updates;
 
 import js.tiny.store.ChangeLog;
 import js.tiny.store.meta.DataService;
@@ -65,6 +66,12 @@ class DAO<T extends IPersistedObject> {
 
 	public void update(T t) {
 		collection.replaceOne(eq("_id", t.getId()), t);
+	}
+
+	public void update(String fieldName, Object fieldValue, String whereName, Object whereValue) {
+		Bson query = eq(whereName, whereValue);
+		Bson updates = Updates.set(fieldName, fieldValue);
+		collection.updateMany(query, updates);
 	}
 
 	public void delete(String id) {

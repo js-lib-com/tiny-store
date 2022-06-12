@@ -7,6 +7,7 @@ import js.tiny.store.dao.IPersistedObject;
 public class DataService implements IPersistedObject {
 	private ObjectId id;
 	private String storeId;
+	private String packageName;
 
 	/**
 	 * Simple class name for data service implementation. Implementation qualified name is created from store package name and
@@ -34,6 +35,14 @@ public class DataService implements IPersistedObject {
 
 	public void setStoreId(String storeId) {
 		this.storeId = storeId;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
 	}
 
 	public String getClassName() {

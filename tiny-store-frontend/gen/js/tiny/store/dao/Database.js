@@ -206,6 +206,15 @@ Database = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
+	 updateOperationsServiceClass: function(serviceId, serviceClass) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/dao/Database/updateOperationsServiceClass.rmi";
+		var parameters = [serviceId, serviceClass];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	 deleteServiceOperation: function(operation) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;

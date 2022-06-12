@@ -92,7 +92,7 @@ public class Workspace {
 		return store;
 	}
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted({ MetaChangeListener.class, StoreUpdateListener.class })
 	public void updateStore(Store store) {
 		store.setOwner("irotaru");
 		db.updateStore(store);

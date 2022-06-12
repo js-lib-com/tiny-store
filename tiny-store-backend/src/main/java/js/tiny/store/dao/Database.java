@@ -82,6 +82,8 @@ public interface Database {
 	@Intercepted({ ServiceOperationValidator.class, MetaChangeListener.class })
 	void updateServiceOperation(ServiceOperation operation);
 
+	void updateOperationsServiceClass(String serviceId, String serviceClass);
+
 	@Intercepted(MetaChangeListener.class)
 	void deleteServiceOperation(ServiceOperation operation);
 

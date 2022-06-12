@@ -88,6 +88,12 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
+	public void updateOperationsServiceClass(String serviceId, String serviceClass) {
+		// update Operation set serviceClass=$1 where serviceId=$2 
+		operationDAO.update("serviceClass", serviceClass, "serviceId", serviceId);
+	}
+
+	@Override
 	public void deleteServiceOperation(ServiceOperation operation) {
 		operationDAO.delete(operation.id());
 	}

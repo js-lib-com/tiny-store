@@ -8,4 +8,5 @@
 	<binding bind="StoreEntityValidator" />
 	<binding bind="DataServiceValidator" />
 	<binding bind="ServiceOperationValidator" />
+	<binding bind="StoreUpdateListener" />
 </app>

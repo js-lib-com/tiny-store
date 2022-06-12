@@ -17,6 +17,7 @@ import js.tiny.store.dao.IPersistedObject;
 public class ServiceOperation implements IPersistedObject {
 	private ObjectId id;
 	private String serviceId;
+	private String serviceClass;
 
 	private String name;
 	private String description;
@@ -47,6 +48,14 @@ public class ServiceOperation implements IPersistedObject {
 
 	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
+	}
+
+	public String getServiceClass() {
+		return serviceClass;
+	}
+
+	public void setServiceClass(String serviceClass) {
+		this.serviceClass = serviceClass;
 	}
 
 	public String getName() {
