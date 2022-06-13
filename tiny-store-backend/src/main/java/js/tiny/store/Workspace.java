@@ -35,6 +35,7 @@ import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.dao.Database;
+import js.tiny.store.dao.StoreUpdateListener;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.FieldFlag;
@@ -208,7 +209,7 @@ public class Workspace {
 		variables.put("entity-class", Strings.concat(store.getPackageName(), '.', entity.getClassName()));
 		variables.put("entity-name", entity.getClassName());
 		variables.put("entity-parameter", entity.getClassName().toLowerCase());
-		variables.put("entity-id-type", Strings.getParameterizedName(entity.getFields().get(0).getType()));
+		variables.put("entity-id-type", Strings.parameterizedName(entity.getFields().get(0).getType()));
 		String operationsJson = Strings.injectVariables(Strings.load(Classes.getResourceAsReader("/dao-operations.json")), variables);
 
 		Json json = Classes.loadService(Json.class);

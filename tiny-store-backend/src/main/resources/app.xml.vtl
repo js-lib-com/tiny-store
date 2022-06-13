@@ -1,7 +1,7 @@
-<app>
+<app package="${store.packageName}">
 	<binding bind="jakarta.persistence.EntityManager" to="js.transaction.eclipselink.EntityManagerImpl" in="ApplicationScoped" />
 
 #foreach($service in $services)
-	<bindind bind="${store.packageName}.I${service.className}" to="${store.packageName}.${service.className}" in="ApplicationScoped" />
+	<bindind bind="${service.interfaceName}" to="${service.implementationName}" in="ApplicationScoped" />
 #end	
 </app>

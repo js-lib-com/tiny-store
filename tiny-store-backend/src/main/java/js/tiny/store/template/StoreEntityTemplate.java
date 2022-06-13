@@ -6,7 +6,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import js.tiny.store.meta.EntityField;
-import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 import js.tiny.store.tool.Strings;
@@ -19,11 +18,11 @@ public class StoreEntityTemplate {
 	private final SortedSet<String> imports;
 	private final List<EntityFieldTemplate> fields;
 
-	public StoreEntityTemplate(Store store, StoreEntity entity) {
+	public StoreEntityTemplate(StoreEntity entity) {
 		this.entity = entity;
 
-		this.packageName = store.getPackageName();
-		this.className = Strings.getSimpleName(entity.getClassName());
+		this.packageName = Strings.packageName(entity.getClassName());
+		this.className = Strings.simpleName(entity.getClassName());
 
 		SortedSet<String> imports = new TreeSet<>();
 		for (EntityField field : entity.getFields()) {

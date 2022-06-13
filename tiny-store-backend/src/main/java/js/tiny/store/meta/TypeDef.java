@@ -5,7 +5,7 @@ import java.util.Objects;
 public class TypeDef {
 	/** Optional qualified name for collection class, null if type is not a collection. */
 	private String collection;
-	/** Qualified class name. */
+	/** Qualified type name. */
 	private String name;
 
 	public TypeDef() {

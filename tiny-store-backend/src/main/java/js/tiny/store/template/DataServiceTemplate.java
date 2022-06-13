@@ -1,6 +1,7 @@
 package js.tiny.store.template;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -22,12 +23,16 @@ public class DataServiceTemplate {
 	private final List<ServiceOperationTemplate> operations;
 	private final String restPath;
 
+	public DataServiceTemplate(Store store, DataService service) {
+		this(store, service, Collections.emptyList());
+	}
+	
 	public DataServiceTemplate(Store store, DataService service, List<ServiceOperation> operations) {
 		this.repositoryName = store.getName();
 		this.service = service;
 
-		this.implementationPackage = store.getPackageName();
-		this.implementationName = Strings.getSimpleName(service.getClassName());
+		this.implementationPackage = Strings.packageName(service.getClassName());
+		this.implementationName = Strings.simpleName(service.getClassName());
 		this.interfacePackage = this.implementationPackage;
 		this.interfaceName = 'I' + this.implementationName;
 

@@ -13,7 +13,7 @@ public class OperationParameterTemplate {
 
 	public OperationParameterTemplate(OperationParameter operationParameter) {
 		this.operationParameter = operationParameter;
-		this.type = Strings.getParameterizedName(operationParameter.getType());
+		this.type = Strings.parameterizedName(operationParameter.getType());
 		this.primitive = Strings.isPrimitive(operationParameter.getType().getName());
 	}
 

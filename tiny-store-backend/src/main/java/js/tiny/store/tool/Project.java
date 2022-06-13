@@ -112,15 +112,16 @@ public class Project {
 
 		List<StoreEntity> entities = dao.getStoreEntities(store.id());
 		for (StoreEntity entity : entities) {
-			String className = Strings.concat(store.getPackageName(), '.', entity.getClassName());
-			generate("/entity.java.vtl", Files.serverSourceFile(projectDir, className), store, entity);
-			generate("/model.java.vtl", Files.clientSourceFile(projectDir, className), store, entity);
+			String className = Strings.concat(store.getPackageName(), '.', Strings.simpleName(entity.getClassName()));
+			generate("/entity.java.vtl", Files.serverSourceFile(projectDir, className), entity);
+			generate("/model.java.vtl", Files.clientSourceFile(projectDir, className), entity);
 		}
 
 		List<DataService> services = dao.getStoreServices(store.id());
 		for (DataService service : services) {
-			String interfaceName = Strings.concat(store.getPackageName(), '.', 'I', service.getClassName());
-			String className = Strings.concat(store.getPackageName(), '.', service.getClassName());
+			String simpleClassName = Strings.simpleName(service.getClassName());
+			String interfaceName = Strings.concat(store.getPackageName(), '.', 'I', simpleClassName);
+			String className = Strings.concat(store.getPackageName(), '.', simpleClassName);
 			List<ServiceOperation> operations = dao.getServiceOperations(service.id());
 			generate("/service-server-interface.java.vtl", Files.serverSourceFile(projectDir, interfaceName), store, service, operations);
 			generate("/service-implementation.java.vtl", Files.serverSourceFile(projectDir, className), store, service, operations);
@@ -142,7 +143,7 @@ public class Project {
 			sourceFile.generate(writer, arguments);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------
 
 	public boolean compileServerSources() throws IOException {

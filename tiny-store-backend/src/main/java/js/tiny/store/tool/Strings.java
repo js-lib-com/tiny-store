@@ -8,30 +8,53 @@ import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 
 public class Strings extends js.util.Strings {
-	public static String getPackageName(String qualifiedName) {
-		int lastDotSeparatorPosition = qualifiedName.lastIndexOf('.');
-		if (lastDotSeparatorPosition == -1) {
-			throw new IllegalArgumentException("Not qualified class name: " + qualifiedName);
+	public static String packageName(String typeName) {
+		if (typeName == null) {
+			return null;
 		}
-		return qualifiedName.substring(0, lastDotSeparatorPosition);
+		int lastDotSeparatorPosition = typeName.lastIndexOf('.');
+		if (lastDotSeparatorPosition == -1) {
+			return null;
+		}
+		return typeName.substring(0, lastDotSeparatorPosition);
 	}
 
-	public static String getSimpleName(String qualifiedName) {
-		if (qualifiedName.endsWith(".")) {
-			throw new IllegalArgumentException("Invalid class name: " + qualifiedName);
-		}
-		int lastDotSeparatorPosition = qualifiedName.lastIndexOf('.');
-		if (lastDotSeparatorPosition == -1) {
-			return qualifiedName;
-		}
-		return qualifiedName.substring(lastDotSeparatorPosition + 1);
+	public static String qualifiedName(String packageName, String typeName) {
+		return concat(packageName, '.', simpleName(typeName));
 	}
 
-	public static String getParameterizedName(TypeDef type) {
+	public static String simpleName(String typeName) {
+		if (typeName.endsWith(".")) {
+			throw new IllegalArgumentException("Invalid type name: " + typeName);
+		}
+		int lastDotSeparatorPosition = typeName.lastIndexOf('.');
+		if (lastDotSeparatorPosition == -1) {
+			return typeName;
+		}
+		return typeName.substring(lastDotSeparatorPosition + 1);
+	}
+
+	public static String parameterizedName(TypeDef type) {
 		if (type.getCollection() == null) {
-			return getSimpleName(type.getName());
+			return simpleName(type.getName());
 		}
-		return concat(getSimpleName(type.getCollection()), '<', getSimpleName(type.getName()), '>');
+		return concat(simpleName(type.getCollection()), '<', simpleName(type.getName()), '>');
+	}
+
+	public static boolean replacePackage(TypeDef type, String oldPackage, String newPackage) {
+		if (oldPackage.equals(packageName(type.getName()))) {
+			type.setName(qualifiedName(newPackage, type.getName()));
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean replaceClass(TypeDef type, String oldQualifiedClass, String newClass) {
+		if (oldQualifiedClass.equals(type.getName())) {
+			type.setName(qualifiedName(packageName(oldQualifiedClass), newClass));
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isDefaultPackage(String qualifiedName) {

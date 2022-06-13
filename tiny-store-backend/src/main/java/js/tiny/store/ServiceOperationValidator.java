@@ -76,7 +76,7 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 			throw new ValidatorException("Create service operation %s#%s does not support %s as parameter.", className(service), operation.getName(), parameter.getType().getCollection());
 		}
 
-		String entityName = Strings.getSimpleName(parameter.getType().getName());
+		String entityName = Strings.simpleName(parameter.getType().getName());
 		StoreEntity entity = database.getStoreEntityByClassName(store.id(), entityName);
 		if (entity == null) {
 			throw new ValidatorException("Entity %s is not defined.", parameter.getType().getName());
@@ -119,7 +119,7 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 			throw new ValidatorException("Delete service operation %s#%s does not support %s as parameter.", className(service), operation.getName(), parameter.getType().getCollection());
 		}
 
-		String entityName = Strings.getSimpleName(parameter.getType().getName());
+		String entityName = Strings.simpleName(parameter.getType().getName());
 		StoreEntity entity = database.getStoreEntityByClassName(store.id(), entityName);
 		if (entity == null) {
 			throw new ValidatorException("Entity %s is not defined.", parameter.getType().getName());

@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -62,13 +63,11 @@ public class SourceTemplate {
 	}
 
 	private static void entity(VelocityContext context, Object... arguments) {
-		Params.EQ(arguments.length, 2, "Arguments length");
-		Params.isKindOf(arguments[0].getClass(), Store.class, "First argument");
-		Params.isKindOf(arguments[1].getClass(), StoreEntity.class, "Second argument");
+		Params.EQ(arguments.length, 1, "Arguments length");
+		Params.isKindOf(arguments[0].getClass(), StoreEntity.class, "Argument");
 
-		final Store store = (Store) arguments[0];
-		final StoreEntity entity = (StoreEntity) arguments[1];
-		context.put("entity", new StoreEntityTemplate(store, entity));
+		final StoreEntity entity = (StoreEntity) arguments[0];
+		context.put("entity", new StoreEntityTemplate(entity));
 	}
 
 	private static void service(VelocityContext context, Object... arguments) {
@@ -92,8 +91,9 @@ public class SourceTemplate {
 		final Store store = (Store) arguments[0];
 		@SuppressWarnings("unchecked")
 		final List<DataService> services = (List<DataService>) arguments[1];
+		
 		context.put("store", store);
-		context.put("services", services);
+		context.put("services", services.stream().map(service -> new DataServiceTemplate(store, service)).collect(Collectors.toList()));
 	}
 
 	private static void persistence(VelocityContext context, Object... arguments) {

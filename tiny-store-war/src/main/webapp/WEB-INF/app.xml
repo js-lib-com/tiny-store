@@ -2,11 +2,14 @@
 	<binding bind="Application" />
 	<binding bind="Context" />
 	<binding bind="Workspace" />
-	<binding bind="dao.Database" to="dao.DatabaseImpl" />
-	<binding bind="dao.MongoDB" />
 	<binding bind="MetaChangeListener" />
 	<binding bind="StoreEntityValidator" />
 	<binding bind="DataServiceValidator" />
 	<binding bind="ServiceOperationValidator" />
-	<binding bind="StoreUpdateListener" />
+
+	<binding bind="dao.Database" to="dao.DatabaseImpl" />
+	<binding bind="dao.MongoDB" />
+	<binding bind="dao.StoreUpdateListener" />
+	<binding bind="dao.StoreEntityUpdateListener" />
+	<binding bind="dao.DataServiceUpdateListener" />
 </app>

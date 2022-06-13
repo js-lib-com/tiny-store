@@ -38,7 +38,7 @@ public interface Database {
 	@Intercepted({ StoreEntityValidator.class, MetaChangeListener.class })
 	StoreEntity createStoreEntity(String storeId, StoreEntity entity);
 
-	@Intercepted({ StoreEntityValidator.class, MetaChangeListener.class })
+	@Intercepted({ StoreEntityValidator.class, StoreEntityUpdateListener.class, MetaChangeListener.class })
 	void updateStoreEntity(StoreEntity entity);
 
 	@Intercepted(MetaChangeListener.class)
@@ -57,7 +57,7 @@ public interface Database {
 	@Intercepted({ DataServiceValidator.class, MetaChangeListener.class })
 	DataService createDataService(String storeId, DataService service);
 
-	@Intercepted({ DataServiceValidator.class, MetaChangeListener.class })
+	@Intercepted({ DataServiceValidator.class, DataServiceUpdateListener.class, MetaChangeListener.class })
 	void updateDataService(DataService service);
 
 	@Intercepted(MetaChangeListener.class)

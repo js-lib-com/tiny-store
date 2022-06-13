@@ -46,13 +46,13 @@ public class SourceTemplateTest {
 		field.setDescription("Humble employee.");
 		
 		StoreEntity entity = new StoreEntity();
-		entity.setClassName("Call");
+		entity.setClassName("ro.gnotis.Call");
 		entity.setAlias("call");
 		entity.setDescription("Recorded calls.");
 		entity.setFields(Arrays.asList(identity, field));
 		
 		// when
-		sourceTemplate.generate(writer, store, entity);
+		sourceTemplate.generate(writer, entity);
 		
 		// then
 		System.out.println(writer);
@@ -69,7 +69,7 @@ public class SourceTemplateTest {
 		store.setPackageName("ro.gnotis");
 		
 		DataService service = new DataService();
-		service.setClassName("CallDAO");
+		service.setClassName("ro.gnotis.CallDAO");
 		
 		OperationParameter parameter = new OperationParameter();
 		parameter.setType(new TypeDef(String.class.getCanonicalName()));

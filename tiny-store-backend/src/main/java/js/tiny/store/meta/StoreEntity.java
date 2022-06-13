@@ -9,9 +9,7 @@ import js.tiny.store.dao.IPersistedObject;
 public class StoreEntity implements IPersistedObject {
 	private ObjectId id;
 	private String storeId;
-	private String packageName;
 
-	/** Entity simple class name. Qualified name is created from store package name and this simple name. */
 	private String className;
 	/** Name for table or collection storing this entity. */
 	private String alias;
@@ -34,14 +32,6 @@ public class StoreEntity implements IPersistedObject {
 
 	public void setStoreId(String storeId) {
 		this.storeId = storeId;
-	}
-
-	public String getPackageName() {
-		return packageName;
-	}
-
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
 	}
 
 	public String getClassName() {
