@@ -32,7 +32,9 @@ class Page {
 	}
 
 	getCompo(compoName) {
-		return this._compoSelect.get(compoName);
+		const compo = this._compoSelect.get(compoName);
+		compo.validator = null;
+		return compo;
 	}
 
 	_setObject(object) {

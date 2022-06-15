@@ -14,7 +14,7 @@
         <input name="restPath" placeholder="REST path" />
         <input name="gitURL" placeholder="Git URL" />
         <input name="mavenServer" placeholder="Maven server" required="true" />
-        <input name="packageName" placeholder="package" required="true" />
+        <input name="packageName" placeholder="package" required="true" pattern="^([a-z_]+\.)*[a-z_]+$" />
 
         <textarea name="databaseURL" placeholder="database connection" required="true"></textarea>
         <input name="databaseUser" placeholder="database user" required="true" />

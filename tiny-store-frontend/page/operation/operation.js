@@ -119,6 +119,7 @@ OperationPage = class extends Page {
             this._operation.exceptions.splice(this._exceptionsListView.getSelectedIndex(), 1);
             this._exceptionsListView.deleteSelectedRow();
             this._saveOperation();
+            Database.updateServiceOperation(this._operation);
         });
     }
 

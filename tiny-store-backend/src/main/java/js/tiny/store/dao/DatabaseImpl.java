@@ -76,6 +76,7 @@ public class DatabaseImpl implements Database {
 	@Override
 	public ServiceOperation createServiceOperation(DataService service, ServiceOperation operation) {
 		operation.setServiceId(service.id());
+		operation.setServiceClass(service.getClassName());
 		operation.setRestEnabled(service.isRestEnabled());
 		operation.setParameters(new ArrayList<>());
 		operation.setExceptions(new ArrayList<>());

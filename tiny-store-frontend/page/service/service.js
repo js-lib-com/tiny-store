@@ -54,7 +54,8 @@ ServicePage = class extends Page {
 
         dialog.edit(operation, operation => {
             Database.createServiceOperation(this._service, operation, operation => {
-                this._operationsView.addItem(operation);
+                //this._operationsView.addItem(operation);
+                location.assign(`operation.htm?${operation.id}`);
             });
         });
     }

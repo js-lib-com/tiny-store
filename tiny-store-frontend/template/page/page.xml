@@ -5,6 +5,7 @@
 
 	<head>
 		<script src="gen/js/tiny/store/dao/Database.js" />
+		<script src="gen/js/tiny/store/Validator.js" />
 		<script src="lib/opp.js"></script>
 		<script src="lib/object-view.js"></script>
 		<script src="lib/object-form.js"></script>

@@ -93,7 +93,7 @@ public class Workspace {
 		return store;
 	}
 
-	@Intercepted({ MetaChangeListener.class, StoreUpdateListener.class })
+	@Intercepted({ ChangeLogListener.class, StoreUpdateListener.class })
 	public void updateStore(Store store) {
 		store.setOwner("irotaru");
 		db.updateStore(store);
@@ -194,7 +194,7 @@ public class Workspace {
 		return entity;
 	}
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted(ChangeLogListener.class)
 	public DataService createDaoService(StoreEntity entity) throws IOException {
 		Store store = db.getStore(entity.getStoreId());
 

@@ -56,10 +56,6 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 
 	}
 
-	private String className(DataService service) {
-		return Strings.concat(store.getPackageName(), '.', service.getClassName());
-	}
-
 	private void assertCreateParameters(DataService service, ServiceOperation operation) throws ValidatorException {
 		List<OperationParameter> parameters = operation.getParameters();
 		if (parameters == null) {
@@ -68,18 +64,18 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		}
 
 		if (parameters.size() != 1) {
-			throw new ValidatorException("Create service operation %s#%s should have exactly one entity parameter.", className(service), operation.getName());
+			throw new ValidatorException("CREATE operation %s#%s should have exactly one entity parameter.", service.getClassName(), operation.getName());
 		}
 
 		OperationParameter parameter = parameters.get(0);
 		if (parameter.getType().getCollection() != null) {
-			throw new ValidatorException("Create service operation %s#%s does not support %s as parameter.", className(service), operation.getName(), parameter.getType().getCollection());
+			throw new ValidatorException("CREATE operation %s#%s does not support type '%s' as parameter.", service.getClassName(), operation.getName(), parameter.getType().getCollection());
 		}
 
 		String entityName = Strings.simpleName(parameter.getType().getName());
 		StoreEntity entity = database.getStoreEntityByClassName(store.id(), entityName);
 		if (entity == null) {
-			throw new ValidatorException("Entity %s is not defined.", parameter.getType().getName());
+			throw new ValidatorException("CREATE operation requires an entity. Provided parameter type '%s' does not designate a defined entity.", parameter.getType().getName());
 		}
 	}
 
@@ -90,7 +86,7 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		}
 
 		if (value.getType().getCollection() != null) {
-			throw new ValidatorException("Create service operation %s#%s does not support %s as return value.", service.getClassName(), operation.getName(), value.getType().getCollection());
+			throw new ValidatorException("CREATE operation %s#%s does not support type '%s' as return value.", service.getClassName(), operation.getName(), value.getType().getCollection());
 		}
 		if (value.getType().getName() == null) {
 			return;
@@ -99,7 +95,7 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		// at this point parameters are already validated
 		OperationParameter parameter = operation.getParameters().get(0);
 		if (!value.getType().equals(parameter.getType())) {
-			throw new ValidatorException("Create service operation %s#%s should return type %s.", service.getClassName(), operation.getName(), parameter.getType().getName());
+			throw new ValidatorException("CREATE operation %s#%s should return type '%s'.", service.getClassName(), operation.getName(), parameter.getType().getName());
 		}
 	}
 
@@ -111,18 +107,18 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		}
 
 		if (parameters.size() != 1) {
-			throw new ValidatorException("Delete service operation %s#%s should have exactly one entity parameter.", className(service), operation.getName());
+			throw new ValidatorException("DELETE operation %s#%s should have exactly one entity parameter.", service.getClassName(), operation.getName());
 		}
 
 		OperationParameter parameter = parameters.get(0);
 		if (parameter.getType().getCollection() != null) {
-			throw new ValidatorException("Delete service operation %s#%s does not support %s as parameter.", className(service), operation.getName(), parameter.getType().getCollection());
+			throw new ValidatorException("DELETE operation %s#%s does not support type '%s' as parameter.", service.getClassName(), operation.getName(), parameter.getType().getCollection());
 		}
 
 		String entityName = Strings.simpleName(parameter.getType().getName());
 		StoreEntity entity = database.getStoreEntityByClassName(store.id(), entityName);
 		if (entity == null) {
-			throw new ValidatorException("Entity %s is not defined.", parameter.getType().getName());
+			throw new ValidatorException("DELETE operation requires an entity. Provided parameter type '%s' does not designate a defined entity.", parameter.getType().getName());
 		}
 	}
 
@@ -133,7 +129,7 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		}
 
 		if (value.getType().getName() != null || value.getType().getCollection() != null) {
-			throw new ValidatorException("Delete service operation %s#%s should be void.", className(service), operation.getName());
+			throw new ValidatorException("DELETE operation %s#%s should be void.", service.getClassName(), operation.getName());
 		}
 	}
 
@@ -156,7 +152,7 @@ public class ServiceOperationValidator implements PreInvokeInterceptor {
 		for (int i = 0; i < operations.size(); i++) {
 			for (int j = i + 1; j < operations.size(); j++) {
 				if (operations.get(i).getName().equals(operations.get(j).getName())) {
-					throw new ValidatorException("Data service operation %s#%s already existing.", className(service), operations.get(i).getName());
+					throw new ValidatorException("Data service operation %s#%s already existing.", service.getClassName(), operations.get(i).getName());
 				}
 			}
 		}

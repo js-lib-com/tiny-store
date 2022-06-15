@@ -2,8 +2,9 @@
 	<binding bind="Application" />
 	<binding bind="Context" />
 	<binding bind="Workspace" />
-	<binding bind="MetaChangeListener" />
-	<binding bind="StoreEntityValidator" />
+	<binding bind="Validator" />
+	
+	<binding bind="ChangeLogListener" />
 	<binding bind="DataServiceValidator" />
 	<binding bind="ServiceOperationValidator" />
 

@@ -2,6 +2,8 @@ class SideDialog extends HTMLElement {
     constructor() {
         super();
 
+        this._validator = null;
+
         this._autoClose = false;
 
         this._titleView = this.getElementsByTagName("h2")[0];
@@ -21,6 +23,20 @@ class SideDialog extends HTMLElement {
         negativeButton.addEventListener("click", this._onNegativeButton.bind(this));
 
         this._registeredHandlers = [];
+    }
+
+    /**
+     * @param {String} title
+     */
+    set title(title) {
+        this._titleView.textContent = title;
+    }
+
+    /**
+     * @param {Function} validator
+     */
+    set validator(validator) {
+        this._validator = validator;
     }
 
     setTitle(title) {
@@ -81,7 +97,20 @@ class SideDialog extends HTMLElement {
             if (!this._form.isValid()) {
                 return;
             }
-            this._callback(this._form.getObject(this._object));
+            if (this._validator != null) {
+                this._validator(this._form.getObject(), fail => {
+                    if (fail) {
+                        alert(fail);
+                        return;
+                    }
+                    this._callback(this._form.getObject(this._object));
+                    this._onNegativeButton();
+                });
+                return;
+            }
+            else {
+                this._callback(this._form.getObject(this._object));
+            }
         }
         else {
             this._callback();

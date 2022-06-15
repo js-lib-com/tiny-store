@@ -7,10 +7,7 @@ StorePage = class extends Page {
 		this._entitiesView = document.getElementById("entities-list");
 		this._entitiesView.addEventListener("select", this._onEntitySelect.bind(this));
 
-		const storeId = location.search.substring(1);
-		Database.getStore(storeId, this._onStoreLoaded.bind(this));
-		Database.getStoreServices(storeId, services => this._servicesView.setItems(services));
-		Database.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
+		this._loadStore();
 
 		this._sideMenu = this.getSideMenu();
 		this._sideMenu.setLink("index-page", () => `index.htm`);
@@ -34,6 +31,22 @@ StorePage = class extends Page {
 		this._onEntitySelect({ detail: { selected: false } });
 	}
 
+	_loadStore(delay) {
+		const storeId = location.search.substring(1);
+		Database.getStore(storeId, this._onStoreLoaded.bind(this));
+		
+		if (typeof delay != "undefined") {
+			setTimeout(() => {
+				Database.getStoreServices(storeId, services => this._servicesView.setItems(services));
+				Database.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
+			}, delay);
+			return;
+		}
+
+		Database.getStoreServices(storeId, services => this._servicesView.setItems(services));
+		Database.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
+	}
+
 	_onStoreLoaded(store) {
 		this._store = store;
 		this._storeId = store.id;
@@ -52,7 +65,7 @@ StorePage = class extends Page {
 		const dialog = this.getCompo("store-form");
 		dialog.setHandler("test", this._onTestStore.bind(this));
 		dialog.edit(this._store, store => {
-			Workspace.updateStore(store, () => this._setObject(store));
+			Workspace.updateStore(store, () => this._loadStore(2000));
 		});
 	}
 
@@ -72,6 +85,7 @@ StorePage = class extends Page {
 		dialog.setTitle("Create Service");
 
 		const service = {
+			className: `${this._store.packageName}.`,
 			restEnabled: this._store.restPath != null
 		};
 
@@ -122,14 +136,17 @@ StorePage = class extends Page {
 	_onCreateEntity() {
 		const dialog = this.getCompo("entity-form");
 		dialog.setTitle("Create Entity");
-		
+
 		dialog.setHandler("import", entity => {
 			Workspace.importStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});
 		}, { autoClose: true });
 
-		dialog.open(entity => {
+		const entity = {
+			className: `${this._store.packageName}.`
+		};
+		dialog.edit(entity, entity => {
 			Database.createStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
 			});

@@ -11,13 +11,12 @@ import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
-import js.tiny.store.tool.Strings;
 
-public class MetaChangeListener implements PostInvokeInterceptor {
+public class ChangeLogListener implements PostInvokeInterceptor {
 	private final Database dao;
 
 	@Inject
-	public MetaChangeListener(Database dao) {
+	public ChangeLogListener(Database dao) {
 		this.dao = dao;
 	}
 
@@ -26,8 +25,7 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 		String methodName = managedMethod.getName();
 
 		String storeId = storeId(methodName, arguments);
-		Store store = dao.getStore(storeId);
-		String className = Strings.concat(store.getPackageName(), '.', simpleName(methodName, arguments, value));
+		String className = className(methodName, arguments, value);
 		String memberName = getMemberName(arguments);
 
 		ChangeLog changeLog = new ChangeLog();
@@ -67,7 +65,7 @@ public class MetaChangeListener implements PostInvokeInterceptor {
 		throw new IllegalArgumentException(String.format("Invalid signature for method %s#%s. Cannot infer store ID from arguments.", Workspace.class.getCanonicalName(), methodName));
 	}
 
-	private String simpleName(String methodName, Object[] arguments, Object value) {
+	private String className(String methodName, Object[] arguments, Object value) {
 		if (arguments.length == 0) {
 			throw new IllegalArgumentException(String.format("Missing argument on method %s#%s.", Workspace.class.getCanonicalName(), methodName));
 		}

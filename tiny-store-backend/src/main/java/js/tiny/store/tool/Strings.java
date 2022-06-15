@@ -41,6 +41,10 @@ public class Strings extends js.util.Strings {
 		return concat(simpleName(type.getCollection()), '<', simpleName(type.getName()), '>');
 	}
 
+	public static String memberName(StoreEntity entity, EntityField field) {
+		return concat(entity.getClassName(), '#', field.getName());
+	}
+
 	public static boolean replacePackage(TypeDef type, String oldPackage, String newPackage) {
 		if (oldPackage.equals(packageName(type.getName()))) {
 			type.setName(qualifiedName(newPackage, type.getName()));
@@ -138,7 +142,7 @@ public class Strings extends js.util.Strings {
 		if (alias != null) {
 			return alias;
 		}
-		return entity.getClassName();
+		return simpleName(entity.getClassName());
 	}
 
 	public static String columnName(EntityField field) {
@@ -147,5 +151,9 @@ public class Strings extends js.util.Strings {
 			return alias;
 		}
 		return field.getName();
+	}
+
+	public static String columnName(String tableName, String columnName) {
+		return concat(tableName, ':', columnName);
 	}
 }

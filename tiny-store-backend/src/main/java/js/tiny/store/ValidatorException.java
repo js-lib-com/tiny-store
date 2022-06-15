@@ -1,6 +1,6 @@
 package js.tiny.store;
 
-public class ValidatorException extends Exception {
+public class ValidatorException extends RuntimeException {
 	private static final long serialVersionUID = 2495300801450321825L;
 
 	public ValidatorException() {

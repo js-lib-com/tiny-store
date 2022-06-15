@@ -36,7 +36,8 @@ EntityPage = class extends Page {
 
     _onEditEntity() {
         const dialog = this.getCompo("entity-form");
-        dialog.setTitle("Edit Entity");
+        dialog.title = "Edit Entity";
+        dialog.validator = (entity, callback) => Validator.assertEditEntity(this._entity, entity, callback);
 
         dialog.setHandler("import", entity => {
             Workspace.importStoreEntity(this._storeId, entity, entity => {
@@ -51,7 +52,8 @@ EntityPage = class extends Page {
 
     _onCreateField() {
         const dialog = this.getCompo("field-form");
-        dialog.setTitle("Create Field");
+        dialog.title = "Create Field";
+        dialog.validator = (field, callback) => Validator.assertCreateField(this._entity, field, callback);
 
         dialog.open(field => {
             this._entity.fields.push(field);
@@ -61,7 +63,9 @@ EntityPage = class extends Page {
 
     _onEditField() {
         const dialog = this.getCompo("field-form");
-        dialog.setTitle("Edit Field");
+        dialog.title = "Edit Field";
+        const fieldIndex = this._fieldsView.getSelectedIndex();
+        dialog.validator = (field, callback) => Validator.assertEditField(this._entity, fieldIndex, field, callback);
 
         dialog.edit(this._fieldsView.getSelectedItem(), field => {
             this._entity.fields[this._fieldsView.getSelectedIndex()] = field;

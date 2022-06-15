@@ -7,10 +7,9 @@ import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.ChangeLog;
+import js.tiny.store.ChangeLogListener;
 import js.tiny.store.DataServiceValidator;
-import js.tiny.store.MetaChangeListener;
 import js.tiny.store.ServiceOperationValidator;
-import js.tiny.store.StoreEntityValidator;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -35,13 +34,13 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted({ StoreEntityValidator.class, MetaChangeListener.class })
+	@Intercepted({ ChangeLogListener.class })
 	StoreEntity createStoreEntity(String storeId, StoreEntity entity);
 
-	@Intercepted({ StoreEntityValidator.class, StoreEntityUpdateListener.class, MetaChangeListener.class })
+	@Intercepted({ StoreEntityUpdateListener.class, ChangeLogListener.class })
 	void updateStoreEntity(StoreEntity entity);
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted(ChangeLogListener.class)
 	void deleteStoreEntity(StoreEntity entity);
 
 	StoreEntity getStoreEntity(String entityId);
@@ -54,13 +53,13 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted({ DataServiceValidator.class, MetaChangeListener.class })
+	@Intercepted({ DataServiceValidator.class, ChangeLogListener.class })
 	DataService createDataService(String storeId, DataService service);
 
-	@Intercepted({ DataServiceValidator.class, DataServiceUpdateListener.class, MetaChangeListener.class })
+	@Intercepted({ DataServiceValidator.class, DataServiceUpdateListener.class, ChangeLogListener.class })
 	void updateDataService(DataService service);
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted(ChangeLogListener.class)
 	void deleteDataService(DataService service);
 
 	DataService getDataService(String serviceId);
@@ -73,18 +72,18 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted({ ServiceOperationValidator.class, MetaChangeListener.class })
+	@Intercepted({ ServiceOperationValidator.class, ChangeLogListener.class })
 	ServiceOperation createOperation(ServiceOperation operation);
 
-	@Intercepted({ ServiceOperationValidator.class, MetaChangeListener.class })
+	@Intercepted({ ServiceOperationValidator.class, ChangeLogListener.class })
 	ServiceOperation createServiceOperation(DataService service, ServiceOperation operation);
 
-	@Intercepted({ ServiceOperationValidator.class, MetaChangeListener.class })
+	@Intercepted({ ServiceOperationValidator.class, ChangeLogListener.class })
 	void updateServiceOperation(ServiceOperation operation);
 
 	void updateOperationsServiceClass(String serviceId, String serviceClass);
 
-	@Intercepted(MetaChangeListener.class)
+	@Intercepted(ChangeLogListener.class)
 	void deleteServiceOperation(ServiceOperation operation);
 
 	List<ServiceOperation> getServiceOperations(String serviceId);

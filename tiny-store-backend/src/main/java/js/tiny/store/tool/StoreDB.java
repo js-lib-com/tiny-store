@@ -23,12 +23,12 @@ public class StoreDB implements AutoCloseable {
 		datasource.setPassword(store.getDatabasePassword());
 	}
 
-	public void sql(WorkUnit workUnit) throws Exception {
+	public void sql(WorkUnit workUnit) throws SQLException {
 		workUnit.execute(datasource.getConnection());
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		try {
 			DataSources.destroy(datasource);
 		} catch (SQLException e) {

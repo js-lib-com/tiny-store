@@ -35,6 +35,10 @@ table th {
     color: var(--th-text-color);
 }
 
+table th.large {
+    width: 100%;
+}
+
 table td {
     vertical-align: top;
     color: var(--td-text-color);
@@ -42,7 +46,6 @@ table td {
 
 table td.large {
     width: 100%;
-    vertical-align: top;
     white-space: normal;
 }
 
