@@ -206,9 +206,9 @@ public class Workspace {
 		DataService createdService = db.createDataService(entity.getStoreId(), service);
 
 		Map<String, String> variables = new HashMap<>();
-		variables.put("entity-class", Strings.concat(store.getPackageName(), '.', entity.getClassName()));
-		variables.put("entity-name", entity.getClassName());
-		variables.put("entity-parameter", entity.getClassName().toLowerCase());
+		variables.put("entity-class", entity.getClassName());
+		variables.put("entity-name", Strings.simpleName(entity.getClassName()));
+		variables.put("entity-parameter", Strings.simpleName(entity.getClassName()).toLowerCase());
 		variables.put("entity-id-type", Strings.parameterizedName(entity.getFields().get(0).getType()));
 		String operationsJson = Strings.injectVariables(Strings.load(Classes.getResourceAsReader("/dao-operations.json")), variables);
 
