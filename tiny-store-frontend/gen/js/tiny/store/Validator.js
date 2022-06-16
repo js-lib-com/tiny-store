@@ -1,9 +1,27 @@
 Validator = {
+	 assertCreateEntity: function(storeId, entity) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/Validator/assertCreateEntity.rmi";
+		var parameters = [storeId, entity];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	 assertEditEntity: function(model, entity) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;
 		var url = "js/tiny/store/Validator/assertEditEntity.rmi";
 		var parameters = [model, entity];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 allowDeleteEntity: function(entity) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/Validator/allowDeleteEntity.rmi";
+		var parameters = [entity];
 
 		this.fetch(url, parameters, __callback__, __scope__);
 	},

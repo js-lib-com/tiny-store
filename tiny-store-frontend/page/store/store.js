@@ -26,8 +26,6 @@ StorePage = class extends Page {
 
 		this._actionBar.setHandler("create-dao", this._onCreateDAO);
 		this._actionBar.setHandler("create-entity", this._onCreateEntity);
-		this._actionBar.setHandler("edit-entity", this._onEditEntity);
-		this._actionBar.setHandler("delete-entity", this._onDeleteEntity);
 		this._onEntitySelect({ detail: { selected: false } });
 	}
 
@@ -128,14 +126,13 @@ StorePage = class extends Page {
 		this._sideMenu.enable("entity-page", selected);
 		this._actionBar.show("create-dao", selected);
 		this._actionBar.show("create-entity", !selected);
-		this._actionBar.show("edit-entity", selected);
-		this._actionBar.show("delete-entity", selected);
 		this._actionBar.show("build-project", !selected);
 	}
 
 	_onCreateEntity() {
 		const dialog = this.getCompo("entity-form");
-		dialog.setTitle("Create Entity");
+		dialog.title = "Create Entity";
+        dialog.validator = (entity, callback) => Validator.assertCreateEntity(this._store.id, entity, callback);
 
 		dialog.setHandler("import", entity => {
 			Workspace.importStoreEntity(this._store.id, entity, entity => {
@@ -149,34 +146,6 @@ StorePage = class extends Page {
 		dialog.edit(entity, entity => {
 			Database.createStoreEntity(this._store.id, entity, entity => {
 				this._entitiesView.addItem(entity);
-			});
-		});
-	}
-
-	_onEditEntity() {
-		const dialog = this.getCompo("entity-form");
-		dialog.setTitle("Edit Entity");
-
-		dialog.setHandler("import", entity => {
-			Workspace.importStoreEntity(this._store.id, entity, entity => {
-				this._entitiesView.setSelectedItem(entity);
-			});
-		}, { autoClose: true });
-
-		dialog.edit(this._entitiesView.getSelectedItem(), entity => {
-			Database.updateStoreEntity(entity, () => {
-				this._entitiesView.setSelectedItem(entity);
-			});
-		});
-	}
-
-	_onDeleteEntity() {
-		this._show("entity-delete", true);
-		const dialog = this.getCompo("entity-delete");
-		dialog.open(() => {
-			const entity = this._entitiesView.getSelectedItem();
-			Database.deleteStoreEntity(entity, () => {
-				this._entitiesView.deleteSelectedRow();
 			});
 		});
 	}

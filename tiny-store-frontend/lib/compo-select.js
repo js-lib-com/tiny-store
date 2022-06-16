@@ -18,14 +18,21 @@
         }
 
         get(compoName) {
+            const compo = this._compos[compoName];
+            if (!compo) {
+                throw `Missing component ${compoName}.`;
+            }
+
+            if (compo.classList.contains("overlapped")) {
+                compo.classList.remove("hidden");
+                return compo;
+            }
+
             if (this._selectedCompo) {
                 this._selectedCompo.classList.add("hidden");
             }
 
-            this._selectedCompo = this._compos[compoName];
-            if (!this._selectedCompo) {
-                throw `Missing component ${compoName}.`;
-            }
+            this._selectedCompo = compo;
 
             this._selectedCompo.classList.remove("hidden");
             return this._selectedCompo;

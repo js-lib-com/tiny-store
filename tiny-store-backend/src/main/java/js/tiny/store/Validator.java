@@ -14,7 +14,10 @@ import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.tiny.store.dao.Database;
+import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
+import js.tiny.store.meta.OperationParameter;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
@@ -33,6 +36,21 @@ public class Validator {
 		this.db = db;
 	}
 
+	public String assertCreateEntity(String storeId, StoreEntity entity) {
+		StoreEntity existingEntity = db.getStoreEntityByClassName(storeId, entity.getClassName());
+		if (existingEntity != null) {
+			return format("Store entity %s already existing.", entity.getClassName());
+		}
+
+		try {
+			assertEntityTable(storeId, entity);
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+
+		return null;
+	}
+
 	public String assertEditEntity(StoreEntity model, StoreEntity entity) {
 		StoreEntity existingEntity = db.getStoreEntityByClassName(model.getStoreId(), entity.getClassName());
 		if (existingEntity != null) {
@@ -42,7 +60,17 @@ public class Validator {
 			}
 		}
 
-		Store store = db.getStore(model.getStoreId());
+		try {
+			assertEntityTable(model.getStoreId(), entity);
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+
+		return null;
+	}
+
+	private void assertEntityTable(String storeId, StoreEntity entity) throws SQLException {
+		Store store = db.getStore(storeId);
 		try (StoreDB storeDB = new StoreDB(store)) {
 			storeDB.sql(connection -> {
 				String tableName = Strings.tableName(entity);
@@ -52,10 +80,22 @@ public class Validator {
 					throw new Fail("Missing table %s required by entity %s.", tableName, entity.getClassName());
 				}
 			});
-		} catch (Exception e) {
-			return e.getMessage();
 		}
+	}
 
+	public String allowDeleteEntity(StoreEntity entity) {
+		for (DataService service : db.getStoreServices(entity.getStoreId())) {
+			for (ServiceOperation operation : db.getServiceOperations(service.id())) {
+				if (entity.getClassName().equals(operation.getValue().getType().getName())) {
+					return String.format("Entity is used by service %s as operation return value.", service.getClassName());
+				}
+				for (OperationParameter parameter : operation.getParameters()) {
+					if(entity.getClassName().equals(parameter.getType().getName())) {
+						return String.format("Entity is used by service %s as operation parameter.", service.getClassName());
+					}
+				}
+			}
+		}
 		return null;
 	}
 
@@ -67,7 +107,7 @@ public class Validator {
 		}
 
 		try {
-			assertColumn(model, field);
+			assertFieldColumn(model, field);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
@@ -86,14 +126,14 @@ public class Validator {
 		}
 
 		try {
-			assertColumn(model, field);
+			assertFieldColumn(model, field);
 		} catch (Exception e) {
 			return e.getMessage();
 		}
 		return null;
 	}
 
-	private void assertColumn(StoreEntity entity, EntityField field) throws SQLException {
+	private void assertFieldColumn(StoreEntity entity, EntityField field) throws SQLException {
 		Store store = db.getStore(entity.getStoreId());
 		try (StoreDB storeDB = new StoreDB(store)) {
 			storeDB.sql(connection -> {

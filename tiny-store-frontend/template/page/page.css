@@ -87,7 +87,6 @@ body>.side-dialogs {
     grid-column: 3;
     grid-row: 2;
     border-left: solid 1px lightgray;
-    padding: var(--side-dialog-padding);
     overflow: hidden;
     border-bottom: solid 1px lightgray;
 }

@@ -2,7 +2,7 @@
 
     <div id="page-caption" w:content="caption">
         <div class="logo"></div>
-        <h1><span>Repository Entity:</span> <span data-text="className"></span></h1>
+        <h1><span>Store Entity:</span> <span data-text="className"></span></h1>
         <p data-text="description"></p>
     </div>
 
@@ -14,6 +14,7 @@
 
     <action-bar w:content="action-bar">
         <li id="edit-entity"><img src="@image/edit" /><label>Edit Entity</label></li>
+		<li id="delete-entity"><img src="@image/delete" /><label>Delete Entity</label></li>
         <li id="create-field"><img src="@image/add" /><label>Create Field</label></li>
         <li id="edit-field" class="hidden"><img src="@image/edit" /><label>Edit Field</label></li>
         <li id="delete-field" class="hidden"><img src="@image/delete" /><label>Delete Field</label></li>
@@ -33,7 +34,9 @@
 
     <compo-select w:content="side-dialogs">
 		<side-dialog w:compo="template/page/commit-form" />
-        <side-dialog w:compo="page/store/entity-form" />
+		<side-alert w:compo="template/page/side-alert" />
+		<side-dialog w:compo="page/store/entity-form" />
+		<side-dialog w:compo="page/entity/entity-delete" />
         <side-dialog w:compo="page/entity/field-form" />
         <side-dialog w:compo="page/entity/field-delete" />
     </compo-select>

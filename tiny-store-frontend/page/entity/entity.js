@@ -13,6 +13,7 @@ EntityPage = class extends Page {
 
         this._actionBar = this.getActionBar("EntityPage");
         this._actionBar.setHandler("edit-entity", this._onEditEntity);
+        this._actionBar.setHandler("delete-entity", this._onDeleteEntity);
 
         this._actionBar.setHandler("create-field", this._onCreateField);
         this._actionBar.setHandler("edit-field", this._onEditField);
@@ -47,6 +48,20 @@ EntityPage = class extends Page {
 
         dialog.edit(this._entity, entity => {
             Database.updateStoreEntity(entity, () => this._setObject(entity));
+        });
+    }
+
+    _onDeleteEntity() {
+        Validator.allowDeleteEntity(this._entity, fail => {
+            if (fail) {
+                this.alert("Delete Entity", `Cannot delete entity ${this._entity.className}.\r\n${fail}`);
+                return;
+            }
+
+            const dialog = this.getCompo("entity-delete");
+            dialog.open(() => {
+                Database.deleteStoreEntity(this._entity, () => location.assign(`store.htm?${this._storeId}`));
+            });
         });
     }
 

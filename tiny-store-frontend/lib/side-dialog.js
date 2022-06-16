@@ -3,6 +3,7 @@ class SideDialog extends HTMLElement {
         super();
 
         this._validator = null;
+        this._alert = alert;
 
         this._autoClose = false;
 
@@ -23,6 +24,13 @@ class SideDialog extends HTMLElement {
         negativeButton.addEventListener("click", this._onNegativeButton.bind(this));
 
         this._registeredHandlers = [];
+    }
+
+    /**
+     * @param {Function} alert system alert function.
+     */
+    set alert(alert) {
+        this._alert = alert;
     }
 
     /**
@@ -97,10 +105,10 @@ class SideDialog extends HTMLElement {
             if (!this._form.isValid()) {
                 return;
             }
-            if (this._validator != null) {
+            if (this._validator) {
                 this._validator(this._form.getObject(), fail => {
                     if (fail) {
-                        alert(fail);
+                        this._alert(fail);
                         return;
                     }
                     this._callback(this._form.getObject(this._object));
@@ -113,6 +121,17 @@ class SideDialog extends HTMLElement {
             }
         }
         else {
+            if (this._validator) {
+                this._validator(fail => {
+                    if (fail) {
+                        alert(fail);
+                        return;
+                    }
+                    this._callback();
+                    this._onNegativeButton();
+                });
+                return;
+            }
             this._callback();
         }
         this._onNegativeButton();

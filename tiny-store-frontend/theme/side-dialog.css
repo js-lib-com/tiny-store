@@ -3,6 +3,7 @@ side-dialog,
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: var(--side-dialog-padding);
     overflow-y: auto;
 }
 
