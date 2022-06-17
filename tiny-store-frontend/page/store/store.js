@@ -105,12 +105,7 @@ StorePage = class extends Page {
 		const dialog = this.getCompo("entity-form");
 		dialog.title = "Create Entity";
 		dialog.validator = (entity, callback) => Validator.assertCreateEntity(this._store.id, entity, callback);
-
-		dialog.setHandler("import", entity => {
-			Workspace.importStoreEntity(this._store.id, entity, entity => {
-				this._entitiesView.addItem(entity);
-			});
-		}, { autoClose: true });
+		dialog.setHandler("import", this._onImportEntity.bind(this), { autoClose: true });
 
 		const entity = {
 			className: `${this._store.packageName}.`
@@ -122,8 +117,14 @@ StorePage = class extends Page {
 		});
 	}
 
+	_onImportEntity(entity) {
+		Workspace.importStoreEntity(this._store.id, entity, entity => {
+			this._entitiesView.addItem(entity);
+		});
+	}
+
 	_onBuildProject() {
-		Workspace.buildProject(this._store.id, result => alert(JSON.stringify(result)));
+		Workspace.buildProject(this._store.id, this.alert);
 	}
 };
 

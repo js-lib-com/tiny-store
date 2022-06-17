@@ -33,7 +33,6 @@ class Page {
 
 	getCompo(compoName) {
 		const compo = this._compoSelect.get(compoName);
-		compo.validator = null;
 		compo.alert = this.alert.bind(this);
 		return compo;
 	}
@@ -78,7 +77,11 @@ class Page {
 		else {
 			title = "System Alert";
 		}
-		this.getCompo("side-alert").title(title).show(message);
+
+		if(typeof message != "string") {
+			message = JSON.stringify(message);
+		}
+		this.getCompo("side-alert").title(title).message(message);
 	}
 };
 

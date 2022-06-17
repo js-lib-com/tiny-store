@@ -23,18 +23,18 @@
                 throw `Missing component ${compoName}.`;
             }
 
-            if (compo.classList.contains("overlapped")) {
-                compo.classList.remove("hidden");
+            if (compo.overlapped) {
+                compo.show();
                 return compo;
             }
 
             if (this._selectedCompo) {
-                this._selectedCompo.classList.add("hidden");
+                this._selectedCompo.close();
             }
 
             this._selectedCompo = compo;
 
-            this._selectedCompo.classList.remove("hidden");
+            this._selectedCompo.show();
             return this._selectedCompo;
         }
     }

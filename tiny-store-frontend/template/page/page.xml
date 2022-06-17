@@ -15,7 +15,7 @@
 		<script src="lib/table-view.js"></script>
 		<script src="lib/bread-crumbs.js"></script>
 		<script src="lib/compo-select.js"></script>
-		<script src="template/page/side-alert.js"></script>
+		<script src="lib/side-alert.js"></script>
 		<script src="template/page/commit-dialog.js"></script>
 	</head>
 </template>

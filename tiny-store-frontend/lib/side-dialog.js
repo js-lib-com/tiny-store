@@ -3,8 +3,7 @@ class SideDialog extends HTMLElement {
         super();
 
         this._validator = null;
-        this._alert = alert;
-
+        this._alert = null;
         this._autoClose = false;
 
         this._titleView = this.getElementsByTagName("h2")[0];
@@ -24,6 +23,16 @@ class SideDialog extends HTMLElement {
         negativeButton.addEventListener("click", this._onNegativeButton.bind(this));
 
         this._registeredHandlers = [];
+    }
+
+    show() {
+        this.classList.remove("hidden");
+    }
+
+    close() {
+        this._validator = null;
+        this._autoClose = false;
+        this.classList.add("hidden");
     }
 
     /**
@@ -47,6 +56,17 @@ class SideDialog extends HTMLElement {
         this._validator = validator;
     }
 
+    /**
+     * Set custom button handler for click event. Function should have a single argument,
+     * namely the form data object.
+     * 
+     * Configuration object: 
+     * - autoClose: boolean flag, when true close dialog after button handler execution.
+     *  
+     * @param {String} buttonName button name,
+     * @param {Function} handler button click handler,
+     * @param {Object} config configuration object.
+     */
     setHandler(buttonName, handler, config) {
         this._autoClose = typeof config != "undefined" && config.autoClose;
         // ensure handler is registered only once
@@ -61,17 +81,16 @@ class SideDialog extends HTMLElement {
         this._registeredHandlers.push(buttonName);
 
         button.addEventListener("click", event => {
-            if (this._form.isValid()) {
-                handler(this._form.getObject(this._object));
+            this._getObject(object => {
+                handler(object);
                 if (this._autoClose) {
-                    this._onNegativeButton();
+                    this.close();
                 }
-            }
+            });
         });
     }
 
     open(callback) {
-        this.classList.remove("hidden");
         this._callback = callback;
         this._object = {};
 
@@ -81,7 +100,6 @@ class SideDialog extends HTMLElement {
     }
 
     edit(object, callback) {
-        this.classList.remove("hidden");
         this._callback = callback;
         this._object = object;
 
@@ -97,45 +115,49 @@ class SideDialog extends HTMLElement {
     }
 
     _onPositiveButton() {
-        if (this._form) {
-            if (!this._form.isValid()) {
-                return;
-            }
-            if (this._validator) {
-                this._validator(this._form.getObject(), fail => {
-                    if (fail) {
-                        this._alert(fail);
-                        return;
-                    }
-                    this._callback(this._form.getObject(this._object));
-                    this._onNegativeButton();
-                });
-                return;
-            }
-            else {
-                this._callback(this._form.getObject(this._object));
-            }
-        }
-        else {
-            if (this._validator) {
-                this._validator(fail => {
-                    if (fail) {
-                        alert(fail);
-                        return;
-                    }
-                    this._callback();
-                    this._onNegativeButton();
-                });
-                return;
-            }
-            this._callback();
-        }
-        this._onNegativeButton();
+        this._getObject(object => {
+            this._callback(object);
+            this.close();
+        });
     }
 
     _onNegativeButton() {
-        this._autoClose = false;
-        this.classList.add("hidden");
+        this.close();
+    }
+
+    _getObject(callback) {
+        if (this._form && !this._form.isValid()) {
+            return;
+        }
+
+        function invoker(callback) {
+            if (this._form) {
+                callback(this._form.getObject(this._object));
+            }
+            else {
+                callback();
+            }
+        }
+
+        if (!this._validator) {
+            invoker.call(this, callback);
+            return;
+        }
+
+        const parameters = [];
+        if (this._form) {
+            parameters.push(this._form.getObject());
+        }
+        parameters.push(fail => {
+            if (fail) {
+                this._alert(fail);
+            }
+            else {
+                invoker.call(this, callback);
+            }
+        });
+
+        this._validator.apply(this, parameters);
     }
 }
 

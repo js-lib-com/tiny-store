@@ -16,6 +16,21 @@
         }
 
         /**
+         * Returns true if this side dialog should be displayed over currently opened dialog, if any.
+         * @returns {Boolean} always true.
+         */
+        get overlapped() {
+            return true;
+        }
+
+        /**
+         * Side dialog life cycle invoked by component selector when need to render the component visible.
+         */
+        show() {
+            this.classList.remove("hidden");
+        }
+
+        /**
          * @param {String} title side alert title.
          * @returns {SideAlert} this object.
          */
@@ -27,7 +42,7 @@
         /**
          * @param {String} message multiline message; uses '\r\n' as line separator.
          */
-        show(message) {
+        message(message) {
             message.split("\r\n").forEach(line => { this._messageView.innerHTML += `<p>${line}</p>\r\n` });
         }
 
