@@ -20,8 +20,6 @@ StorePage = class extends Page {
 		this._actionBar.setHandler("build-project", this._onBuildProject);
 
 		this._actionBar.setHandler("create-service", this._onCreateService);
-		this._actionBar.setHandler("edit-service", this._onEditService);
-		this._actionBar.setHandler("delete-service", this._onDeleteService);
 		this._onServiceSelect({ detail: { selected: false } });
 
 		this._actionBar.setHandler("create-dao", this._onCreateDAO);
@@ -32,7 +30,7 @@ StorePage = class extends Page {
 	_loadStore(delay) {
 		const storeId = location.search.substring(1);
 		Database.getStore(storeId, this._onStoreLoaded.bind(this));
-		
+
 		if (typeof delay != "undefined") {
 			setTimeout(() => {
 				Database.getStoreServices(storeId, services => this._servicesView.setItems(services));
@@ -54,9 +52,6 @@ StorePage = class extends Page {
 	_onServiceSelect(event) {
 		const selected = event.detail.selected;
 		this._sideMenu.enable("service-page", selected);
-		this._actionBar.show("create-service", !selected);
-		this._actionBar.show("edit-service", selected);
-		this._actionBar.show("delete-service", selected);
 	}
 
 	_onEditStore() {
@@ -80,7 +75,7 @@ StorePage = class extends Page {
 
 	_onCreateService() {
 		const dialog = this.getCompo("service-form");
-		dialog.setTitle("Create Service");
+		dialog.title = "Create Service";
 
 		const service = {
 			className: `${this._store.packageName}.`,
@@ -100,39 +95,16 @@ StorePage = class extends Page {
 		});
 	}
 
-	_onEditService() {
-		const dialog = this.getCompo("service-form");
-		dialog.setTitle("Edit Service");
-
-		dialog.edit(this._servicesView.getSelectedItem(), service => {
-			Database.updateDataService(service, () => {
-				this._servicesView.setSelectedItem(service);
-			});
-		});
-	}
-
-	_onDeleteService() {
-		const dialog = this.getCompo("service-delete");
-		dialog.open(() => {
-			const service = this._servicesView.getSelectedItem();
-			Database.deleteDataService(service, () => {
-				this._servicesView.deleteSelectedRow();
-			});
-		});
-	}
-
 	_onEntitySelect(event) {
 		const selected = event.detail.selected;
 		this._sideMenu.enable("entity-page", selected);
 		this._actionBar.show("create-dao", selected);
-		this._actionBar.show("create-entity", !selected);
-		this._actionBar.show("build-project", !selected);
 	}
 
 	_onCreateEntity() {
 		const dialog = this.getCompo("entity-form");
 		dialog.title = "Create Entity";
-        dialog.validator = (entity, callback) => Validator.assertCreateEntity(this._store.id, entity, callback);
+		dialog.validator = (entity, callback) => Validator.assertCreateEntity(this._store.id, entity, callback);
 
 		dialog.setHandler("import", entity => {
 			Workspace.importStoreEntity(this._store.id, entity, entity => {

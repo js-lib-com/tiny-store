@@ -52,7 +52,7 @@ OperationPage = class extends Page {
 
     _onAddParameter() {
         const dialog = this.getCompo("parameter-form");
-        dialog.setTitle("Create Parameter");
+        dialog.title = "Create Parameter";
 
         const parameter = {
             restEnabled: this._operation.restEnabled
@@ -67,7 +67,7 @@ OperationPage = class extends Page {
 
     _onEditParameter() {
         const dialog = this.getCompo("parameter-form");
-        dialog.setTitle("Edit Parameter");
+        dialog.title = "Edit Parameter";
         dialog.edit(this._parametersListView.getSelectedItem(), parameter => {
             this._operation.parameters[this._parametersListView.getSelectedIndex()] = parameter;
             this._parametersListView.setSelectedItem(parameter);
@@ -95,7 +95,7 @@ OperationPage = class extends Page {
 
     _onAddException() {
         const dialog = this.getCompo("exception-form");
-        dialog.setTitle("Create Exception");
+        dialog.title = "Create Exception";
         dialog.open(exception => {
             this._operation.exceptions.push(exception);
             this._exceptionsListView.addItem(exception);
@@ -105,7 +105,7 @@ OperationPage = class extends Page {
 
     _onEditException() {
         const dialog = this.getCompo("exception-form");
-        dialog.setTitle("Edit Exception");
+        dialog.title = "Edit Exception";
         dialog.edit(this._exceptionsListView.getSelectedItem(), exception => {
             this._operation.exceptions[this._exceptionsListView.getSelectedIndex()] = exception;
             this._exceptionsListView.setSelectedItem(exception);

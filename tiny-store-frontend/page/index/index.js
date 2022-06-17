@@ -31,7 +31,7 @@ IndexPage = class extends Page {
 
 	_onCreateStore() {
 		const dialog = this.getCompo("store-form");
-		dialog.setTitle("Create Store");
+		dialog.title = "Create Store";
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
 		dialog.open(store => {
@@ -41,7 +41,7 @@ IndexPage = class extends Page {
 
 	_onEditStore() {
 		const dialog = this.getCompo("store-form");
-		dialog.setTitle("Edit Store");
+		dialog.title = "Edit Store";
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
 		dialog.edit(this._storesView.getSelectedItem(), store => {

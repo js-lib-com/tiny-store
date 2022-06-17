@@ -15,6 +15,7 @@ ServicePage = class extends Page {
 
         this._actionBar = this.getActionBar("ServicePage");
         this._actionBar.setHandler("edit-service", this._onEditService);
+        this._actionBar.setHandler("delete-service", this._onDeleteService);
         this._actionBar.setHandler("create-operation", this._onCreateOperation);
         this._actionBar.setHandler("edit-operation", this._onEditOperation);
         this._actionBar.setHandler("delete-operation", this._onDeleteOperation);
@@ -38,15 +39,22 @@ ServicePage = class extends Page {
 
     _onEditService() {
         const dialog = this.getCompo("service-form");
-        dialog.setTitle("Edit Service");
+        dialog.title = "Edit Service";
         dialog.edit(this._service, service => {
             Database.updateDataService(service, () => this._setObject(service));
         });
     }
 
+    _onDeleteService() {
+        const dialog = this.getCompo("service-delete");
+        dialog.open(() => {
+            Database.deleteDataService(this._service, () => location.assign(`store.htm?${this._storeId}`));
+        });
+    }
+
     _onCreateOperation() {
         const dialog = this.getCompo("operation-form");
-        dialog.setTitle("Create Operation");
+        dialog.title = "Create Operation";
 
         const operation = {
             restEnabled: this._service.restEnabled
@@ -62,7 +70,7 @@ ServicePage = class extends Page {
 
     _onEditOperation() {
         const dialog = this.getCompo("operation-form");
-        dialog.setTitle("Edit Operation");
+        dialog.title = "Edit Operation";
 
         dialog.edit(this._operationsView.getSelectedItem(), operation => {
             Database.updateServiceOperation(operation, () => this._operationsView.setSelectedItem(operation));
