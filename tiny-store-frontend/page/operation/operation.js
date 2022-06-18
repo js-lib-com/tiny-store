@@ -16,6 +16,7 @@ OperationPage = class extends Page {
 
         this._actionBar = this.getActionBar("OperationPage");
         this._actionBar.setHandler("edit-operation", this._onEditOperation);
+        this._actionBar.setHandler("delete-operation", this._onDeleteOperation);
 
         this._actionBar.setHandler("add-parameter", this._onAddParameter);
         this._actionBar.setHandler("edit-parameter", this._onEditParameter);
@@ -35,9 +36,19 @@ OperationPage = class extends Page {
 
     _onEditOperation() {
         const dialog = this.getCompo("operation-form");
+        dialog.validator = (operation, callback) => {
+            Validator.assertEditOperation(this._operation, operation, callback);
+        };
         dialog.edit(this._operation, () => {
             this._setObject(this._operation);
             this._saveOperation();
+        });
+    }
+
+    _onDeleteOperation() {
+        const dialog = this.getCompo("operation-delete");
+        dialog.open(() => {
+            Database.deleteServiceOperation(this._operation, () => location.assign(`service.htm?${this._operation.serviceId}`));
         });
     }
 
@@ -53,6 +64,7 @@ OperationPage = class extends Page {
     _onAddParameter() {
         const dialog = this.getCompo("parameter-form");
         dialog.title = "Create Parameter";
+        dialog.validator = (parameter, callback) => Validator.assertCreateParameter(this._operation, parameter, callback);
 
         const parameter = {
             restEnabled: this._operation.restEnabled
@@ -68,6 +80,10 @@ OperationPage = class extends Page {
     _onEditParameter() {
         const dialog = this.getCompo("parameter-form");
         dialog.title = "Edit Parameter";
+        dialog.validator = (parameter, callback) => {
+            Validator.assertEditParameter(this._operation, this._parametersListView.getSelectedIndex(), parameter, callback);
+        };
+
         dialog.edit(this._parametersListView.getSelectedItem(), parameter => {
             this._operation.parameters[this._parametersListView.getSelectedIndex()] = parameter;
             this._parametersListView.setSelectedItem(parameter);

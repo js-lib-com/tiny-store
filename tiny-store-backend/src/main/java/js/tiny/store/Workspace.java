@@ -251,18 +251,19 @@ public class Workspace {
 		return false;
 	}
 
-	public boolean buildProject(String storeId) throws IOException {
+	public String buildProject(String storeId) throws IOException {
 		Store store = db.getStore(storeId);
 		Project project = new Project(context, store, db);
 		project.clean();
 
 		if (project.generateSources()) {
-			if (!project.compileServerSources()) {
-				// TODO: send compilation diagnostic to user interface
-				return false;
+			String result = project.compileServerSources();
+			if (result != null) {
+				return result;
 			}
-			if (!project.compileClientSources()) {
-				return false;
+			result = project.compileClientSources();
+			if (result != null) {
+				return result;
 			}
 		}
 
@@ -272,7 +273,7 @@ public class Workspace {
 		project.buildClientJar();
 		project.deployClientJar();
 
-		return true;
+		return "Success";
 	}
 
 	public boolean commitChanges(String storeId, String message) throws IOException, NoFilepatternException, GitAPIException {

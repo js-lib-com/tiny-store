@@ -17,8 +17,6 @@ ServicePage = class extends Page {
         this._actionBar.setHandler("edit-service", this._onEditService);
         this._actionBar.setHandler("delete-service", this._onDeleteService);
         this._actionBar.setHandler("create-operation", this._onCreateOperation);
-        this._actionBar.setHandler("edit-operation", this._onEditOperation);
-        this._actionBar.setHandler("delete-operation", this._onDeleteOperation);
 
         this._onOperationSelect({ detail: { selected: false } });
     }
@@ -32,9 +30,6 @@ ServicePage = class extends Page {
     _onOperationSelect(event) {
         const selected = event.detail.selected;
         this._sideMenu.enable("operation-page", selected);
-        this._actionBar.show("create-operation", !selected);
-        this._actionBar.show("edit-operation", selected);
-        this._actionBar.show("delete-operation", selected);
     }
 
     _onEditService() {
@@ -55,6 +50,7 @@ ServicePage = class extends Page {
     _onCreateOperation() {
         const dialog = this.getCompo("operation-form");
         dialog.title = "Create Operation";
+        dialog.validator = (operation, callback) => Validator.assertCreateOperation(this._service, operation, callback);
 
         const operation = {
             restEnabled: this._service.restEnabled
@@ -62,26 +58,8 @@ ServicePage = class extends Page {
 
         dialog.edit(operation, operation => {
             Database.createServiceOperation(this._service, operation, operation => {
-                //this._operationsView.addItem(operation);
                 location.assign(`operation.htm?${operation.id}`);
             });
-        });
-    }
-
-    _onEditOperation() {
-        const dialog = this.getCompo("operation-form");
-        dialog.title = "Edit Operation";
-
-        dialog.edit(this._operationsView.getSelectedItem(), operation => {
-            Database.updateServiceOperation(operation, () => this._operationsView.setSelectedItem(operation));
-        });
-    }
-
-    _onDeleteOperation() {
-        const dialog = this.getCompo("operation-delete");
-        dialog.open(() => {
-            const operation = this._operationsView.getSelectedItem();
-            Database.deleteServiceOperation(operation, () => this._operationsView.deleteSelectedRow());
         });
     }
 };

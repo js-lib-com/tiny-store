@@ -9,7 +9,7 @@ class Page {
 	};
 
 	constructor() {
-		Database.errorHandler = error => this.alert(error.message);
+		Database.errorHandler = function (error) { this.alert(error.message); }.bind(this);
 
 		this._sideMenu = document.getElementsByTagName("side-menu")[0];
 		this._sideMenu.setAction("commit-changes", this._onCommitChanges, this);
@@ -78,7 +78,7 @@ class Page {
 			title = "System Alert";
 		}
 
-		if(typeof message != "string") {
+		if (typeof message != "string") {
 			message = JSON.stringify(message);
 		}
 		this.getCompo("side-alert").title(title).message(message);

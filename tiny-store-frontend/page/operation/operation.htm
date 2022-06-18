@@ -12,6 +12,7 @@
 
     <action-bar w:content="action-bar">
         <li id="edit-operation"><img src="@image/edit" /><label>Edit Operation</label></li>
+        <li id="delete-operation"><img src="@image/delete" /><label>Delete Operation</label></li>
         <li id="add-parameter"><img src="@image/add" /><label>Add Parameter</label></li>
         <li id="edit-parameter"><img src="@image/edit" /><label>Edit Parameter</label></li>
         <li id="delete-parameter"><img src="@image/delete" /><label>Delete Parameter</label></li>
@@ -49,7 +50,9 @@
     </section>
 
     <compo-select w:content="side-dialogs">
+		<side-alert w:compo="template/page/side-alert" />
         <side-dialog w:compo="page/service/operation-form" />
+        <side-dialog w:compo="page/operation/operation-delete" />
         <side-dialog w:compo="page/operation/parameter-form" />
         <side-dialog w:compo="page/operation/parameter-delete" />
         <side-dialog w:compo="page/operation/exception-form" />

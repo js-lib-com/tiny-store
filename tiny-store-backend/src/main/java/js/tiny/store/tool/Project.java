@@ -146,7 +146,7 @@ public class Project {
 
 	// --------------------------------------------------------------------------------------------
 
-	public boolean compileServerSources() throws IOException {
+	public String compileServerSources() throws IOException {
 		File librariesDir = new File(runtimeDir, "libx");
 		if (!librariesDir.exists()) {
 			librariesDir = new File(runtimeDir, "lib");
@@ -190,17 +190,18 @@ public class Project {
 		}
 	}
 
-	public boolean compileClientSources() throws IOException {
+	public String compileClientSources() throws IOException {
 		return compile(Files.clientSourceDir(projectDir), Files.clientClassDir(projectDir));
 	}
 
-	private static boolean compile(File sourceDir, File classDir, File... libraries) throws IOException {
+	private static String compile(File sourceDir, File classDir, File... libraries) throws IOException {
 		List<File> sourceFiles = new ArrayList<>();
 		Files.scanSources(sourceDir, sourceFiles);
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		StringBuilder diagnosticBuilder = new StringBuilder();
 		DiagnosticListener<JavaFileObject> diagnosticListener = diagnostic -> {
-			System.out.println(diagnostic);
+			diagnosticBuilder.append(diagnostic);
 		};
 		List<String> options = Arrays.asList("-source", JAVA_COMPILER, "-target", JAVA_COMPILER);
 
@@ -214,9 +215,9 @@ public class Project {
 			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
 			if (result == null || !result) {
 				log.warn("Compilation error on client sources: %s", sourceFiles);
-				return false;
+				return diagnosticBuilder.toString();
 			}
-			return true;
+			return null;
 		}
 	}
 

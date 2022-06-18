@@ -44,6 +44,42 @@ Validator = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
+	 assertCreateOperation: function(service, operation) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/Validator/assertCreateOperation.rmi";
+		var parameters = [service, operation];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 assertEditOperation: function(model, operation) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/Validator/assertEditOperation.rmi";
+		var parameters = [model, operation];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 assertCreateParameter: function(operation, parameter) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/Validator/assertCreateParameter.rmi";
+		var parameters = [operation, parameter];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 assertEditParameter: function(operation, parameterIndex, parameter) {
+		var __callback__ = arguments[3];
+		var __scope__ = arguments[4] || window;
+		var url = "js/tiny/store/Validator/assertEditParameter.rmi";
+		var parameters = [operation, parameterIndex, parameter];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	fetch: function(url, parameters, callback, scope) {
 		var responsePromise = fetch(url, {
 			method: 'POST',

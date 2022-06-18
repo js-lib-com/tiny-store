@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import js.tiny.store.meta.EntityField;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 
@@ -155,5 +156,19 @@ public class Strings extends js.util.Strings {
 
 	public static String columnName(String tableName, String columnName) {
 		return concat(tableName, ':', columnName);
+	}
+
+	public static String operationName(ServiceOperation operation) {
+		return concat(operation.getServiceClass(), '#', operation.getName());
+	}
+
+	public static int charCount(String string, char c) {
+		int count = 0;
+		for (int i = 0; i < string.length(); ++i) {
+			if (string.charAt(i) == c) {
+				++count;
+			}
+		}
+		return count;
 	}
 }

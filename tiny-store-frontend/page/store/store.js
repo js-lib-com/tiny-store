@@ -124,7 +124,7 @@ StorePage = class extends Page {
 	}
 
 	_onBuildProject() {
-		Workspace.buildProject(this._store.id, this.alert);
+		Workspace.buildProject(this._store.id, result => this.alert(result));
 	}
 };
 

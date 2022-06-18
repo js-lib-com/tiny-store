@@ -17,8 +17,6 @@
         <li id="edit-service"><img src="@image/edit" /><label>Edit Service</label></li>
 		<li id="delete-service"><img src="@image/delete" /><label>Delete Service</label></li>
         <li id="create-operation"><img src="@image/add" /><label>Create Operation</label></li>
-        <li id="edit-operation"><img src="@image/edit" /><label>Edit Operation</label></li>
-        <li id="delete-operation"><img src="@image/delete" /><label>Delete Operation</label></li>
     </action-bar>
 
     <section w:content="content">
@@ -34,10 +32,10 @@
     </section>
 
     <compo-select w:content="side-dialogs">
+		<side-alert w:compo="template/page/side-alert" />
         <side-dialog w:compo="page/store/service-form" />
 		<side-dialog w:compo="page/service/service-delete" />
         <side-dialog w:compo="page/service/operation-form" />
-        <side-dialog w:compo="page/service/operation-delete" />
 		<commit-dialog w:compo="template/page/commit-form" />
     </compo-select>
 
