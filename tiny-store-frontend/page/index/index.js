@@ -3,6 +3,7 @@ IndexPage = class extends Page {
 		super();
 
 		this._storesView = document.getElementById("stores-list");
+		Workspace.getStores(stores => this._storesView.setItems(stores));
 		this._storesView.addEventListener("select", this._onStoreSelect.bind(this));
 
 		this._sideMenu = this.getSideMenu();
@@ -15,8 +16,6 @@ IndexPage = class extends Page {
 		this._actionBar.setHandler("commit-changes", this._onCommitChanges);
 		this._actionBar.setHandler("push-changes", this._onPushChanges);
 		this._onStoreSelect({ detail: { selected: false } });
-
-		Workspace.getStores(stores => this._storesView.setItems(stores));
 	}
 
 	_onStoreSelect(event) {
@@ -44,8 +43,9 @@ IndexPage = class extends Page {
 		dialog.title = "Edit Store";
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
+		const index = this._storesView.getSelectedIndex();
 		dialog.edit(this._storesView.getSelectedItem(), store => {
-			Workspace.updateStore(store, () => this._storesView.setSelectedItem(store));
+			Workspace.updateStore(store, () => this._storesView.setItem(index, store));
 		});
 	}
 

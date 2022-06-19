@@ -1,4 +1,4 @@
-<div w:template="template/page" xmlns:w="js-lib.com/wood">
+<div w:template="template/page" xmlns:w="js-lib.com/wood" xmlns:m="js-lib.com/model">
 
     <div id="page-caption" w:content="caption">
         <div class="logo"></div>
@@ -9,12 +9,12 @@
     <side-menu w:content="side-menu">
         <li id="store-page">Data Store</li>
         <li></li>
-		<li id="commit-changes">Commit Changes</li>
+        <li id="commit-changes">Commit Changes</li>
     </side-menu>
 
     <action-bar w:content="action-bar">
         <li id="edit-entity"><img src="@image/edit" /><label>Edit Entity</label></li>
-		<li id="delete-entity"><img src="@image/delete" /><label>Delete Entity</label></li>
+        <li id="delete-entity"><img src="@image/delete" /><label>Delete Entity</label></li>
         <li id="create-field"><img src="@image/add" /><label>Create Field</label></li>
         <li id="edit-field" class="hidden"><img src="@image/edit" /><label>Edit Field</label></li>
         <li id="delete-field" class="hidden"><img src="@image/delete" /><label>Delete Field</label></li>
@@ -25,18 +25,18 @@
             <dt>Class Name</dt>
             <dd data-text="className"></dd>
             <dt>Alias</dt>
-            <dd data-text="alias"></dd>
+            <dd id="entity-alias" data-text="alias"></dd>
         </dl>
 
         <h3 class="line-break">Entity Fields:</h3>
-        <table-view w:compo="page/entity/fields-list" data-exclude="true" />
+        <table-view w:compo="page/entity/fields-list" data-list="fields" />
     </section>
 
     <compo-select w:content="side-dialogs">
-		<side-dialog w:compo="template/page/commit-form" />
-		<side-alert w:compo="template/page/side-alert" />
-		<side-dialog w:compo="page/store/entity-form" />
-		<side-dialog w:compo="page/entity/entity-delete" />
+        <side-dialog w:compo="template/page/commit-form" />
+        <side-alert w:compo="template/page/side-alert" />
+        <side-dialog w:compo="page/store/entity-form" />
+        <side-dialog w:compo="page/entity/entity-delete" />
         <side-dialog w:compo="page/entity/field-form" />
         <side-dialog w:compo="page/entity/field-delete" />
     </compo-select>

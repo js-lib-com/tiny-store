@@ -37,9 +37,9 @@ class Page {
 		return compo;
 	}
 
-	_setObject(object) {
+	setModel(object) {
 		const pageView = document.getElementById("page-view");
-		pageView.setObject(object);
+		return pageView.setObject(object);
 	}
 
 	_show(id, show) {

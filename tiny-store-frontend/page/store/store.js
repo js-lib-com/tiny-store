@@ -44,9 +44,8 @@ StorePage = class extends Page {
 	}
 
 	_onStoreLoaded(store) {
-		this._store = store;
 		this._storeId = store.id;
-		this._setObject(store);
+		this._store = this.setModel(store);
 	}
 
 	_onServiceSelect(event) {

@@ -1,26 +1,15 @@
 package js.tiny.store.db;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import javax.sql.DataSource;
-
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-import jakarta.persistence.SharedCacheMode;
-import jakarta.persistence.ValidationMode;
-import jakarta.persistence.spi.ClassTransformer;
-import jakarta.persistence.spi.PersistenceUnitInfo;
-import jakarta.persistence.spi.PersistenceUnitTransactionType;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
-public class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
+public class PersistenceUnitInfoImpl/* implements PersistenceUnitInfo*/ {
 	private final String unitName;
 	private final ComboPooledDataSource datasource;
 	private final List<String> entities;
@@ -41,7 +30,8 @@ public class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
 		this.properties.put("eclipselink.logging.level.sql", "FINE");
 		this.properties.put("eclipselink.logging.parameters", "true");
 	}
-
+/*
+	
 	@Override
 	public String getPersistenceUnitName() {
 		return unitName;
@@ -129,4 +119,5 @@ public class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
 	public ClassLoader getNewTempClassLoader() {
 		return getClass().getClassLoader();
 	}
+*/	
 }

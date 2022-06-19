@@ -1,17 +1,10 @@
 package js.tiny.store.db;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.spi.PersistenceProvider;
-import jakarta.persistence.spi.PersistenceUnitInfo;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
@@ -21,6 +14,7 @@ public class JpqlExecuteTest {
 
 	@Test
 	public void execute() {
+		/*
 		store.setName("test");
 		store.setDatabaseURL("jdbc:mysql://localhost:3306/test");
 		store.setDatabaseUser("test");
@@ -41,6 +35,7 @@ public class JpqlExecuteTest {
 			Person person = query.getSingleResult();
 			System.out.println(person);
 		}
+		*/
 	}
 	
 	private static StoreEntity entity(Class<?> entityClass) {

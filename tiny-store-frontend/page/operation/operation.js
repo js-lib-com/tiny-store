@@ -2,14 +2,14 @@ OperationPage = class extends Page {
     constructor() {
         super();
 
+        const operationId = location.search.substring(1);
+        Database.getServiceOperation(operationId, this._onOperationLoaded, this);
+
         this._parametersListView = document.getElementById("parameters-list");
         this._parametersListView.addEventListener("select", this._onParameterSelect.bind(this));
 
         this._exceptionsListView = document.getElementById("exceptions-list");
         this._exceptionsListView.addEventListener("select", this._onExceptionSelect.bind(this));
-
-        const operationId = location.search.substring(1);
-        Database.getServiceOperation(operationId, this._onOperationLoaded, this);
 
         const sideMenu = this.getSideMenu();
         sideMenu.setLink("service-page", () => `service.htm?${this._operation.serviceId}`);
@@ -30,8 +30,7 @@ OperationPage = class extends Page {
     }
 
     _onOperationLoaded(operation) {
-        this._operation = operation;
-        this._setObject(operation);
+        this._operation = this.setModel(operation);
     }
 
     _onEditOperation() {
@@ -39,10 +38,7 @@ OperationPage = class extends Page {
         dialog.validator = (operation, callback) => {
             Validator.assertEditOperation(this._operation, operation, callback);
         };
-        dialog.edit(this._operation, () => {
-            this._setObject(this._operation);
-            this._saveOperation();
-        });
+        dialog.edit(this._operation, () => Database.updateServiceOperation(this._operation));
     }
 
     _onDeleteOperation() {
@@ -72,8 +68,7 @@ OperationPage = class extends Page {
 
         dialog.edit(parameter, parameter => {
             this._operation.parameters.push(parameter);
-            this._parametersListView.addItem(parameter);
-            this._saveOperation();
+            Database.updateServiceOperation(this._operation);
         });
     }
 
@@ -84,19 +79,19 @@ OperationPage = class extends Page {
             Validator.assertEditParameter(this._operation, this._parametersListView.getSelectedIndex(), parameter, callback);
         };
 
-        dialog.edit(this._parametersListView.getSelectedItem(), parameter => {
-            this._operation.parameters[this._parametersListView.getSelectedIndex()] = parameter;
-            this._parametersListView.setSelectedItem(parameter);
-            this._saveOperation();
+        const index = this._parametersListView.getSelectedIndex();
+        dialog.edit(this._operation.parameters[index], parameter => {
+            this._operation.parameters[index] = parameter;
+            Database.updateServiceOperation(this._operation);
         });
     }
 
     _onDeleteParameter() {
         const dialog = this.getCompo("parameter-delete");
+        const index = this._parametersListView.getSelectedIndex();
         dialog.open(() => {
-            this._operation.parameters.splice(this._parametersListView.getSelectedIndex(), 1);
-            this._parametersListView.deleteSelectedRow();
-            this._saveOperation();
+            this._operation.parameters.splice(index, 1);
+            Database.updateServiceOperation(this._operation);
         });
     }
 
@@ -114,33 +109,27 @@ OperationPage = class extends Page {
         dialog.title = "Create Exception";
         dialog.open(exception => {
             this._operation.exceptions.push(exception);
-            this._exceptionsListView.addItem(exception);
-            this._saveOperation();
+            Database.updateServiceOperation(this._operation);
         });
     }
 
     _onEditException() {
         const dialog = this.getCompo("exception-form");
         dialog.title = "Edit Exception";
-        dialog.edit(this._exceptionsListView.getSelectedItem(), exception => {
-            this._operation.exceptions[this._exceptionsListView.getSelectedIndex()] = exception;
-            this._exceptionsListView.setSelectedItem(exception);
-            this._saveOperation();
+        const index = this._exceptionsListView.getSelectedIndex();
+        dialog.edit(this._operation.exceptions[index], exception => {
+            this._operation.exceptions[index] = exception;
+            Database.updateServiceOperation(this._operation);
         });
     }
 
     _onDeleteException() {
         const dialog = this.getCompo("exception-delete");
+        const index = this._exceptionsListView.getSelectedIndex();
         dialog.open(() => {
-            this._operation.exceptions.splice(this._exceptionsListView.getSelectedIndex(), 1);
-            this._exceptionsListView.deleteSelectedRow();
-            this._saveOperation();
+            this._operation.exceptions.splice(index, 1);
             Database.updateServiceOperation(this._operation);
         });
-    }
-
-    _saveOperation() {
-        Database.updateServiceOperation(this._operation);
     }
 
     toString() {

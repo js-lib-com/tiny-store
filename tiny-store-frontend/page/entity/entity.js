@@ -2,11 +2,11 @@ EntityPage = class extends Page {
     constructor() {
         super();
 
-        this._fieldsView = document.getElementById("fields-list");
-        this._fieldsView.addEventListener("select", this._onFieldSelect.bind(this));
-
         const className = location.search.substring(1);
         Database.getStoreEntity(className, this._onEntityLoaded.bind(this));
+
+        this._fieldsView = document.getElementById("fields-list");
+        this._fieldsView.addEventListener("select", this._onFieldSelect.bind(this));
 
         const sideMenu = this.getSideMenu();
         sideMenu.setLink("store-page", () => `store.htm?${this._entity.storeId}`);
@@ -22,10 +22,8 @@ EntityPage = class extends Page {
     }
 
     _onEntityLoaded(entity) {
-        this._entity = entity;
         this._storeId = entity.storeId;
-        this._setObject(entity);
-        this._fieldsView.setItems(this._entity.fields);
+        this._entity = this.setModel(entity);
     }
 
     _onFieldSelect(event) {
@@ -40,15 +38,12 @@ EntityPage = class extends Page {
         dialog.title = "Edit Entity";
         dialog.validator = (entity, callback) => Validator.assertEditEntity(this._entity, entity, callback);
 
-        dialog.setHandler("import", entity => {
-            Workspace.importStoreEntity(this._storeId, entity, entity => {
-                this._onEntityLoaded(entity);
-            });
-        }, { autoClose: true });
+        dialog.setHandler("import", this._onImportEntity.bind(this), { autoClose: true });
+        dialog.edit(this._entity, entity => Database.updateStoreEntity(entity));
+    }
 
-        dialog.edit(this._entity, entity => {
-            Database.updateStoreEntity(entity, () => this._setObject(entity));
-        });
+    _onImportEntity(entity) {
+        Workspace.importStoreEntity(this._storeId, entity, entity => this._onEntityLoaded(entity));
     }
 
     _onDeleteEntity() {
@@ -72,27 +67,29 @@ EntityPage = class extends Page {
 
         dialog.open(field => {
             this._entity.fields.push(field);
-            Database.updateStoreEntity(this._entity, () => this._fieldsView.addItem(field));
+            Database.updateStoreEntity(this._entity);
         });
     }
 
     _onEditField() {
         const dialog = this.getCompo("field-form");
         dialog.title = "Edit Field";
-        const fieldIndex = this._fieldsView.getSelectedIndex();
-        dialog.validator = (field, callback) => Validator.assertEditField(this._entity, fieldIndex, field, callback);
 
-        dialog.edit(this._fieldsView.getSelectedItem(), field => {
-            this._entity.fields[this._fieldsView.getSelectedIndex()] = field;
-            Database.updateStoreEntity(this._entity, () => this._fieldsView.setSelectedItem(field));
+        const index = this._fieldsView.getSelectedIndex();
+        dialog.validator = (field, callback) => Validator.assertEditField(this._entity, index, field, callback);
+
+        dialog.edit(this._entity.fields[index], field => {
+            this._entity.fields[index] = field;
+            Database.updateStoreEntity(this._entity);
         });
     }
 
     _onDeleteField() {
         const dialog = this.getCompo("field-delete");
+        const index = this._fieldsView.getSelectedIndex();
         dialog.open(() => {
-            this._entity.fields.splice(this._fieldsView.getSelectedIndex(), 1);
-            Database.updateStoreEntity(this._entity, () => this._fieldsView.deleteSelectedRow());
+            this._entity.fields.splice(index, 1);
+            Database.updateStoreEntity(this._entity);
         });
     }
 };

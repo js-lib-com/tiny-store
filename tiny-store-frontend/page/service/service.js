@@ -2,16 +2,16 @@ ServicePage = class extends Page {
     constructor() {
         super();
 
-        this._operationsView = document.getElementById("operations-list");
-        this._operationsView.addEventListener("select", this._onOperationSelect.bind(this));
+        const operationsView = document.getElementById("operations-list");
+        operationsView.addEventListener("select", this._onOperationSelect.bind(this));
 
         const serviceId = location.search.substring(1);
         Database.getDataService(serviceId, this._onServiceLoaded.bind(this));
-        Database.getServiceOperations(serviceId, operations => this._operationsView.setItems(operations));
+        Database.getServiceOperations(serviceId, operations => operationsView.setItems(operations));
 
         this._sideMenu = this.getSideMenu();
         this._sideMenu.setLink("store-page", () => `store.htm?${this._service.storeId}`);
-        this._sideMenu.setLink("operation-page", () => `operation.htm?${this._operationsView.getSelectedId()}`);
+        this._sideMenu.setLink("operation-page", () => `operation.htm?${operationsView.getSelectedId()}`);
 
         this._actionBar = this.getActionBar("ServicePage");
         this._actionBar.setHandler("edit-service", this._onEditService);
@@ -22,9 +22,8 @@ ServicePage = class extends Page {
     }
 
     _onServiceLoaded(service) {
-        this._service = service;
         this._storeId = service.storeId;
-        this._setObject(service);
+        this._service = this.setModel(service);
     }
 
     _onOperationSelect(event) {
@@ -36,7 +35,7 @@ ServicePage = class extends Page {
         const dialog = this.getCompo("service-form");
         dialog.title = "Edit Service";
         dialog.edit(this._service, service => {
-            Database.updateDataService(service, () => this._setObject(service));
+            Database.updateDataService(service);
         });
     }
 
