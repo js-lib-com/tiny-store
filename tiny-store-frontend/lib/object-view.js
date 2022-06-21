@@ -1,16 +1,22 @@
 (function () {
 
-    function PropertyPath(stack) {
+    /**
+     * Proxy handler factory for model object. Returned handler intercepts property
+     * assignment operations on model object, get bound element from bindings and
+     * update element text content with related object property value.
+     * 
+     * @param {Array} stack object properties stack,
+     * @param {Object} bindings object property paths mapped to related view elements.
+     * @returns object proxy handler.
+     */
+    function ObjectHandler(stack, bindings) {
         let propertyPath = stack.join('.');
         if (propertyPath) {
             propertyPath += '.';
         }
-        return propertyPath;
-    }
 
-    function ObjectHandler(stack, bindings) {
         return {
-            propertyPath: PropertyPath(stack),
+            propertyPath: propertyPath,
             bindings: bindings,
 
             set(object, property, value, proxy) {
@@ -19,7 +25,7 @@
 
                 const elements = this.bindings[propertyPath];
                 if (typeof elements != "undefined") {
-                    elements.forEach(element => element.textContent = value);
+                    elements.forEach(element => ObjectView.setValue(element, value));
                 }
 
                 return Reflect.set(object, property, value, proxy);
@@ -27,17 +33,30 @@
         };
     }
 
+    /**
+     * Proxy handler factory for model arrays. Returned handler intercepts operations on model
+     * array and delegates bound {@link ListView}.
+     * 
+     * Delegated model array actions:
+     * - push to array: {@link ListView#addItem(Object)},
+     * - assign to array item: {@link ListView#setItem(Number, Object)},
+     * - delete array item: {@link ListView#removeItem(Number)}.
+     * 
+     * @param {Array} stack object properties stack,
+     * @param {Object} bindings object property paths mapped to related view elements.
+     * @returns array proxy handler.
+     */
     function ArrayHandler(stack, bindings) {
         return {
             objectPath: stack.join('.'),
             bindings: bindings,
 
-            set(target, property, value, receiver) {
+            set(array, property, value, proxy) {
                 if (!isNaN(property)) {
                     const listView = bindings[this.objectPath][0];
                     if (typeof listView != "undefined") {
                         console.log(`Delegate list view ${listView}.`);
-                        if (target.length <= Number(property)) {
+                        if (array.length <= Number(property)) {
                             console.log(`Add array ${this.objectPath}, item ${property}:${JSON.stringify(value)}.`);
                             listView.addItem(value);
                         }
@@ -51,11 +70,10 @@
                 else {
                     console.log(`Set array property ${this.objectPath}.${property}:${JSON.stringify(value)}.`);
                 }
-
-                return Reflect.set(target, property, value, receiver);
+                return Reflect.set(array, property, value, proxy);
             },
 
-            deleteProperty(target, property) {
+            deleteProperty(array, property) {
                 if (!isNaN(property)) {
                     const listView = bindings[this.objectPath][0];
                     if (typeof listView != "undefined") {
@@ -68,35 +86,69 @@
                 else {
                     console.log(`Delete array property ${this.objectPath}.${property}.`);
                 }
-                return Reflect.set(target, property);
+                return Reflect.set(array, property);
             }
         };
     }
 
+    /**
+     * Object view is a container with descendat elements instrumented for one-way data binding. 
+     * 
+     * An object view layout is designed for a particular model object. Object view has 
+     * descendant elements specifically bound to model object proerties. Bindings are 
+     * declared on elements using <code>data-text</code> and <code>data-list</code> attributes.
+     * 
+     * Object view has a single method: {@link #setObject(Object)}. It traverses all instrumented
+     * descendant elements and populate them from model object properties. Model object supports 
+     * arbitrary complex hierarchy; it is regarded as a tree of primitive data value and compund
+     * types (objects and arrays) with primitive values as tree leafs. The path through model object
+     * tree is called object property path - OPP.
+     * 
+     * Also {@link #setObject(Object)} takes care to discover and intialize one-way data bindings
+     * between model object properties and related object view descendat elements. It creates and
+     * return a proxy for given model object. This proxy intercepts assignment operation on model 
+     * and update bound element state accordingly.
+     * 
+     * So, first execution of {@link #setObject(Object)} populates object view elements from model
+     * object properties. After that controller operates directly on model object via assignment 
+     * language operation and the one-way data binding proxy takes care to update view elements.
+     * 
+     * Object view deals only with static layout. For list of views created dynamically this class
+     * delegates {@link ListView} class.
+     */
     ObjectView = class extends HTMLElement {
+        static setValue(element, value) {
+            if (value) {
+                if (element.hasAttribute("data-format")) {
+                    value = FormatFactory.get(element.getAttribute("data-format")).format(value);
+                }
+            }
+            else {
+                value = '';
+            }
+            element.textContent = value;
+        }
+
         constructor() {
             super();
         }
 
+        /**
+         * Inject model object into object view descendants and create one-way data binding proxy.
+         * 
+         * @param {Object} object model object, usualy loaded from server.
+         * @returns {Object} one-way data binding proxy for given model object.
+         */
         setObject(object) {
             const bindings = {};
             this._inject(this, object, bindings);
-            return this._proxy([], object, bindings, true);
+            return this._proxy(object, [], bindings, true);
         }
 
         _inject(element, object, bindings) {
             const propertyPath = this._bind(bindings, element, "data-text");
             if (propertyPath) {
-                let value = OPP.get(object, propertyPath);
-                if (value) {
-                    if (element.hasAttribute("data-format")) {
-                        value = FormatFactory.get(element.getAttribute("data-format")).format(value);
-                    }
-                }
-                else {
-                    value = '';
-                }
-                element.textContent = value;
+                ObjectView.setValue(element, OPP.get(object, propertyPath));
                 return;
             }
 
@@ -116,7 +168,7 @@
                     }
                 }
                 else if (childElement.hasAttribute("data-list")) {
-                    if(!(childElement instanceof ListView)) {
+                    if (!(childElement instanceof ListView)) {
                         throw "List view element should implements ListView abstract class.";
                     }
                     const propertyPath = this._bind(bindings, childElement, "data-list");
@@ -132,10 +184,20 @@
             }
         }
 
+        /**
+         * Collect one-way data bindings from DOM element. Given element may or may not be
+         * instrumented with one-way data bindings using a specific <code>data-</code> attribute.
+         * If element has not requested attribute this method does nothing and returns null.
+         * 
+         * @param {Object} bindings bindings collector,
+         * @param {HTMLElement} element DOM element, possible instrumented with data binding,
+         * @param {String} attribute attribute name used to declare data binding.
+         * @returns {String} property path or null if element has none declared.
+         */
         _bind(bindings, element, attribute) {
             const propertyPath = element.getAttribute(attribute);
             if (!propertyPath) {
-                return;
+                return null;
             }
 
             let boundElements = bindings[propertyPath];
@@ -148,7 +210,21 @@
             return propertyPath;
         }
 
-        _proxy(stack, object, bindings, processing) {
+        /**
+         * Recursivelly replace all objects from model object with one-way data binding proxy. 
+         * At start, <code>object</code> parameter is set to model object but for next iterations
+         * it is the descendant object from hierarchy.
+         * 
+         * Both object and array are substitued but array items are not processed. For that
+         * <code>processing</code> parameter is set to false when an array is discovered.
+         * 
+         * @param {Object} object model object or descendant,
+         * @param {Array} stack object properties stack, update at every iteration,
+         * @param {Object} bindings object property paths mapped to related view elements,
+         * @param {Boolean} processing flag true as long as processing should continue.
+         * @returns proxy instance for given model object.
+         */
+        _proxy(object, stack, bindings, processing) {
             if (processing) {
                 for (const property in object) {
                     if (!object.hasOwnProperty(property) || object[property] == null) {
@@ -161,7 +237,7 @@
                     const array = Array.isArray(object[property]);
                     console.log(`Create ${array ? 'array' : 'object'} proxy for ${stack.join('.')}.`);
                     // continue processing only if not array
-                    object[property] = this._proxy(stack, object[property], bindings, !array);
+                    object[property] = this._proxy(object[property], stack, bindings, !array);
                     stack.pop(property);
                 }
             }
@@ -181,29 +257,59 @@
 
 })();
 
-
+/**
+ * Interface for list of views. This interface is known and used by {@link ObjectView}
+ * to deal with dynamically managed layout.
+ * 
+ * There is a major distinction between object view and list view: object view has
+ * an immutable structure. While object view has only logic to update value elements, 
+ * the list view must also create and remove layout elemnents dynamically.
+ * 
+ * On its initialization, {@link ObjectView} discovers list view elements and invoked 
+ * {@link #setItems(Array)} that takes care to create and populate its item elements. 
+ * After that controller operates directly on model array, e.g. when controller perform 
+ * a push operation on model array, one-way data binding proxy delegates this class 
+ * {@link #addItem(Object)} method.
+ */
 ListView = class extends HTMLElement {
     constructor() {
         super();
     }
 
+    /**
+     * Create child views populated from given array. This method is invoked by {@link ObjectView}
+     * when it discovers an list view element.
+     * @param {Array} items model array items.
+     */
     setItems(items) {
         throw "Concrete list view should implement 'setItems(items)' method.";
     }
 
+    /**
+     * Create a new child view populated from given item object. This method is delegated when
+     * controller performs push operation on model array.
+     * @param {Object} item item added to model array. 
+     */
     addItem(item) {
         throw "Concrete list view should implement 'addItem(item)' method.";
     }
 
+    /**
+     * Replace an the item identified by array index. This method is delegated when controller
+     * performs an assignation to a model array item.
+     * @param {Number} index array index for item to replace,
+     * @param {Object} item model array item. 
+     */
     setItem(index, item) {
         throw "Concrete list view should implement 'setItem(index, item)' method.";
     }
 
+    /**
+     * Remove an item identified by array index. This method is delegated when controller 
+     * remove an item from model array.
+     * @param {Number} index array index for item to remove.
+     */
     removeItem(index) {
         throw "Concrete list view should implement 'removeItem(index)' method.";
-    }
-
-    clear() {
-        throw "Concrete list view should implement 'clear()' method.";
     }
 };

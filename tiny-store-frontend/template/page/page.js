@@ -38,7 +38,7 @@ class Page {
 	}
 
 	setModel(object) {
-		const pageView = document.getElementById("page-view");
+		const pageView = document.getElementById("object-view");
 		return pageView.setObject(object);
 	}
 

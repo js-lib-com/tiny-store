@@ -222,7 +222,7 @@ public class Workspace {
 		return createdService;
 	}
 
-	public boolean testDataSource(Store store) throws PropertyVetoException {
+	public String testDataSource(Store store) throws PropertyVetoException {
 		if (store.getDatabaseURL().startsWith("jdbc:")) {
 			// jdbc data source
 			ComboPooledDataSource datasource = new ComboPooledDataSource();
@@ -234,23 +234,24 @@ public class Workspace {
 
 			try {
 				datasource.getConnection();
-				return true;
+				return "Database connection is working properly.";
 			} catch (SQLException e) {
 				log.error(e);
+				return e.getMessage();
 			} finally {
 				try {
 					DataSources.destroy(datasource);
 				} catch (SQLException e) {
 					log.error(e);
+					return e.getMessage();
 				}
 			}
-			return false;
 		}
 
 		// no-sql data source
-		return false;
+		return "NoSQL database not implemented yet.";
 	}
-
+	
 	public String buildProject(String storeId) throws IOException {
 		Store store = db.getStore(storeId);
 		Project project = new Project(context, store, db);

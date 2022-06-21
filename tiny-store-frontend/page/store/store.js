@@ -69,7 +69,7 @@ StorePage = class extends Page {
 	}
 
 	_onTestStore(store) {
-		Workspace.testDataSource(store, this.alert);
+		Workspace.testDataSource(store, result => this.alert(result));
 	}
 
 	_onCreateService() {
