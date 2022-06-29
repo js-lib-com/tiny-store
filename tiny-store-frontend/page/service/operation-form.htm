@@ -1,4 +1,4 @@
-<side-dialog id="operation-form" class="hidden">
+<side-dialog id="operation-form" class="hidden" xmlns:w="js-lib.com/wood">
     <h2>Create Operation</h2>
 
     <object-form class="fill">
@@ -14,7 +14,7 @@
         <input data-if="restEnabled" name="restPath" placeholder="REST path" />
 
         <input name="value.type.name" placeholder="value class name" />
-        <input name="value.type.collection" placeholder="value collection" />
+        <select name="value.type.collection" w:compo="compo/collection-select"></select>
         <textarea name="value.description" placeholder="value description"></textarea>
 
         <select name="dataOpcode" required="true">

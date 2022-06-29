@@ -1,19 +1,18 @@
-<side-dialog id="field-form" class="hidden">
+<side-dialog id="field-form" class="hidden" xmlns:w="js-lib.com/wood">
     <h2>Create Field</h2>
 
     <object-form class="fill">
         <input name="name" placeholder="name" required="true" />
         <input name="alias" placeholder="alias" />
         <textarea name="description" placeholder="description"></textarea>
+
         <input name="type.name" placeholder="type" required="true" />
-        <input name="type.collection" placeholder="collection" />
+        <select name="type.collection" w:compo="compo/collection-select"></select>
+        
         <select name="flag">
             <option></option>
             <option>PROVIDED_KEY</option>
-            <option>AUTO_KEY</option>
             <option>IDENTITY_KEY</option>
-            <option>SEQUENCE_KEY</option>
-            <option>TABLE_KEY</option>
         </select>
     </object-form>
 

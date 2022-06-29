@@ -9,7 +9,6 @@ import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.ChangeLog;
 import js.tiny.store.ChangeLogListener;
 import js.tiny.store.DataServiceValidator;
-import js.tiny.store.ServiceOperationValidator;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -72,13 +71,13 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted({ ServiceOperationValidator.class, ChangeLogListener.class })
+	@Intercepted(ChangeLogListener.class)
 	ServiceOperation createOperation(ServiceOperation operation);
 
-	@Intercepted({ ServiceOperationValidator.class, ChangeLogListener.class })
+	@Intercepted(ChangeLogListener.class)
 	ServiceOperation createServiceOperation(DataService service, ServiceOperation operation);
 
-	@Intercepted({ ServiceOperationValidator.class, ChangeLogListener.class })
+	@Intercepted(ChangeLogListener.class)
 	void updateServiceOperation(ServiceOperation operation);
 
 	void updateOperationsServiceClass(String serviceId, String serviceClass);

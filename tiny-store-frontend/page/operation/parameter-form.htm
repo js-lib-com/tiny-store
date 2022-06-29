@@ -1,13 +1,9 @@
-<side-dialog id="parameter-form" class="hidden">
+<side-dialog id="parameter-form" class="hidden" xmlns:w="js-lib.com/wood">
     <h2>Parameter Entity</h2>
 
     <object-form class="fill">
         <input name="type.name" placeholder="class name" required="true" />
-        <select name="type.collection">
-            <option value=""></option>
-            <option value="java.util.List">List</option>
-            <option value="java.util.Set">Set</option>
-        </select>
+        <select name="type.collection" w:compo="compo/collection-select"></select>
 
         <input name="name" placeholder="name" required="true" />
         <textarea name="description" placeholder="description"></textarea>
