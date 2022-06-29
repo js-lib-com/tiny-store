@@ -32,6 +32,7 @@ class Page {
 	}
 
 	getCompo(compoName) {
+		this._compoSelect.get("side-alert").close();
 		const compo = this._compoSelect.get(compoName);
 		compo.alert = this.alert.bind(this);
 		return compo;

@@ -305,18 +305,18 @@ public class Validator {
 		}
 
 		if (parameters.size() != 1) {
-			throw new Fail("CREATE operation %s should have exactly one entity parameter.", operationName(operation));
+			throw new Fail("Operation %s should have exactly one entity parameter.", operationName(operation));
 		}
 
 		OperationParameter parameter = parameters.get(0);
 		if (parameter.getType().getCollection() != null) {
-			throw new Fail("CREATE operation %s does not support type '%s' as parameter.", operationName(operation), parameter.getType().getCollection());
+			throw new Fail("Operation %s does not support type '%s' as parameter.", operationName(operation), parameter.getType().getCollection());
 		}
 
-		String entityName = Strings.simpleName(parameter.getType().getName());
+		String entityName = parameter.getType().getName();
 		StoreEntity entity = db.getStoreEntityByClassName(storeId, entityName);
 		if (entity == null) {
-			throw new Fail("CREATE operation %s requires an entity. Provided parameter type '%s' does not designate a defined entity.", operationName(operation), parameter.getType().getName());
+			throw new Fail("Operation %s requires an entity. Provided parameter type '%s' does not designate a defined entity.", operationName(operation), parameter.getType().getName());
 		}
 	}
 
@@ -327,7 +327,7 @@ public class Validator {
 		}
 
 		if (value.getType().getCollection() != null) {
-			throw new Fail("CREATE operation %s does not support type '%s' as return value.", operationName(operation), value.getType().getCollection());
+			throw new Fail("Operation %s does not support type '%s' as return value.", operationName(operation), value.getType().getCollection());
 		}
 		if (value.getType().getName() == null) {
 			return;
@@ -336,7 +336,7 @@ public class Validator {
 		// at this point parameters are already validated
 		OperationParameter parameter = operation.getParameters().get(0);
 		if (!value.getType().equals(parameter.getType())) {
-			throw new Fail("CREATE operation %s should return type '%s'.", operationName(operation), parameter.getType().getName());
+			throw new Fail("Operation %s should return type '%s'.", operationName(operation), parameter.getType().getName());
 		}
 	}
 
@@ -349,7 +349,7 @@ public class Validator {
 		if (parameters.size() == 1) {
 			String parameterType = parameters.get(0).getType().getName();
 			if (!Types.isPrimitiveLike(parameterType)) {
-				throw new Fail("READ operation %s should provide primary key. Parameter type %s cannot be used as primary key.", operationName(operation), parameterType);
+				throw new Fail("Operation %s should have primary key parameter. Provided type %s cannot be used as primary key.", operationName(operation), parameterType);
 			}
 			return;
 		}
@@ -357,18 +357,18 @@ public class Validator {
 		if (parameters.size() == 2) {
 			String parameterType = parameters.get(0).getType().getName();
 			if (!parameterType.equals(String.class.getCanonicalName())) {
-				throw new Fail("If READ operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
+				throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
 			}
 
 			parameterType = parameters.get(1).getType().getName();
 			if (!parameterType.equals(Object.class.getCanonicalName())) {
-				throw new Fail("If READ operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
+				throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
 			}
 
 			return;
 		}
 
-		throw new Fail("Bad parameters count (%d) for READ operation %s.", parameters.size(), operationName(operation));
+		throw new Fail("Bad parameters count (%d) for operation %s.", parameters.size(), operationName(operation));
 	}
 
 	private void assertReadValue(String storeId, ServiceOperation operation) {
@@ -376,17 +376,17 @@ public class Validator {
 		TypeDef valueType = value != null ? value.getType() : null;
 
 		if (valueType.getName() == null) {
-			throw new Fail("READ operation %s should return a value.", operationName(operation));
+			throw new Fail("Operation %s should return a value.", operationName(operation));
 		}
 
 		String collectionType = valueType.getCollection();
 		if (collectionType != null && !collectionType.equals(List.class.getCanonicalName())) {
-			throw new Fail("READ operation %s does support only collection type '%s' as return value.", operationName(operation), List.class.getCanonicalName());
+			throw new Fail("Operation %s does support only collection type '%s' as return value.", operationName(operation), List.class.getCanonicalName());
 		}
 
 		StoreEntity entity = db.getStoreEntityByClassName(storeId, valueType.getName());
 		if (entity == null) {
-			throw new Fail("READ operation %s should return an entity or a list of entities. Provided value type '%s' does not designate a defined entity.", operationName(operation), valueType.getName());
+			throw new Fail("Operation %s should return an entity or a list of entities. Provided value type '%s' does not designate a defined entity.", operationName(operation), valueType.getName());
 		}
 	}
 
@@ -398,18 +398,18 @@ public class Validator {
 		}
 
 		if (parameters.size() != 1) {
-			throw new Fail("DELETE operation %s should have exactly one entity parameter.", operationName(operation));
+			throw new Fail("Operation %s should have exactly one entity parameter.", operationName(operation));
 		}
 
 		OperationParameter parameter = parameters.get(0);
 		if (parameter.getType().getCollection() != null) {
-			throw new Fail("DELETE operation %s does not support type '%s' as parameter.", operationName(operation), parameter.getType().getCollection());
+			throw new Fail("Operation %s does not support type '%s' as parameter.", operationName(operation), parameter.getType().getCollection());
 		}
 
 		String entityName = Strings.simpleName(parameter.getType().getName());
 		StoreEntity entity = db.getStoreEntityByClassName(storeId, entityName);
 		if (entity == null) {
-			throw new Fail("DELETE operation %s requires an entity. Provided parameter type '%s' does not designate a defined entity.", operationName(operation), parameter.getType().getName());
+			throw new Fail("Operation %s requires an entity. Provided parameter type '%s' does not designate a defined entity.", operationName(operation), parameter.getType().getName());
 		}
 	}
 
@@ -420,7 +420,7 @@ public class Validator {
 		}
 
 		if (value.getType().getName() != null || value.getType().getCollection() != null) {
-			throw new Fail("DELETE operation %s should be void.", operationName(operation));
+			throw new Fail("Operation %s should be void.", operationName(operation));
 		}
 	}
 

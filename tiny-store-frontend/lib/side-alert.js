@@ -11,7 +11,7 @@
             if (!positiveButton) {
                 throw "Invalid side alert dialog. Missing positive button.";
             }
-            positiveButton.addEventListener("click", this._onPositiveButton.bind(this));
+            positiveButton.addEventListener("click", this.close.bind(this));
 
         }
 
@@ -46,7 +46,7 @@
             message.split("\r\n").forEach(line => { this._messageView.innerHTML += `<p>${line}</p>\r\n` });
         }
 
-        _onPositiveButton() {
+        close() {
             this.classList.add("hidden");
             this._titleView.innerHTML = '';
             this._messageView.innerHTML = '';
