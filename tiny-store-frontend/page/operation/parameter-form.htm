@@ -2,17 +2,17 @@
     <h2>Parameter Entity</h2>
 
     <object-form class="fill">
-        <input name="type.name" placeholder="class name" required="true" />
-        <select name="type.collection" w:compo="compo/collection-select"></select>
+        <select-edit name="type.name" placeholder="type name" required="true" class="types" />
+        <select-edit name="type.collection" w:compo="compo/collection-select" />
 
         <input name="name" placeholder="name" required="true" />
         <textarea name="description" placeholder="description"></textarea>
-        
+
         <select data-if="restEnabled" name="restParameter" required="true">
             <option selected="selected">PATH_PARAM</option>
             <option>ENTITY_PARAM</option>
         </select>
-        
+
         <select name="flag">
             <option selected="selected"></option>
             <option>FIRST_RESULT</option>

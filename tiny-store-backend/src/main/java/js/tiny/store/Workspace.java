@@ -3,9 +3,14 @@ package js.tiny.store;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -202,14 +207,14 @@ public class Workspace {
 		service.setClassName(entity.getClassName() + "DAO");
 		service.setDescription(String.format("Data access for %s entity.", entity.getClassName()));
 		service.setRestEnabled(store.getRestPath() != null);
-		service.setRestPath(entity.getClassName().toLowerCase());
+		service.setRestPath(Strings.simpleName(entity.getClassName()).toLowerCase());
 		DataService createdService = db.createDataService(entity.getStoreId(), service);
 
 		Map<String, String> variables = new HashMap<>();
 		variables.put("entity-class", entity.getClassName());
 		variables.put("entity-name", Strings.simpleName(entity.getClassName()));
 		variables.put("entity-parameter", Strings.simpleName(entity.getClassName()).toLowerCase());
-		variables.put("entity-id-type", Strings.parameterizedName(entity.getFields().get(0).getType()));
+		variables.put("entity-id-type", entity.getFields().get(0).getType().getName());
 		String operationsJson = Strings.injectVariables(Strings.load(Classes.getResourceAsReader("/dao-operations.json")), variables);
 
 		Json json = Classes.loadService(Json.class);
@@ -251,7 +256,7 @@ public class Workspace {
 		// no-sql data source
 		return "NoSQL database not implemented yet.";
 	}
-	
+
 	public String buildProject(String storeId) throws IOException {
 		Store store = db.getStore(storeId);
 		Project project = new Project(context, store, db);
@@ -341,5 +346,34 @@ public class Workspace {
 	public Project getProject(String projectName) throws IOException {
 		Store store = db.getStoreByName(projectName);
 		return new Project(context, store, db);
+	}
+
+	public List<String> getTypeOptionsByService(String serviceId) {
+		DataService service = db.getDataService(serviceId);
+		return getTypeOptionsByStore(service.getStoreId());
+	}
+
+	public List<String> getTypeOptionsByStore(String storeId) {
+		List<StoreEntity> entities = db.getStoreEntities(storeId);
+
+		List<String> options = new ArrayList<>();
+		entities.forEach(entity -> options.add(entity.getClassName()));
+
+		options.add(BigDecimal.class.getCanonicalName());
+		options.add(Boolean.class.getCanonicalName());
+		options.add(Byte.class.getCanonicalName());
+		options.add(Byte[].class.getCanonicalName());
+		options.add(Date.class.getCanonicalName());
+		options.add(Double.class.getCanonicalName());
+		options.add(Float.class.getCanonicalName());
+		options.add(Integer.class.getCanonicalName());
+		options.add(Long.class.getCanonicalName());
+		options.add(Object.class.getCanonicalName());
+		options.add(Short.class.getCanonicalName());
+		options.add(String.class.getCanonicalName());
+		options.add(Time.class.getCanonicalName());
+		options.add(Timestamp.class.getCanonicalName());
+		
+		return options;
 	}
 }

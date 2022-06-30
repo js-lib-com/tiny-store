@@ -1,6 +1,10 @@
 package ${service.implementationPackage};
 
 import java.util.List;
+import java.lang.reflect.Field;
+import java.util.Collections;
+import js.converter.Converter;
+import js.util.Classes;
 
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -20,10 +24,12 @@ import ${import};
 #end 
  */
 public class ${service.implementationName} implements ${service.interfaceName} {
+	private final Converter converter;
 	private final EntityManager em;
 
 	@Inject
-	public ${service.implementationName}(EntityManager em) {
+	public ${service.implementationName}(Converter converter, EntityManager em) {
+		this.converter = converter;
 		this.em = em;
 	}
 ##
@@ -106,9 +112,17 @@ public class ${service.implementationName} implements ${service.interfaceName} {
 #elseif($operation.parametersCount == 1)
 		return em.find(${operation.value.type}.class, ${operation.parameter.name});
 #elseif($operation.parametersCount == 2)
+		Field field = Classes.getOptionalField(${operation.value.rawType}.class, ${operation.parameters[0].name});
+		if(field == null) {
+			// return empty result if provided property name is not found on entity fields
+			// TODO: maybe throw 404 Not Found
+			return Collections.emptyList();
+		}
+		Object parameter = converter.asObject(${operation.parameters[1].name}, field.getType());
+		
 		String jpql = String.format("select e from ${operation.value.rawType} e where e.%s=?1", ${operation.parameters[0].name});
 		TypedQuery query = em.createQuery(jpql, ${operation.value.rawType}.class);
-		query.setParameter(1, ${operation.parameters[1].name});
+		query.setParameter(1, parameter);
 		return query.getResultList();
 #end
 #elseif($operation.dataOpcode == "UPDATE")

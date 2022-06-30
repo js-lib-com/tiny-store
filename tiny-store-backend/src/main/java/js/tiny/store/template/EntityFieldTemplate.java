@@ -11,7 +11,7 @@ public class EntityFieldTemplate {
 
 	public EntityFieldTemplate(EntityField entityField) {
 		this.entityField = entityField;
-		this.type = Strings.parameterizedName(entityField.getType());
+		this.type = Strings.simpleParameterizedName(entityField.getType());
 		this.title = Character.toUpperCase(entityField.getName().charAt(0)) + entityField.getName().substring(1);
 	}
 

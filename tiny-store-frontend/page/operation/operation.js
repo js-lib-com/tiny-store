@@ -31,6 +31,7 @@ OperationPage = class extends Page {
 
     _onOperationLoaded(operation) {
         this._operation = this.setModel(operation);
+        Workspace.getTypeOptionsByService(this._operation.serviceId, optionsMeta => this.loadTypeOptions(optionsMeta));
     }
 
     _onEditOperation() {
@@ -63,7 +64,7 @@ OperationPage = class extends Page {
         dialog.validator = (parameter, callback) => Validator.assertCreateParameter(this._operation, parameter, callback);
 
         const parameter = {
-            restEnabled: this._operation.restEnabled
+            //restEnabled: this._operation.restEnabled
         };
 
         dialog.edit(parameter, parameter => {

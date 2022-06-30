@@ -98,6 +98,24 @@ Workspace = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
+	 getTypeOptionsByService: function(serviceId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/Workspace/getTypeOptionsByService.rmi";
+		var parameters = [serviceId];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 getTypeOptionsByStore: function(storeId) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/Workspace/getTypeOptionsByStore.rmi";
+		var parameters = [storeId];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	fetch: function(url, parameters, callback, scope) {
 		var responsePromise = fetch(url, {
 			method: 'POST',

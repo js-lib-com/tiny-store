@@ -50,11 +50,11 @@ IndexPage = class extends Page {
 	}
 
 	_onTestStore(store) {
-		Workspace.testDataSource(store, this.alert);
+		Workspace.testDataSource(store, result => this.alert(result));
 	}
 
 	_onBuildProject() {
-		Workspace.buildProject(this._storesView.getSelectedId(), this.alert);
+		Workspace.buildProject(this._storesView.getSelectedId(), result => this.alert(result));
 	}
 
 	_onCommitChanges() {

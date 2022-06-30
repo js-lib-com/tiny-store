@@ -28,15 +28,15 @@
 
         setObject(object) {
             this._inputs.forEach(input => {
-                if (input.hasAttribute("data-if")) {
-                    const expression = OPP.get(object, input.getAttribute("data-if"));
+                if (input.dataset.if) {
+                    const expression = OPP.get(object, input.dataset.if);
                     input.classList.toggle("hidden", !expression);
                 }
                 input.classList.remove("invalid");
                 let value = OPP.get(object, input.getAttribute("name"));
                 if (value) {
-                    if (input.hasAttribute("data-format")) {
-                        value = FormatFactory.get(input.getAttribute("data-format")).format(value);
+                    if (input.dataset.format) {
+                        value = FormatFactory.get(input.dataset.format).format(value);
                     }
                     input.value = value;
                 }

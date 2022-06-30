@@ -11,7 +11,7 @@ public class OperationValueTemplate {
 
 	public OperationValueTemplate(OperationValue operationValue) {
 		if (operationValue.getType().getName() != null) {
-			this.type = Strings.parameterizedName(operationValue.getType());
+			this.type = Strings.simpleParameterizedName(operationValue.getType());
 			this.rawType = Strings.simpleName(operationValue.getType().getName());
 			this.description = operationValue.getDescription();
 			this.collection = operationValue.getType().getCollection() != null;

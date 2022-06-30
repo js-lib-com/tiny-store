@@ -152,6 +152,7 @@ public class Project {
 			librariesDir = new File(runtimeDir, "lib");
 		}
 		File[] libraries = new File[] { //
+				new File(librariesDir, "js-commons-1.3.1.jar"), //
 				new File(librariesDir, "js-jee-api-1.1.jar"), //
 				new File(librariesDir, "js-transaction-api-1.3.jar") //
 		};

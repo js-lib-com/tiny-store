@@ -24,6 +24,7 @@ ServicePage = class extends Page {
     _onServiceLoaded(service) {
         this._storeId = service.storeId;
         this._service = this.setModel(service);
+        Workspace.getTypeOptionsByStore(this._storeId, optionsMeta => this.loadTypeOptions(optionsMeta));
     }
 
     _onOperationSelect(event) {

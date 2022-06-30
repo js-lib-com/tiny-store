@@ -5,16 +5,11 @@
         <input name="name" placeholder="name" required="true" />
         <textarea name="description" placeholder="description"></textarea>
 
-        <select data-if="restEnabled" name="restMethod" required="true">
-            <option selected="selected">GET</option>
-            <option>POST</option>
-            <option>PUT</option>
-            <option>DELETE</option>
-        </select>
+        <select-edit  data-if="restEnabled" name="restMethod" required="true" w:compo="compo/rest-method-select" />
         <input data-if="restEnabled" name="restPath" placeholder="REST path" />
 
-        <input name="value.type.name" placeholder="value class name" />
-        <select name="value.type.collection" w:compo="compo/collection-select"></select>
+        <select-edit name="value.type.name" placeholder="value type name" required="true" class="types" />
+        <select-edit name="value.type.collection" placeholder="value collection name" w:compo="compo/collection-select" />
         <textarea name="value.description" placeholder="value description"></textarea>
 
         <select name="dataOpcode" required="true">

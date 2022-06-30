@@ -122,7 +122,7 @@
 				"name": "value",
 				"restParameter": "PATH_PARAM",
 				"type": {
-					"name": "java.lang.Object"
+					"name": "java.lang.String"
 				},
 				"description": "property value"
 			}

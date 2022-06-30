@@ -22,6 +22,13 @@ class Page {
 		breadCrumbs.setPath(Page.PAGE_BREAD_CRUMBS[location.pathname]);
 	}
 
+	loadTypeOptions(optionsMeta) {
+		const typeSelects = document.querySelectorAll("select-edit.types");
+		for (let i = 0; i < typeSelects.length; ++i) {
+			typeSelects.item(i).load(optionsMeta);
+		}
+	}
+
 	getSideMenu() {
 		return this._sideMenu;
 	}
@@ -56,7 +63,7 @@ class Page {
 		Database.getChangeLog(storeId, changeLog => {
 			const dialog = this.getCompo("commit-form");
 			dialog.edit({ changeLog: changeLog }, commit => {
-				Workspace.commitChanges(storeId, commit.message, this.alert);
+				Workspace.commitChanges(storeId, commit.message, result => this.alert(result));
 			});
 		});
 	}
@@ -65,7 +72,7 @@ class Page {
 		const storeId = typeof event == "string" ? event : this._storeId;
 		const dialog = this.getCompo("push-confirm");
 		dialog.open(() => {
-			Workspace.pushChanges(storeId, this.alert);
+			Workspace.pushChanges(storeId, result => this.alert(result));
 		});
 	}
 

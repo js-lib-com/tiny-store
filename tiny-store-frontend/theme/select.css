@@ -1,4 +1,5 @@
-select {
+select,
+select-edit {
     display: block;
     min-width: 50%;
     background: white;
@@ -8,19 +9,23 @@ select {
     font-size: 14px;
 }
 
-select:required {
-	border-color: cadetblue;
+select:required,
+select-edit.required {
+    border-color: cadetblue;
 }
 
-select.invalid {
+select.invalid,
+select-edit.invalid {
     border-bottom-color: red;
 }
 
-select:focus {
+select:focus,
+select-edit:focus {
     outline: none;
 }
 
-select:invalid {
+select:invalid,
+select-edit:invalid {
     color: lightgray;
 }
 
@@ -32,4 +37,38 @@ option {
 
 option:hover {
     background: white;
+}
+
+select-edit {
+    position: relative;
+    width: 50%;
+    height: 25px;
+}
+
+select-edit select {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 24px;
+    border: none;
+    margin: 0;
+}
+
+select-edit input {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 200px;
+    height: 23px;
+    border: none;
+    margin: 0;
+    background-color: white;
+}
+
+select-edit select:focus,
+select-edit input:focus {
+    outline: none;
 }

@@ -119,8 +119,8 @@
     ObjectView = class extends HTMLElement {
         static setValue(element, value) {
             if (value) {
-                if (element.hasAttribute("data-format")) {
-                    value = FormatFactory.get(element.getAttribute("data-format")).format(value);
+                if (element.dataset.format) {
+                    value = FormatFactory.get(element.dataset.format).format(value);
                 }
             }
             else {
@@ -146,7 +146,7 @@
         }
 
         _inject(element, object, bindings) {
-            const propertyPath = this._bind(bindings, element, "data-text");
+            const propertyPath = this._bind(bindings, element, "text");
             if (propertyPath) {
                 ObjectView.setValue(element, OPP.get(object, propertyPath));
                 return;
@@ -154,11 +154,11 @@
 
             let childElement = element.firstElementChild;
             while (childElement) {
-                if (childElement.hasAttribute("data-exclude")) {
+                if (childElement.dataset.exclude) {
                     console.debug(`Excluded element ${childElement.tagName}.`);
                 }
-                else if (childElement.hasAttribute("data-if")) {
-                    let expression = OPP.get(object, childElement.getAttribute("data-if"));
+                else if (childElement.dataset.if) {
+                    let expression = OPP.get(object, childElement.dataset.if);
                     if (expression) {
                         childElement.classList.remove("hidden");
                         this._inject(childElement, object, bindings);
@@ -167,11 +167,11 @@
                         childElement.classList.add("hidden");
                     }
                 }
-                else if (childElement.hasAttribute("data-list")) {
+                else if (childElement.dataset.list) {
                     if (!(childElement instanceof ListView)) {
                         throw "List view element should implements ListView abstract class.";
                     }
-                    const propertyPath = this._bind(bindings, childElement, "data-list");
+                    const propertyPath = this._bind(bindings, childElement, "list");
                     console.debug(`List element ${childElement.tagName}.`);
                     const list = OPP.get(object, propertyPath);
                     console.debug(`List property ${list}.`);
@@ -187,15 +187,15 @@
         /**
          * Collect one-way data bindings from DOM element. Given element may or may not be
          * instrumented with one-way data bindings using a specific <code>data-</code> attribute.
-         * If element has not requested attribute this method does nothing and returns null.
+         * If element has not requested dataset property this method does nothing and returns null.
          * 
          * @param {Object} bindings bindings collector,
          * @param {HTMLElement} element DOM element, possible instrumented with data binding,
-         * @param {String} attribute attribute name used to declare data binding.
+         * @param {String} property dataset property used to declare data binding.
          * @returns {String} property path or null if element has none declared.
          */
-        _bind(bindings, element, attribute) {
-            const propertyPath = element.getAttribute(attribute);
+        _bind(bindings, element, property) {
+            const propertyPath = element.dataset[property];
             if (!propertyPath) {
                 return null;
             }
@@ -205,7 +205,7 @@
                 boundElements = [];
                 bindings[propertyPath] = boundElements;
             }
-            console.log(`Bind ${propertyPath} property to view element ${element.tagName}#${element.getAttribute(attribute)}.`);
+            console.log(`Bind ${propertyPath} property to view element ${element.tagName}#${element.dataset[property]}.`);
             boundElements.push(element);
             return propertyPath;
         }

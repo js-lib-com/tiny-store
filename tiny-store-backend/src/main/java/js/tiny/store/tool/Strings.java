@@ -35,7 +35,7 @@ public class Strings extends js.util.Strings {
 		return typeName.substring(lastDotSeparatorPosition + 1);
 	}
 
-	public static String parameterizedName(TypeDef type) {
+	public static String simpleParameterizedName(TypeDef type) {
 		if (type.getCollection() == null) {
 			return simpleName(type.getName());
 		}

@@ -6,6 +6,7 @@ object-form textarea {
 	margin-top: var(--control-space);
 }
 
-object-form select {
+object-form select,
+object-form select-edit {
 	margin-top: var(--control-space);
 }
