@@ -5,7 +5,6 @@
 	<binding bind="Validator" />
 	
 	<binding bind="ChangeLogListener" />
-	<binding bind="DataServiceValidator" />
 
 	<binding bind="dao.Database" to="dao.DatabaseImpl" />
 	<binding bind="dao.MongoDB" />

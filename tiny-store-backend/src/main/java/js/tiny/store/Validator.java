@@ -41,6 +41,26 @@ public class Validator {
 		this.db = db;
 	}
 
+	public String assertCreateService(String storeId, DataService service) {
+		DataService existingService = db.getDataServiceByClassName(storeId, service.getClassName());
+		if (existingService != null) {
+			return format("Data service %s already existing.", service.getClassName());
+		}
+		
+		return null;
+	}
+
+	public String assertEditService(DataService model, DataService service) {
+		DataService existingService = db.getDataServiceByClassName(model.getStoreId(), service.getClassName());
+		if (existingService != null) {
+			if (!existingService.id().equals(model.id())) {
+				return format("Data service %s already existing.", service.getClassName());
+			}
+		}
+
+		return null;
+	}
+
 	public String assertCreateEntity(String storeId, StoreEntity entity) {
 		StoreEntity existingEntity = db.getStoreEntityByClassName(storeId, entity.getClassName());
 		if (existingEntity != null) {
@@ -217,11 +237,11 @@ public class Validator {
 	public String assertEditParameter(ServiceOperation operation, int parameterIndex, OperationParameter parameter) {
 		List<OperationParameter> parameters = operation.getParameters();
 		for (int i = 0; i < parameters.size(); ++i) {
-			if(parameterIndex == i) {
+			if (parameterIndex == i) {
 				parameters.set(i, parameter);
 				continue;
 			}
-			if(parameters.get(i).getName().equals(parameter.getName())) {
+			if (parameters.get(i).getName().equals(parameter.getName())) {
 				return format("Duplicated operation parameter %s:%s.", operationName(operation), parameter.getName());
 			}
 		}

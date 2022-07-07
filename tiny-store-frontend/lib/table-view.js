@@ -77,14 +77,17 @@ class TableView extends ListView {
         let cell = row.firstElementChild;
         let index = 0;
         while (cell) {
-            if (cell.hasAttribute("data-if")) {
-                const expression = OPP.get(item, cell.getAttribute("data-if"));
+            if (cell.dataset.if) {
+                const expression = OPP.get(item, cell.dataset.if);
                 cell.classList.toggle("hidden", !expression);
                 this._headers[index].classList.toggle("hidden", !expression);
             }
-            let value = OPP.get(item, cell.getAttribute("data-text"));
-            if (cell.hasAttribute("data-format")) {
-                value = FormatFactory.get(cell.getAttribute("data-format")).format(value);
+            let value = OPP.get(item, cell.dataset.text);
+            if (cell.dataset.format) {
+                value = FormatFactory.get(cell.dataset.format).format(value);
+            }
+            if(!value) {
+                value = '';
             }
             cell.textContent = value;
             cell = cell.nextElementSibling;

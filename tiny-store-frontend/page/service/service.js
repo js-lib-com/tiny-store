@@ -35,6 +35,7 @@ ServicePage = class extends Page {
     _onEditService() {
         const dialog = this.getCompo("service-form");
         dialog.title = "Edit Service";
+        dialog.validator = (service, callback) => Validator.assertEditService(this._service, service, callback);
         dialog.edit(this._service, service => {
             Database.updateDataService(service);
         });

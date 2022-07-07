@@ -1,4 +1,22 @@
 Validator = {
+	 assertCreateService: function(storeId, service) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/Validator/assertCreateService.rmi";
+		var parameters = [storeId, service];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 assertEditService: function(model, service) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/Validator/assertEditService.rmi";
+		var parameters = [model, service];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	 assertCreateEntity: function(storeId, entity) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;

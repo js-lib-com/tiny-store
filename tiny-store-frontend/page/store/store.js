@@ -75,6 +75,7 @@ StorePage = class extends Page {
 	_onCreateService() {
 		const dialog = this.getCompo("service-form");
 		dialog.title = "Create Service";
+		dialog.validator = (service, callback) => Validator.assertCreateService(this._store.id, service, callback);
 
 		const service = {
 			className: `${this._store.packageName}.`,

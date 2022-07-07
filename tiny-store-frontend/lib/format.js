@@ -2,7 +2,9 @@ FormatFactory = {
     get(formatName) {
         switch (formatName) {
             case "parameters": return ParametersFormat;
+            case "simple-parameters": return SimpleParametersFormat;
             case "type": return TypeFormat;
+            case "simple-type": return SimpleTypeFormat;
             case "version": return VersionFormat;
             case "time": return TimeFormat;
             case "class-name": return ClassNameFormat;
@@ -17,12 +19,31 @@ ParametersFormat = {
     }
 };
 
+SimpleParametersFormat = {
+    format(parameters) {
+        return parameters.map(parameter => SimpleTypeFormat.format(parameter.type)).join(", ");
+    }
+};
+
 TypeFormat = {
     format(type) {
         if (!type.collection) {
             return type.name;
         }
         return `${type.collection}<${type.name}>`;
+    }
+};
+
+SimpleTypeFormat = {
+    format(type) {
+        function simpleName(qualifiedName) {
+            return qualifiedName ? /[^.]+$/.exec(qualifiedName)[0] : null;
+        }
+
+        if (!type.collection) {
+            return simpleName(type.name);
+        }
+        return `${simpleName(type.collection)}<${simpleName(type.name)}>`;
     }
 };
 

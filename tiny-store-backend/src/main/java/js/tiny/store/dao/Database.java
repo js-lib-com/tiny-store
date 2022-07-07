@@ -8,7 +8,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.ChangeLog;
 import js.tiny.store.ChangeLogListener;
-import js.tiny.store.DataServiceValidator;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
@@ -52,10 +51,10 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted({ DataServiceValidator.class, ChangeLogListener.class })
+	@Intercepted(ChangeLogListener.class)
 	DataService createDataService(String storeId, DataService service);
 
-	@Intercepted({ DataServiceValidator.class, DataServiceUpdateListener.class, ChangeLogListener.class })
+	@Intercepted({ DataServiceUpdateListener.class, ChangeLogListener.class })
 	void updateDataService(DataService service);
 
 	@Intercepted(ChangeLogListener.class)

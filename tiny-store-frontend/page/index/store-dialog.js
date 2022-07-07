@@ -10,7 +10,8 @@
             this._packageNameInput = form.getElementByName("packageName");
             this._restPathInput = form.getElementByName("restPath");
             this._gitUrlInput = form.getElementByName("gitURL");
-            
+            this._mavenServerInput = form.getElementByName("mavenServer");
+
             const nameInput = form.getElementByName("name");
             nameInput.addEventListener("change", this._onNameChanged.bind(this));
 
@@ -20,30 +21,36 @@
 
         }
 
+        open(callback) {
+            super.open(callback);
+            this._mavenServerInput.value = "https://maven.js-lib.com/";
+        }
+
         _onNameChanged(event) {
             function toTitleCase(name) {
                 return name.split('-').map(word => word[0].toUpperCase() + word.substring(1)).join(' ');
             }
 
+            this._restPathInput.value = `/${event.target.value}/1.0/`;
             this._displayInput.value = toTitleCase(event.target.value);
-            this._packageNameInput.value = "com.jslib." + event.target.value.replace('-', '');
+            this._packageNameInput.value = `com.jslib.${event.target.value.replace('-', '')}`;
         }
 
         _onDeploymentChange(event) {
             switch (event.target.value) {
                 case "EMBEDDED":
-                    this._restPathInput.classList.toggle("hidden", true);
-                    this._gitUrlInput.classList.toggle("hidden", true);
+                    this._restPathInput.classList.add("hidden");
+                    this._gitUrlInput.classList.add("hidden");
                     break;
 
                 case "HOSTED":
-                    this._restPathInput.classList.toggle("hidden", false);
-                    this._gitUrlInput.classList.toggle("hidden", true);
+                    this._restPathInput.classList.remove("hidden");
+                    this._gitUrlInput.classList.add("hidden");
                     break;
 
                 default:
-                    this._restPathInput.classList.toggle("hidden", false);
-                    this._gitUrlInput.classList.toggle("hidden", false);
+                    this._restPathInput.classList.remove("hidden");
+                    this._gitUrlInput.classList.remove("hidden");
             }
         }
     }
