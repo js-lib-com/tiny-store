@@ -3,9 +3,8 @@ ServerPage = class extends Page {
         super();
 
         this._serversView = document.getElementById("servers-list");
+        Database.getServers(servers => this._onModelLoaded(servers));
         this._serversView.addEventListener("select", this._onServerSelect.bind(this));
-
-        Database.getServers(servers => this._serversView.setItems(servers));
 
         this._sideMenu = this.getSideMenu();
         this._sideMenu.setLink("index-page", () => `index.htm`);
@@ -19,7 +18,7 @@ ServerPage = class extends Page {
     }
 
     _onModelLoaded(servers) {
-        this._servers = this.getModelView("servers-list").setModel(servers);
+        this._servers = this._serversView.setItems(servers);
     }
 
     _onServerSelect(event) {
@@ -32,15 +31,18 @@ ServerPage = class extends Page {
     _onCreateServer() {
         const dialog = this.getCompo("server-form");
         dialog.title = "Create External Server";
+
         dialog.open(server => {
-            Database.createServer(server, server => this._servers.push(server));
+            this._servers.push(server);
+            Database.createServer(server);
         });
     }
 
     _onEditServer() {
         const dialog = this.getCompo("server-form");
         dialog.title = "Edit External Server";
-        const index = this._serversView.getSelectedIndex();
+
+        const index = this._serversView.selectedIndex;
         dialog.edit(this._servers[index], server => {
             this._servers[index] = server;
             Database.updateServer(server);
@@ -49,15 +51,9 @@ ServerPage = class extends Page {
 
     _onDeleteServer() {
         const dialog = this.getCompo("server-delete");
-        const index = this._serversView.getSelectedIndex();
         dialog.open(() => {
-            const server = this._servers.splice(index, 1)[0];
+            const server = this._servers.splice(this._serversView.selectedIndex, 1)[0];
             Database.deleteServer(server);
-        });
-
-        const server = this._serversView.getSelectedItem();
-        dialog.open(() => {
-            Database.deleteServer(server, () => location.assign(`store.htm?${this._storeId}`));
         });
     }
 };

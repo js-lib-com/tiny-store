@@ -1,0 +1,22 @@
+<side-dialog id="server-form" class="hidden" xmlns:w="js-lib.com/wood">
+    <h2>Create Operation</h2>
+
+    <object-form class="fill">
+        <select name="type" required="true">
+            <option selected="selected"></option>
+            <option>GIT</option>
+            <option>MAVEN</option>
+        </select>
+
+        <textarea name="description" placeholder="description"></textarea>
+
+        <input name="hostURL" placeholder="host URL" pattern="^https?://\w+(\.\w+)?$" required="true" />
+        <input name="username" placeholder="user name" required="true" />
+        <input name="password" placeholder="password" required="true" />
+    </object-form>
+    
+    <div>
+        <button type="button" name="positive">Save</button>
+        <button type="button" name="negative">Cancel</button>
+    </div>
+</side-dialog>

@@ -242,6 +242,33 @@ Database = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
+	 createServer: function(server) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/dao/Database/createServer.rmi";
+		var parameters = [server];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 updateServer: function(server) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/dao/Database/updateServer.rmi";
+		var parameters = [server];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 deleteServer: function(server) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/dao/Database/deleteServer.rmi";
+		var parameters = [server];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	 getServers: function() {
 		var __callback__ = arguments[0];
 		var __scope__ = arguments[1] || window;

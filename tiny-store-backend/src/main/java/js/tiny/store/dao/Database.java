@@ -92,6 +92,12 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
+	void createServer(Server server);
+	
+	void updateServer(Server server);
+	
+	void deleteServer(Server server);
+	
 	List<Server> getServers();
 
 	Server getServerByHostURL(String hostURL);

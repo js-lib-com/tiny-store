@@ -189,6 +189,21 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
+	public void createServer(Server server) {
+		serverDAO.create(server);
+	}
+
+	@Override
+	public void updateServer(Server server) {
+		serverDAO.update(server);
+	}
+
+	@Override
+	public void deleteServer(Server server) {
+		serverDAO.delete(server.id());
+	}
+
+	@Override
 	public List<Server> getServers() {
 		return serverDAO.getAll();
 	}

@@ -22,13 +22,13 @@ class TableView extends ListView {
         if (elements.length > 0) {
             this._tbody = elements.item(0);
             this._tbody.addEventListener("click", this._onClick.bind(this));
-            
+
             this._rowTemplate = document.createElement("object-view");
             this._rowTemplate.classList.add(TableView.CLASS_TR);
-            while(this._tbody.firstElementChild.firstChild) {
+            while (this._tbody.firstElementChild.firstChild) {
                 this._rowTemplate.appendChild(this._tbody.firstElementChild.firstChild);
             }
-            
+
             this._tbody.removeChild(this._tbody.firstElementChild);
         }
     }
@@ -38,6 +38,7 @@ class TableView extends ListView {
         items.forEach(item => {
             this.addItem(item);
         });
+        return super.setItems(items);
     }
 
     addItem(item) {
@@ -68,18 +69,18 @@ class TableView extends ListView {
 
     // --------------------------------------------------------------------------------------------
 
-    getSelectedIndex() {
+    get selectedIndex() {
         if (this._selectedRow == null) {
             return -1;
         }
         return Array.prototype.indexOf.call(this._tbody.children, this._selectedRow);
     }
 
-    getSelectedItem() {
+    getSelectedItemEOL() {
         return this._selectedRow != null ? this._selectedRow.object : null;
     }
 
-    getSelectedId() {
+    getSelectedIdEOL() {
         return this._selectedRow != null ? this._selectedRow.object.id : null;
     }
 
