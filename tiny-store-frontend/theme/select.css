@@ -45,6 +45,10 @@ select-edit {
     height: 25px;
 }
 
+select-edit.large {
+    width: 90%;
+}
+
 select-edit select {
     display: block;
     position: absolute;
@@ -61,7 +65,7 @@ select-edit input {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 200px;
+    width: calc(100% - var(--select-arrow-width));
     height: 23px;
     border: none;
     margin: 0;

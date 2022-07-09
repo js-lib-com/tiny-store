@@ -367,7 +367,6 @@ public class Workspace {
 		options.add(BigDecimal.class.getCanonicalName());
 		options.add(Boolean.class.getCanonicalName());
 		options.add(Byte.class.getCanonicalName());
-		options.add(Byte[].class.getCanonicalName());
 		options.add(Date.class.getCanonicalName());
 		options.add(Double.class.getCanonicalName());
 		options.add(Float.class.getCanonicalName());
