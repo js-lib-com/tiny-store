@@ -44,6 +44,8 @@ import js.tiny.store.dao.StoreUpdateListener;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.FieldFlag;
+import js.tiny.store.meta.Server;
+import js.tiny.store.meta.ServerType;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -54,6 +56,7 @@ import js.tiny.store.tool.Files;
 import js.tiny.store.tool.Project;
 import js.tiny.store.tool.StoreDB;
 import js.tiny.store.tool.Strings;
+import js.tiny.store.tool.URLs;
 
 @ApplicationScoped
 @Remote
@@ -86,8 +89,9 @@ public class Workspace {
 		String gitURL = store.getGitURL();
 		if (gitURL != null) {
 			log.info("Clone store %s from Git repository %s.", store.getName(), gitURL);
-			// TODO: extract server URL from git URL and retrieve credentials
-			CredentialsProvider credentials = new UsernamePasswordCredentialsProvider("irotaru", "Mami1964!@#$");
+			Server server = db.getServerByHostURL(URLs.hostURL(gitURL));
+			assert server != null;
+			CredentialsProvider credentials = new UsernamePasswordCredentialsProvider(server.getUsername(), server.getPassword());
 			Git.cloneRepository().setURI(gitURL).setDirectory(projectDir).setCredentialsProvider(credentials).call();
 		}
 
@@ -329,9 +333,10 @@ public class Workspace {
 
 	public boolean pushChanges(String storeId) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		Store store = db.getStore(storeId);
-		// String gitURL = store.getGitURL();
-		// TODO: extract server URL from git URL and retrieve credentials from servers configuration
-		CredentialsProvider credentials = new UsernamePasswordCredentialsProvider("irotaru", "Mami1964!@#$");
+		String gitURL = store.getGitURL();
+
+		Server server = db.getServerByHostURL(URLs.hostURL(gitURL));
+		CredentialsProvider credentials = new UsernamePasswordCredentialsProvider(server.getUsername(), server.getPassword());
 
 		File projectDir = new File(context.getWorkspaceDir(), store.getName());
 		try (Git git = Git.open(projectDir.getAbsoluteFile())) {
@@ -373,7 +378,11 @@ public class Workspace {
 		options.add(String.class.getCanonicalName());
 		options.add(Time.class.getCanonicalName());
 		options.add(Timestamp.class.getCanonicalName());
-		
+
 		return options;
+	}
+
+	public List<String> getMavenOptions() {
+		return db.findServersByType(ServerType.MAVEN).stream().map(server -> server.getHostURL()).collect(Collectors.toList());
 	}
 }

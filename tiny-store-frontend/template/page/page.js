@@ -22,10 +22,10 @@ class Page {
 		breadCrumbs.setPath(Page.PAGE_BREAD_CRUMBS[location.pathname]);
 	}
 
-	loadTypeOptions(optionsMeta) {
+	loadTypeOptions(options) {
 		const typeSelects = document.querySelectorAll("select-edit.types");
 		for (let i = 0; i < typeSelects.length; ++i) {
-			typeSelects.item(i).load(optionsMeta);
+			typeSelects.item(i).load(options);
 		}
 	}
 

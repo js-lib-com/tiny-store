@@ -8,6 +8,8 @@ import java.util.Map;
 import jakarta.inject.Inject;
 import js.tiny.store.ChangeLog;
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.Server;
+import js.tiny.store.meta.ServerType;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -17,6 +19,7 @@ public class DatabaseImpl implements Database {
 	private final DAO<StoreEntity> entityDAO;
 	private final DAO<DataService> serviceDAO;
 	private final DAO<ServiceOperation> operationDAO;
+	private final DAO<Server> serverDAO;
 	private final DAO<ChangeLog> changeLogDAO;
 
 	@Inject
@@ -25,6 +28,7 @@ public class DatabaseImpl implements Database {
 		this.entityDAO = new DAO<>(mongo, StoreEntity.class);
 		this.serviceDAO = new DAO<>(mongo, DataService.class);
 		this.operationDAO = new DAO<>(mongo, ServiceOperation.class);
+		this.serverDAO = new DAO<>(mongo, Server.class);
 		this.changeLogDAO = new DAO<>(mongo, ChangeLog.class);
 	}
 
@@ -182,6 +186,21 @@ public class DatabaseImpl implements Database {
 		filter.put("storeId", storeId);
 		filter.put("className", className);
 		return serviceDAO.find(filter);
+	}
+
+	@Override
+	public List<Server> getServers() {
+		return serverDAO.getAll();
+	}
+
+	@Override
+	public Server getServerByHostURL(String hostURL) {
+		return serverDAO.get("hostURL", hostURL);
+	}
+
+	@Override
+	public List<Server> findServersByType(ServerType type) {
+		return serverDAO.find("type", type);
 	}
 
 	@Override

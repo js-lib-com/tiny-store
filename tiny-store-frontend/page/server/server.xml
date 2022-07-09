@@ -1,0 +1,6 @@
+<page>
+    <title>Server Page</title>
+    <description>External servers page description.</description>
+
+    <script src="lib/format.js" />
+</page>

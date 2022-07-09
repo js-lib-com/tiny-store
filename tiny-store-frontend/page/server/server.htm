@@ -1,0 +1,53 @@
+<div w:template="template/page" xmlns:w="js-lib.com/wood">
+
+    <div id="page-caption" w:content="caption">
+        <div class="logo"></div>
+        <h1>External Servers</h1>
+        <p>Servers hosting third party services like Git or Maven repositories.</p>
+    </div>
+
+    <side-menu w:content="side-menu">
+        <li id="index-page">Home</li>
+    </side-menu>
+
+    <action-bar w:content="action-bar">
+        <li id="create-server"><img src="@image/add" /><label>Create Server</label></li>
+        <li id="edit-server"><img src="@image/edit" /><label>Edit Server</label></li>
+        <li id="delete-server"><img src="@image/delete" /><label>Delete Server</label></li>
+    </action-bar>
+
+    <section w:content="content">
+        <h3 class="line-break">External Servers:</h3>
+        <table-view id="servers-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Host URL</th>
+                        <th>User Name</th>
+                        <th>Password</th>
+                        <th class="large">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-text="type"></td>
+                        <td data-text="hostURL"></td>
+                        <td data-text="username"></td>
+                        <td data-text="password"></td>
+                        <td data-text="description" class="large"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </table-view>
+    </section>
+
+    <compo-select w:content="side-dialogs">
+        <side-alert w:compo="template/page/side-alert" />
+        <side-dialog w:compo="page/store/service-form" />
+        <side-dialog w:compo="page/service/service-delete" />
+        <side-dialog w:compo="page/service/operation-form" />
+        <commit-dialog w:compo="template/page/commit-form" />
+    </compo-select>
+
+</div>

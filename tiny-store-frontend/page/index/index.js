@@ -8,6 +8,7 @@ IndexPage = class extends Page {
 
 		this._sideMenu = this.getSideMenu();
 		this._sideMenu.setLink("store-page", () => `store.htm?${this._storesView.getSelectedId()}`);
+		this._sideMenu.setLink("server-page", () => `server.htm`);
 
 		this._actionBar = this.getActionBar("IndexPage");
 		this._actionBar.setHandler("create-store", this._onCreateStore);
@@ -31,6 +32,7 @@ IndexPage = class extends Page {
 	_onCreateStore() {
 		const dialog = this.getCompo("store-form");
 		dialog.title = "Create Store";
+		dialog.validator = (store, callback) => Validator.assertCreateStore(store, callback);
 		dialog.setHandler("test", this._onTestStore.bind(this));
 
 		dialog.open(store => {

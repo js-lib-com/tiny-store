@@ -16,6 +16,7 @@ import com.mongodb.client.model.Updates;
 
 import js.tiny.store.ChangeLog;
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.Server;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -41,6 +42,12 @@ class DAO<T extends IPersistedObject> {
 			equalExpressions.add(eq(entry.getKey(), entry.getValue()));
 		}
 		return collection.find(and(equalExpressions)).first();
+	}
+
+	public List<T> getAll() {
+		List<T> list = new ArrayList<>();
+		collection.find().forEach(item -> list.add(item));
+		return list;
 	}
 
 	public List<T> find(String name, Object value) {
@@ -88,6 +95,7 @@ class DAO<T extends IPersistedObject> {
 		COLLECTIONS.put(StoreEntity.class, "entity");
 		COLLECTIONS.put(DataService.class, "service");
 		COLLECTIONS.put(ServiceOperation.class, "operation");
+		COLLECTIONS.put(Server.class, "server");
 		COLLECTIONS.put(ChangeLog.class, "changelog");
 	}
 }

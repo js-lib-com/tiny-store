@@ -116,6 +116,15 @@ Workspace = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
+	 getMavenOptions: function() {
+		var __callback__ = arguments[0];
+		var __scope__ = arguments[1] || window;
+		var url = "js/tiny/store/Workspace/getMavenOptions.rmi";
+		var parameters = [];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	fetch: function(url, parameters, callback, scope) {
 		var responsePromise = fetch(url, {
 			method: 'POST',

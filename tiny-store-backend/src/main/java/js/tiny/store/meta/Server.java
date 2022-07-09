@@ -2,18 +2,25 @@ package js.tiny.store.meta;
 
 import org.bson.types.ObjectId;
 
+import js.tiny.store.dao.IPersistedObject;
+
 /**
  * Server providing external services like Maven or Git repositories.
  * 
  * @author Iulian Rotaru
  */
-public class Server {
+public class Server implements IPersistedObject {
 	private ObjectId id;
 
 	private ServerType type;
 	private String hostURL;
 	private String username;
 	private String password;
+
+	@Override
+	public String id() {
+		return id.toHexString();
+	}
 
 	public ObjectId getId() {
 		return id;

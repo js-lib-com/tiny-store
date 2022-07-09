@@ -1,4 +1,13 @@
 Validator = {
+	 assertCreateStore: function(store) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/Validator/assertCreateStore.rmi";
+		var parameters = [store];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	 assertCreateService: function(storeId, service) {
 		var __callback__ = arguments[2];
 		var __scope__ = arguments[3] || window;

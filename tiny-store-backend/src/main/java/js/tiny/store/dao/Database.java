@@ -9,6 +9,8 @@ import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.ChangeLog;
 import js.tiny.store.ChangeLogListener;
 import js.tiny.store.meta.DataService;
+import js.tiny.store.meta.Server;
+import js.tiny.store.meta.ServerType;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -87,6 +89,14 @@ public interface Database {
 	List<ServiceOperation> getServiceOperations(String serviceId);
 
 	ServiceOperation getServiceOperation(String operationId);
+
+	// --------------------------------------------------------------------------------------------
+
+	List<Server> getServers();
+
+	Server getServerByHostURL(String hostURL);
+
+	List<Server> findServersByType(ServerType type);
 
 	// --------------------------------------------------------------------------------------------
 

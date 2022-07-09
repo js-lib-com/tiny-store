@@ -20,6 +20,7 @@ import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
+import js.tiny.store.meta.Server;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
@@ -29,6 +30,7 @@ import js.tiny.store.tool.FinalInteger;
 import js.tiny.store.tool.StoreDB;
 import js.tiny.store.tool.Strings;
 import js.tiny.store.tool.Types;
+import js.tiny.store.tool.URLs;
 
 @ApplicationScoped
 @Remote
@@ -41,12 +43,28 @@ public class Validator {
 		this.db = db;
 	}
 
+	public String assertCreateStore(Store store) {
+		String gitURL = store.getGitURL();
+		if (gitURL != null) {
+			if(!URLs.isValid(gitURL)) {
+				return format("Invalid Git URL: %s", gitURL);
+			}
+			String hostURL = URLs.hostURL(gitURL);
+			Server server = db.getServerByHostURL(hostURL);
+			if (server == null) {
+				return format("Not registered Git server %s. Please define it on external servers.", hostURL);
+			}
+		}
+
+		return null;
+	}
+
 	public String assertCreateService(String storeId, DataService service) {
 		DataService existingService = db.getDataServiceByClassName(storeId, service.getClassName());
 		if (existingService != null) {
 			return format("Data service %s already existing.", service.getClassName());
 		}
-		
+
 		return null;
 	}
 

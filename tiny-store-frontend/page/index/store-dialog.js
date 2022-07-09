@@ -6,11 +6,13 @@
 
             const form = this.getElementsByTagName("object-form")[0];
 
+            const mavenServerSelect = form.getElementByName("mavenServer");
+            Workspace.getMavenOptions(options => mavenServerSelect.load(options));
+
             this._displayInput = form.getElementByName("display");
             this._packageNameInput = form.getElementByName("packageName");
             this._restPathInput = form.getElementByName("restPath");
             this._gitUrlInput = form.getElementByName("gitURL");
-            this._mavenServerInput = form.getElementByName("mavenServer");
 
             const nameInput = form.getElementByName("name");
             nameInput.addEventListener("change", this._onNameChanged.bind(this));
@@ -19,11 +21,6 @@
             deploymentSelect.addEventListener("change", this._onDeploymentChange.bind(this));
             this._onDeploymentChange({ target: deploymentSelect });
 
-        }
-
-        open(callback) {
-            super.open(callback);
-            this._mavenServerInput.value = "https://maven.js-lib.com/";
         }
 
         _onNameChanged(event) {
