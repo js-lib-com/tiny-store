@@ -9,16 +9,17 @@ table thead tr {
     border-bottom: solid 1px #C0C0C0;
 }
 
-table tbody tr {
+table tbody tr, table tbody .tr {
+    display: table-row;
     border-bottom: solid 1px #F0F0F0;
     cursor: pointer;
 }
 
-table tr.selected {
+table tr.selected, table .tr.selected {
     background-color: #F8F8F8;
 }
 
-table tr.selected td {
+table tr.selected td, table .tr.selected td {
     color: var(--th-text-color);
 }
 

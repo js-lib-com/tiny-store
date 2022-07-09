@@ -19,7 +19,7 @@ ServerPage = class extends Page {
     }
 
     _onModelLoaded(servers) {
-        this._servers = this.getModelView().setModel(servers);
+        this._servers = this.getModelView("servers-list").setModel(servers);
     }
 
     _onServerSelect(event) {

@@ -53,9 +53,7 @@
 
             set(array, property, value, proxy) {
                 if (!isNaN(property)) {
-                    const listView = bindings[this.objectPath][0];
-                    if (typeof listView != "undefined") {
-                        console.log(`Delegate list view ${listView}.`);
+                    bindings[this.objectPath].forEach(listView => {
                         if (array.length <= Number(property)) {
                             console.log(`Add array ${this.objectPath}, item ${property}:${JSON.stringify(value)}.`);
                             listView.addItem(value);
@@ -65,7 +63,7 @@
                             console.log(`Update array ${this.objectPath}, item ${index}:${JSON.stringify(value)}.`);
                             listView.setItem(index, value);
                         }
-                    }
+                    });
                 }
                 else {
                     console.log(`Set array property ${this.objectPath}.${property}:${JSON.stringify(value)}.`);
@@ -75,13 +73,11 @@
 
             deleteProperty(array, property) {
                 if (!isNaN(property)) {
-                    const listView = bindings[this.objectPath][0];
-                    if (typeof listView != "undefined") {
-                        console.log(`Delegate list view ${listView}.`);
+                    bindings[this.objectPath].forEach(listView => {
                         const index = Number(property);
                         console.log(`Delete array ${this.objectPath}, item ${index}.`);
                         listView.removeItem(index);
-                    }
+                    });
                 }
                 else {
                     console.log(`Delete array property ${this.objectPath}.${property}.`);
@@ -131,6 +127,15 @@
 
         constructor() {
             super();
+        }
+
+        set object(object) {
+            this._object = object;
+            this.setObject(object);
+        }
+
+        get object() {
+            return this._object;
         }
 
         /**

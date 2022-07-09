@@ -1,4 +1,5 @@
 class TableView extends ListView {
+    static CLASS_TR = "tr";
     static CLASS_SELECTED = "selected";
     static EVENT_SELECTED = "select";
 
@@ -21,7 +22,14 @@ class TableView extends ListView {
         if (elements.length > 0) {
             this._tbody = elements.item(0);
             this._tbody.addEventListener("click", this._onClick.bind(this));
-            this._rowTemplate = this._tbody.removeChild(this._tbody.firstElementChild);
+            
+            this._rowTemplate = document.createElement("object-view");
+            this._rowTemplate.classList.add(TableView.CLASS_TR);
+            while(this._tbody.firstElementChild.firstChild) {
+                this._rowTemplate.appendChild(this._tbody.firstElementChild.firstChild);
+            }
+            
+            this._tbody.removeChild(this._tbody.firstElementChild);
         }
     }
 
@@ -34,7 +42,7 @@ class TableView extends ListView {
 
     addItem(item) {
         const row = this._rowTemplate.cloneNode(true);
-        this._setRowItem(row, item);
+        row.object = item;
         this._tbody.appendChild(row);
     }
 
@@ -43,7 +51,7 @@ class TableView extends ListView {
         if (!row) {
             throw `Out of bound table index ${index}.`;
         }
-        this._setRowItem(row, item);
+        row.object = item;
     }
 
     removeItem(index) {
@@ -58,6 +66,8 @@ class TableView extends ListView {
         this._tbody.innerHTML = '';
     }
 
+    // --------------------------------------------------------------------------------------------
+
     getSelectedIndex() {
         if (this._selectedRow == null) {
             return -1;
@@ -66,40 +76,17 @@ class TableView extends ListView {
     }
 
     getSelectedItem() {
-        return this._selectedRow != null ? this._selectedRow.__item__ : null;
+        return this._selectedRow != null ? this._selectedRow.object : null;
     }
 
     getSelectedId() {
-        return this._selectedRow != null ? this._selectedRow.__item__.id : null;
-    }
-
-    _setRowItem(row, item) {
-        let cell = row.firstElementChild;
-        let index = 0;
-        while (cell) {
-            if (cell.dataset.if) {
-                const expression = OPP.get(item, cell.dataset.if);
-                cell.classList.toggle("hidden", !expression);
-                this._headers[index].classList.toggle("hidden", !expression);
-            }
-            let value = OPP.get(item, cell.dataset.text);
-            if (cell.dataset.format) {
-                value = FormatFactory.get(cell.dataset.format).format(value);
-            }
-            if(!value) {
-                value = '';
-            }
-            cell.textContent = value;
-            cell = cell.nextElementSibling;
-            ++index;
-        }
-        row.__item__ = item;
+        return this._selectedRow != null ? this._selectedRow.object.id : null;
     }
 
     _onClick(event) {
         console.log(`${this}#onClick(event)`);
         var row = event.target;
-        while (row.tagName.toLowerCase() !== "tr") {
+        while (!row.classList.contains(TableView.CLASS_TR)) {
             row = row.parentElement;
             if (row === null) return;
         }
@@ -119,7 +106,7 @@ class TableView extends ListView {
     _select(row, selected) {
         const event = new CustomEvent(TableView.EVENT_SELECTED, { detail: { selected: selected } });
         this.dispatchEvent(event);
-        row.classList[selected ? "add" : "remove"](TableView.CLASS_SELECTED);
+        row.classList.toggle(TableView.CLASS_SELECTED, selected);
     }
 
     toString() {
