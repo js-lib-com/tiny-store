@@ -13,6 +13,7 @@ public class Server implements IPersistedObject {
 	private ObjectId id;
 
 	private ServerType type;
+	private String description;
 	private String hostURL;
 	private String username;
 	private String password;
@@ -36,6 +37,14 @@ public class Server implements IPersistedObject {
 
 	public void setType(ServerType type) {
 		this.type = type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getHostURL() {

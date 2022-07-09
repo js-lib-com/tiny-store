@@ -10,7 +10,7 @@
 
         <textarea name="description" placeholder="description"></textarea>
 
-        <input name="hostURL" placeholder="host URL" pattern="^https?://\w+(\.\w+)?$" required="true" />
+        <input name="hostURL" placeholder="host URL" pattern="^https?://\w[\w-]+(\.\w[\w-]+)*/?$" required="true" />
         <input name="username" placeholder="user name" required="true" />
         <input name="password" placeholder="password" required="true" />
     </object-form>
