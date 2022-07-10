@@ -2,7 +2,7 @@ package js.tiny.store.template;
 
 import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.FieldFlag;
-import js.tiny.store.tool.Strings;
+import js.tiny.store.util.Strings;
 
 public class EntityFieldTemplate {
 	private final EntityField entityField;

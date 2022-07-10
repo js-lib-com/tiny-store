@@ -9,7 +9,7 @@ import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.StoreEntity;
-import js.tiny.store.tool.Strings;
+import js.tiny.store.util.Strings;
 
 public class StoreEntityUpdateListener implements PreInvokeInterceptor, PostInvokeInterceptor {
 	private final Database database;

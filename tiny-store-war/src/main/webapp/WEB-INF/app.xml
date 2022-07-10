@@ -11,4 +11,6 @@
 	<binding bind="dao.StoreUpdateListener" />
 	<binding bind="dao.StoreEntityUpdateListener" />
 	<binding bind="dao.DataServiceUpdateListener" />
+
+	<binding bind="tool.IGitClient" to="tool.GitClientImpl" />
 </app>

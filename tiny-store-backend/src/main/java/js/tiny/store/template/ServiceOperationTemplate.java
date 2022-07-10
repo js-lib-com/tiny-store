@@ -12,7 +12,7 @@ import js.tiny.store.meta.RestParameter;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.TypeDef;
-import js.tiny.store.tool.Strings;
+import js.tiny.store.util.Strings;
 
 public class ServiceOperationTemplate {
 	private final Store store;

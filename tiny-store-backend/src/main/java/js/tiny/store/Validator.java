@@ -1,10 +1,10 @@
 package js.tiny.store;
 
 import static java.lang.String.format;
-import static js.tiny.store.tool.Strings.charCount;
-import static js.tiny.store.tool.Strings.columnName;
-import static js.tiny.store.tool.Strings.memberName;
-import static js.tiny.store.tool.Strings.operationName;
+import static js.tiny.store.util.Strings.charCount;
+import static js.tiny.store.util.Strings.columnName;
+import static js.tiny.store.util.Strings.memberName;
+import static js.tiny.store.util.Strings.operationName;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -25,12 +25,12 @@ import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
-import js.tiny.store.tool.Classes;
-import js.tiny.store.tool.FinalInteger;
 import js.tiny.store.tool.StoreDB;
-import js.tiny.store.tool.Strings;
-import js.tiny.store.tool.Types;
-import js.tiny.store.tool.URLs;
+import js.tiny.store.util.Classes;
+import js.tiny.store.util.FinalInteger;
+import js.tiny.store.util.Strings;
+import js.tiny.store.util.Types;
+import js.tiny.store.util.URLs;
 
 @ApplicationScoped
 @Remote

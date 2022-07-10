@@ -24,7 +24,6 @@ EntityPage = class extends Page {
     _onEntityLoaded(entity) {
         this._storeId = entity.storeId;
         this._entity = this.setModel(entity);
-        Workspace.getTypeOptionsByStore(this._storeId, optionsMeta => this.loadTypeOptions(optionsMeta));
     }
 
     _onFieldSelect(event) {

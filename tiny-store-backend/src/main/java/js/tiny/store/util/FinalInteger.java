@@ -1,4 +1,4 @@
-package js.tiny.store.tool;
+package js.tiny.store.util;
 
 public class FinalInteger {
 	private int value;

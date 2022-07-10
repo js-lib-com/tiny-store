@@ -1,4 +1,4 @@
-package js.tiny.store.tool;
+package js.tiny.store.util;
 
 public class Types extends js.util.Types {
 	public static boolean isPrimitiveLike(String type) {

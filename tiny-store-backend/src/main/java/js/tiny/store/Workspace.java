@@ -18,12 +18,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
@@ -51,12 +48,13 @@ import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
 import js.tiny.store.meta.Version;
-import js.tiny.store.tool.Classes;
-import js.tiny.store.tool.Files;
+import js.tiny.store.tool.IGitClient;
 import js.tiny.store.tool.Project;
 import js.tiny.store.tool.StoreDB;
-import js.tiny.store.tool.Strings;
-import js.tiny.store.tool.URLs;
+import js.tiny.store.util.Classes;
+import js.tiny.store.util.Files;
+import js.tiny.store.util.Strings;
+import js.tiny.store.util.URLs;
 
 @ApplicationScoped
 @Remote
@@ -66,11 +64,13 @@ public class Workspace {
 
 	private final Context context;
 	private final Database db;
+	private final IGitClient git;
 
 	@Inject
-	public Workspace(Context context, Database db) {
+	public Workspace(Context context, Database db, IGitClient git) {
 		this.context = context;
 		this.db = db;
+		this.git = git;
 	}
 
 	public Store createStore(Store store) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
@@ -286,65 +286,23 @@ public class Workspace {
 		return "Success";
 	}
 
-	public boolean commitChanges(String storeId, String message) throws IOException, NoFilepatternException, GitAPIException {
+	public boolean commitChanges(String storeId, String message) throws IOException {
 		Store store = db.getStore(storeId);
 		Project project = new Project(context, store, db);
 		project.clean();
 		project.generateSources();
 
-		try (Git git = Git.open(project.getProjectDir().getAbsoluteFile())) {
-			Status status = git.status().call();
-			boolean changed = false;
-
-			// missing: files in index, but not file system (e.g. what you get if you call 'rm ...' on a existing file)
-			for (String file : status.getMissing()) {
-				changed = true;
-				log.info("Missing file: %s.", file);
-			}
-
-			// modified: files modified on disk relative to the index (e.g. what you get if you modify an existing file without
-			// adding it to the index)
-			for (String file : status.getModified()) {
-				changed = true;
-				log.info("Modified file: %s.", file);
-			}
-
-			// untracked: files that are not ignored, and not in the index. (e.g. what you get if you create a new file without
-			// adding it to the index)
-			for (String file : status.getUntracked()) {
-				changed = true;
-				log.info("Untracked file: %s.", file);
-			}
-
-			if (!changed) {
-				log.warn("Attempt to commit no changes.");
-				return false;
-			}
-			git.add().addFilepattern(".").call();
-			git.commit().setAll(true).setMessage(message).call();
-		} catch (RepositoryNotFoundException e) {
-			log.warn(e);
-			return false;
-		}
-
+		git.commit(project.getProjectDir(), message);
 		db.deleteChangeLog(storeId);
 		return true;
 	}
 
-	public boolean pushChanges(String storeId) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
+	public boolean pushChanges(String storeId) throws IOException {
 		Store store = db.getStore(storeId);
-		String gitURL = store.getGitURL();
-
-		Server server = db.getServerByHostURL(URLs.hostURL(gitURL));
-		CredentialsProvider credentials = new UsernamePasswordCredentialsProvider(server.getUsername(), server.getPassword());
-
 		File projectDir = new File(context.getWorkspaceDir(), store.getName());
-		try (Git git = Git.open(projectDir.getAbsoluteFile())) {
-			git.push().setCredentialsProvider(credentials).call();
-		} catch (RepositoryNotFoundException e) {
-			log.warn(e);
-			return false;
-		}
+
+		Server server = db.getServerByHostURL(URLs.hostURL(store.getGitURL()));
+		git.push(projectDir, server.getUsername(), server.getPassword());
 		return true;
 	}
 

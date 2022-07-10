@@ -22,6 +22,8 @@ import js.tiny.store.dao.MongoDB;
 public class WorkspaceTest {
 	@Mock
 	private Context context;
+	@Mock
+	private IGitClient git;
 	
 	private Database database;
 	private Workspace workspace;
@@ -35,7 +37,7 @@ public class WorkspaceTest {
 		
 		MongoDB mongo = new MongoDB(context);
 		database = new DatabaseImpl(mongo);
-		workspace = new Workspace(context, database);
+		workspace = new Workspace(context, database, git);
 	}
 
 	@Test

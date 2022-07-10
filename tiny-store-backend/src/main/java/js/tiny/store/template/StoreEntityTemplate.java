@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
-import js.tiny.store.tool.Strings;
+import js.tiny.store.util.Strings;
 
 public class StoreEntityTemplate {
 	private final StoreEntity entity;

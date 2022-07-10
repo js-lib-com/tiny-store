@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
-import js.tiny.store.tool.Strings;
+import js.tiny.store.util.Strings;
 
 public class DataServiceTemplate {
 	private final String repositoryName;

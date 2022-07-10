@@ -1,4 +1,4 @@
-package js.tiny.store.tool;
+package js.tiny.store.util;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package js.tiny.store.template;
 
 import js.tiny.store.meta.Store;
-import js.tiny.store.tool.Strings;
+import js.tiny.store.util.Strings;
 
 public class StoreTemplate {
 	private final Store store;

@@ -15,13 +15,13 @@ FormatFactory = {
 
 ParametersFormat = {
     format(parameters) {
-        return parameters.map(parameter => TypeFormat.format(parameter.type)).join(", ");
+        return `[ ${parameters.map(parameter => TypeFormat.format(parameter.type)).join(", ")} ]`;
     }
 };
 
 SimpleParametersFormat = {
     format(parameters) {
-        return parameters.map(parameter => SimpleTypeFormat.format(parameter.type)).join(", ");
+        return `[ ${parameters.map(parameter => SimpleTypeFormat.format(parameter.type)).join(", ")} ]`;
     }
 };
 

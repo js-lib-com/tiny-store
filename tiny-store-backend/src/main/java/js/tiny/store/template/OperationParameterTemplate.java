@@ -3,7 +3,7 @@ package js.tiny.store.template;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.ParameterFlag;
 import js.tiny.store.meta.RestParameter;
-import js.tiny.store.tool.Strings;
+import js.tiny.store.util.Strings;
 
 public class OperationParameterTemplate {
 	private final OperationParameter operationParameter;

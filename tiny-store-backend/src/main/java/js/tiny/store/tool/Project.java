@@ -1,34 +1,11 @@
 package js.tiny.store.tool;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.jar.Manifest;
-
-import javax.tools.DiagnosticListener;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
-
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 
 import js.log.Log;
 import js.log.LogFactory;
@@ -39,14 +16,12 @@ import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.template.SourceTemplate;
+import js.tiny.store.tool.IMavenClient.Coordinates;
+import js.tiny.store.util.Files;
+import js.tiny.store.util.Strings;
 
 public class Project {
 	private static final Log log = LogFactory.getLog(Project.class);
-
-	private static final String JAVA_COMPILER = "1.8";
-
-	private final HttpClientBuilder clientBuilder;
-	private final RequestConfig requestConfig;
 
 	private final Store store;
 	private final Database dao;
@@ -57,22 +32,10 @@ public class Project {
 	private final File serverWarFile;
 	private final File clientJarFile;
 
+	private final ICompiler compiler;
+	private final IMavenClient maven;
+
 	public Project(Context context, Store store, Database dao) throws IOException {
-		HttpClientBuilder clientBuilder = HttpClients.custom();
-		RequestConfig.Builder configBuilder = RequestConfig.custom();
-		if (context.hasProxy()) {
-			HttpHost proxy = new HttpHost(context.getProxyHost(), context.getProxyPort(), context.getProxyProtocol());
-			configBuilder.setProxy(proxy);
-		}
-		this.requestConfig = configBuilder.build();
-
-		if (context.isProxySecure()) {
-			CredentialsProvider credentials = new BasicCredentialsProvider();
-			credentials.setCredentials(new AuthScope(context.getProxyHost(), context.getProxyPort()), new UsernamePasswordCredentials(context.getProxyUser(), context.getProxyPassword()));
-			clientBuilder = clientBuilder.setDefaultCredentialsProvider(credentials);
-		}
-		this.clientBuilder = clientBuilder;
-
 		this.store = store;
 		this.dao = dao;
 
@@ -85,6 +48,11 @@ public class Project {
 		this.serverWarFile = new File(Files.serverTargetDir(projectDir), Strings.concat(store.getName(), '#', store.getVersion(), ".war"));
 		// client jar uses 'store' suffix: app-store-1.0.jar
 		this.clientJarFile = new File(Files.clientTargetDir(projectDir), Strings.concat(store.getName(), "-store-", store.getVersion(), ".jar"));
+
+		this.compiler = new CompilerImpl();
+		this.compiler.setVersion(ICompiler.Version.JAVA_8);
+
+		this.maven = new MavenClientImpl(context);
 
 		generateProjectFiles();
 	}
@@ -156,7 +124,7 @@ public class Project {
 				new File(librariesDir, "js-jee-api-1.1.jar"), //
 				new File(librariesDir, "js-transaction-api-1.3.jar") //
 		};
-		return compile(Files.serverSourceDir(projectDir), Files.serverClassDir(projectDir), libraries);
+		return compiler.compile(Files.serverSourceDir(projectDir), Files.serverClassDir(projectDir), libraries);
 	}
 
 	public void buildServerWar() throws IOException {
@@ -192,34 +160,7 @@ public class Project {
 	}
 
 	public String compileClientSources() throws IOException {
-		return compile(Files.clientSourceDir(projectDir), Files.clientClassDir(projectDir));
-	}
-
-	private static String compile(File sourceDir, File classDir, File... libraries) throws IOException {
-		List<File> sourceFiles = new ArrayList<>();
-		Files.scanSources(sourceDir, sourceFiles);
-
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		StringBuilder diagnosticBuilder = new StringBuilder();
-		DiagnosticListener<JavaFileObject> diagnosticListener = diagnostic -> {
-			diagnosticBuilder.append(diagnostic);
-		};
-		List<String> options = Arrays.asList("-source", JAVA_COMPILER, "-target", JAVA_COMPILER);
-
-		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
-			if (libraries.length > 0) {
-				fileManager.setLocation(StandardLocation.CLASS_PATH, Arrays.asList(libraries));
-			}
-			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(classDir));
-
-			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
-			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
-			if (result == null || !result) {
-				log.warn("Compilation error on client sources: %s", sourceFiles);
-				return diagnosticBuilder.toString();
-			}
-			return null;
-		}
+		return compiler.compile(Files.clientSourceDir(projectDir), Files.clientClassDir(projectDir));
 	}
 
 	public void buildClientJar() throws IOException {
@@ -230,20 +171,7 @@ public class Project {
 	}
 
 	public void deployClientJar() throws IOException {
-		String url = String.format("https://maven.js-lib.com/%s/%s-store/%s/%s", store.getPackageName().replace('.', '/'), store.getName(), store.getVersion(), clientJarFile.getName());
-		log.debug("Deploy client JAR to |%s|.", url);
-
-		try (CloseableHttpClient client = clientBuilder.build()) {
-			HttpPost httpPost = new HttpPost(url);
-			httpPost.setConfig(requestConfig);
-			httpPost.setHeader("Content-Type", "application/octet-stream");
-			httpPost.setEntity(new InputStreamEntity(new FileInputStream(clientJarFile)));
-
-			try (CloseableHttpResponse response = client.execute(httpPost)) {
-				if (response.getStatusLine().getStatusCode() != 200) {
-					throw new IOException(String.format("Fail to upload file %s", clientJarFile));
-				}
-			}
-		}
+		IMavenClient.Coordinates coordinates = new Coordinates(store.getPackageName(), store.getName() + "-store", store.getVersion());
+		maven.deploy(store.getMavenServer(), coordinates, clientJarFile);
 	}
 }
