@@ -2,16 +2,16 @@ ServicePage = class extends Page {
     constructor() {
         super();
 
-        const operationsView = document.getElementById("operations-list");
-        operationsView.addEventListener("select", this._onOperationSelect.bind(this));
+        this._operationsView = document.getElementById("operations-list");
+        this._operationsView.addEventListener("select", this._onOperationSelect.bind(this));
 
         const serviceId = location.search.substring(1);
         Database.getDataService(serviceId, this._onServiceLoaded.bind(this));
-        Database.getServiceOperations(serviceId, operations => operationsView.setItems(operations));
+        Database.getServiceOperations(serviceId, operations => this._onOperationsLoaded(operations));
 
         this._sideMenu = this.getSideMenu();
         this._sideMenu.setLink("store-page", () => `store.htm?${this._service.storeId}`);
-        this._sideMenu.setLink("operation-page", () => `operation.htm?${operationsView.getSelectedId()}`);
+        this._sideMenu.setLink("operation-page", () => `operation.htm?${this._operations[this._operationsView.selectedIndex].id}`);
 
         this._actionBar = this.getActionBar("ServicePage");
         this._actionBar.setHandler("edit-service", this._onEditService);
@@ -25,6 +25,11 @@ ServicePage = class extends Page {
         this._storeId = service.storeId;
         this._service = this.setModel(service);
         Workspace.getTypeOptionsByStore(this._storeId, optionsMeta => this.loadTypeOptions(optionsMeta));
+    }
+
+    _onOperationsLoaded(operations) {
+        /** {Array} service operations list. This property is actually an one-way data binding proxy to an array. */
+        this._operations = this._operationsView.setItems(operations);
     }
 
     _onOperationSelect(event) {

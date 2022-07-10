@@ -62,7 +62,7 @@ class Page {
 		const storeId = typeof event == "string" ? event : this._storeId;
 		Database.getChangeLog(storeId, changeLog => {
 			const dialog = this.getCompo("commit-form");
-			dialog.edit({ changeLog: changeLog }, commit => {
+			dialog.edit(changeLog, commit => {
 				Workspace.commitChanges(storeId, commit.message, result => this.alert(result));
 			});
 		});

@@ -2,13 +2,16 @@ ServerPage = class extends Page {
     constructor() {
         super();
 
+        /** {TableView} servers table view. */
         this._serversView = document.getElementById("servers-list");
         Database.getServers(servers => this._onModelLoaded(servers));
         this._serversView.addEventListener("select", this._onServerSelect.bind(this));
 
+        /** {SideMenu} side menu. */
         this._sideMenu = this.getSideMenu();
         this._sideMenu.setLink("index-page", () => `index.htm`);
 
+        /** {ActionBar} action bar. */
         this._actionBar = this.getActionBar("ServerPage");
         this._actionBar.setHandler("create-server", this._onCreateServer);
         this._actionBar.setHandler("edit-server", this._onEditServer);
@@ -18,6 +21,7 @@ ServerPage = class extends Page {
     }
 
     _onModelLoaded(servers) {
+        /** {Array} servers list. This property is actually an one-way data binding proxy to an array. */
         this._servers = this._serversView.setItems(servers);
     }
 

@@ -5,7 +5,7 @@
  * 
  * @param {Array} stack object properties stack,
  * @param {Object} bindings object property paths mapped to related view elements.
- * @returns object proxy handler.
+ * @returns {Object} object proxy handler.
  */
 function ObjectHandler(stack, bindings) {
     let propertyPath = stack.join('.');
@@ -42,7 +42,7 @@ function ObjectHandler(stack, bindings) {
  * 
  * @param {Array} stack object properties stack,
  * @param {Object} bindings object property paths mapped to related view elements.
- * @returns array proxy handler.
+ * @returns {Object} array proxy handler.
  */
 function ArrayHandler(stack, bindings) {
     return {
@@ -140,7 +140,7 @@ ObjectView = class extends HTMLElement {
      * Inject model object into object view descendants and create one-way data binding proxy.
      * 
      * @param {Object} object model object, usualy loaded from server.
-     * @returns {Object} one-way data binding proxy for given model object.
+     * @returns {Proxy} one-way data binding proxy for given model object.
      */
     setObject(object) {
         const bindings = {};
@@ -230,7 +230,7 @@ ObjectView = class extends HTMLElement {
      * @param {Array} stack object properties stack, update at every iteration,
      * @param {Object} bindings object property paths mapped to related view elements,
      * @param {Boolean} processing flag true as long as processing should continue.
-     * @returns proxy instance for given model object.
+     * @returns {Proxy} proxy instance for given model object.
      */
     _proxy(object, stack, bindings, processing) {
         if (processing) {
@@ -286,6 +286,7 @@ ListView = class extends HTMLElement {
      * Create child views populated from given array. This method is invoked by {@link ObjectView}
      * when it discovers an list view element.
      * @param {Array} items model array items.
+     * @returns {Proxy} one-way data binding proxy for given model array.
      */
     setItems(items) {
         return new Proxy(items, ArrayHandler(["self"], { self: [this] }));

@@ -76,14 +76,6 @@ class TableView extends ListView {
         return Array.prototype.indexOf.call(this._tbody.children, this._selectedRow);
     }
 
-    getSelectedItemEOL() {
-        return this._selectedRow != null ? this._selectedRow.object : null;
-    }
-
-    getSelectedIdEOL() {
-        return this._selectedRow != null ? this._selectedRow.object.id : null;
-    }
-
     _onClick(event) {
         console.log(`${this}#onClick(event)`);
         var row = event.target;

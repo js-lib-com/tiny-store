@@ -76,7 +76,7 @@ EntityPage = class extends Page {
         const dialog = this.getCompo("field-form");
         dialog.title = "Edit Field";
 
-        const index = this._fieldsView.getSelectedIndex();
+        const index = this._fieldsView.selectedIndex;
         dialog.validator = (field, callback) => Validator.assertEditField(this._entity, index, field, callback);
 
         dialog.edit(this._entity.fields[index], field => {
@@ -87,7 +87,7 @@ EntityPage = class extends Page {
 
     _onDeleteField() {
         const dialog = this.getCompo("field-delete");
-        const index = this._fieldsView.getSelectedIndex();
+        const index = this._fieldsView.selectedIndex;
         dialog.open(() => {
             this._entity.fields.splice(index, 1);
             Database.updateStoreEntity(this._entity);

@@ -60,15 +60,18 @@ IndexPage = class extends Page {
 	}
 
 	_onBuildProject() {
-		Workspace.buildProject(this._storesView.getSelectedId(), result => this.alert(result));
+		const storeId = this._stores[this._storesView.selectedIndex].id;
+		Workspace.buildProject(storeId, result => this.alert(result));
 	}
 
 	_onCommitChanges() {
-		super._onCommitChanges(this._storesView.getSelectedId());
+		const storeId = this._stores[this._storesView.selectedIndex].id;
+		super._onCommitChanges(storeId);
 	}
 
 	_onPushChanges() {
-		super._onPushChanges(this._storesView.getSelectedId());
+		const storeId = this._stores[this._storesView.selectedIndex].id;
+		super._onPushChanges(storeId);
 	}
 };
 

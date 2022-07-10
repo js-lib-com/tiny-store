@@ -77,10 +77,10 @@ OperationPage = class extends Page {
         const dialog = this.getCompo("parameter-form");
         dialog.title = "Edit Parameter";
         dialog.validator = (parameter, callback) => {
-            Validator.assertEditParameter(this._operation, this._parametersListView.getSelectedIndex(), parameter, callback);
+            Validator.assertEditParameter(this._operation, this._parametersListView.selectedIndex, parameter, callback);
         };
 
-        const index = this._parametersListView.getSelectedIndex();
+        const index = this._parametersListView.selectedIndex;
         dialog.edit(this._operation.parameters[index], parameter => {
             this._operation.parameters[index] = parameter;
             Database.updateServiceOperation(this._operation);
@@ -89,7 +89,7 @@ OperationPage = class extends Page {
 
     _onDeleteParameter() {
         const dialog = this.getCompo("parameter-delete");
-        const index = this._parametersListView.getSelectedIndex();
+        const index = this._parametersListView.selectedIndex;
         dialog.open(() => {
             this._operation.parameters.splice(index, 1);
             Database.updateServiceOperation(this._operation);
@@ -117,7 +117,7 @@ OperationPage = class extends Page {
     _onEditException() {
         const dialog = this.getCompo("exception-form");
         dialog.title = "Edit Exception";
-        const index = this._exceptionsListView.getSelectedIndex();
+        const index = this._exceptionsListView.selectedIndex;
         dialog.edit(this._operation.exceptions[index], exception => {
             this._operation.exceptions[index] = exception;
             Database.updateServiceOperation(this._operation);
@@ -126,7 +126,7 @@ OperationPage = class extends Page {
 
     _onDeleteException() {
         const dialog = this.getCompo("exception-delete");
-        const index = this._exceptionsListView.getSelectedIndex();
+        const index = this._exceptionsListView.selectedIndex;
         dialog.open(() => {
             this._operation.exceptions.splice(index, 1);
             Database.updateServiceOperation(this._operation);

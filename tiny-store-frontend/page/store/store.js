@@ -11,8 +11,8 @@ StorePage = class extends Page {
 
 		this._sideMenu = this.getSideMenu();
 		this._sideMenu.setLink("index-page", () => `index.htm`);
-		this._sideMenu.setLink("service-page", () => `service.htm?${this._servicesView.getSelectedId()}`);
-		this._sideMenu.setLink("entity-page", () => `entity.htm?${this._entitiesView.getSelectedId()}`);
+		this._sideMenu.setLink("service-page", () => `service.htm?${this._services[this._servicesView.selectedIndex].id}`);
+		this._sideMenu.setLink("entity-page", () => `entity.htm?${this._entities[this._entitiesView.selectedIndex].id}`);
 
 		this._actionBar = this.getActionBar("StorePage");
 		this._actionBar.setHandler("edit-store", this._onEditStore);
@@ -33,19 +33,29 @@ StorePage = class extends Page {
 
 		if (typeof delay != "undefined") {
 			setTimeout(() => {
-				Database.getStoreServices(storeId, services => this._servicesView.setItems(services));
-				Database.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
+				Database.getStoreServices(storeId, services => this._onServicesLoaded(services));
+				Database.getStoreEntities(storeId, entities => this._onEntitiesLoaded(entities));
 			}, delay);
 			return;
 		}
 
-		Database.getStoreServices(storeId, services => this._servicesView.setItems(services));
-		Database.getStoreEntities(storeId, entities => this._entitiesView.setItems(entities));
+		Database.getStoreServices(storeId, services => this._onServicesLoaded(services));
+		Database.getStoreEntities(storeId, entities => this._onEntitiesLoaded(entities));
 	}
 
 	_onStoreLoaded(store) {
 		this._storeId = store.id;
 		this._store = this.setModel(store);
+	}
+
+	_onServicesLoaded(services) {
+		/** {Array} data services list. This property is actually an one-way data binding proxy to an array. */
+		this._services = this._servicesView.setItems(services);
+	}
+
+	_onEntitiesLoaded(entities) {
+		/** {Array} store entities list. This property is actually an one-way data binding proxy to an array. */
+		this._entities = this._entitiesView.setItems(entities);
 	}
 
 	_onServiceSelect(event) {
@@ -84,13 +94,14 @@ StorePage = class extends Page {
 
 		dialog.edit(service, service => {
 			Database.createDataService(this._store.id, service, service => {
-				this._servicesView.addItem(service);
+				this._services.push(service);
 			});
 		});
 	}
 
 	_onCreateDAO() {
-		Workspace.createDaoService(this._entitiesView.getSelectedItem(), service => {
+		const entity = this._entities[this._entitiesView.selectedIndex];
+		Workspace.createDaoService(entity, service => {
 			this._servicesView.addItem(service);
 		});
 	}
@@ -110,16 +121,17 @@ StorePage = class extends Page {
 		const entity = {
 			className: `${this._store.packageName}.`
 		};
+
 		dialog.edit(entity, entity => {
 			Database.createStoreEntity(this._store.id, entity, entity => {
-				this._entitiesView.addItem(entity);
+				this._entities.push(entity);
 			});
 		});
 	}
 
 	_onImportEntity(entity) {
 		Workspace.importStoreEntity(this._store.id, entity, entity => {
-			this._entitiesView.addItem(entity);
+			this._entities.push(entity);
 		});
 	}
 
