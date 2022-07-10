@@ -1,7 +1,9 @@
 package js.tiny.store;
 
 import java.io.File;
+import java.util.Properties;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -15,7 +17,7 @@ public class Context {
 	@Resource(name = "mongo.url")
 	private String mongoURL;
 	@Resource(name = "mongo.db")
-	private String mongoDatabase;
+	private String mongoDatabaseName;
 
 	@Resource(name = "proxy.protocol")
 	private String proxyProtocol;
@@ -30,18 +32,36 @@ public class Context {
 
 	private File workspaceDir;
 	private File runtimeDir;
+	private Properties properties;
+
+	@PostConstruct
+	private void postConstruct() {
+		this.workspaceDir = new File(workspaceDirPath);
+		this.runtimeDir = new File(runtimeDirPath);
+
+		this.properties = new Properties();
+		setProperty("workspace.dir", workspaceDir);
+		setProperty("runtime.dir", runtimeDir);
+		setProperty("mongo.url", mongoURL);
+		setProperty("mongo.db", mongoDatabaseName);
+		setProperty("proxy.protocol", proxyProtocol);
+		setProperty("proxy.host", proxyHost);
+		setProperty("proxy.port", proxyPort);
+		setProperty("proxy.User", proxyUser);
+		setProperty("proxy.Password", proxyPassword);
+	}
+
+	private void setProperty(String key, Object value) {
+		if (value != null) {
+			properties.put(key, value);
+		}
+	}
 
 	public File getWorkspaceDir() {
-		if (workspaceDir == null) {
-			workspaceDir = new File(workspaceDirPath);
-		}
 		return workspaceDir;
 	}
 
 	public File getRuntimeDir() {
-		if (runtimeDir == null) {
-			runtimeDir = new File(runtimeDirPath);
-		}
 		return runtimeDir;
 	}
 
@@ -49,8 +69,8 @@ public class Context {
 		return mongoURL;
 	}
 
-	public String getMongoDatabase() {
-		return mongoDatabase;
+	public String getMongoDatabaseName() {
+		return mongoDatabaseName;
 	}
 
 	public boolean hasProxy() {
@@ -79,5 +99,9 @@ public class Context {
 
 	public String getProxyPassword() {
 		return proxyPassword;
+	}
+
+	public Properties getProperties() {
+		return properties;
 	}
 }

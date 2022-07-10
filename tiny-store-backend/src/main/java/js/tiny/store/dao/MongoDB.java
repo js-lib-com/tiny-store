@@ -17,6 +17,7 @@ import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.tiny.store.Context;
+import js.util.Params;
 
 @ApplicationScoped
 public class MongoDB {
@@ -25,13 +26,16 @@ public class MongoDB {
 
 	@Inject
 	public MongoDB(Context context) {
+		Params.notNull(context.getMongoURL(), "Context Mongo URL");
+		Params.notNull(context.getMongoDatabaseName(), "Context Mongo database name");
+		
 		ConnectionString connectionString = new ConnectionString(context.getMongoURL());
 		CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
 		CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
 
 		MongoClientSettings clientSettings = MongoClientSettings.builder().applyConnectionString(connectionString).codecRegistry(codecRegistry).build();
 		this.client = MongoClients.create(clientSettings);
-		this.database = this.client.getDatabase(context.getMongoDatabase());
+		this.database = this.client.getDatabase(context.getMongoDatabaseName());
 	}
 
 	@PreDestroy

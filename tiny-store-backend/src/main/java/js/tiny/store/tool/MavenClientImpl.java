@@ -3,6 +3,7 @@ package js.tiny.store.tool;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -19,7 +20,6 @@ import org.apache.http.impl.client.HttpClients;
 
 import js.log.Log;
 import js.log.LogFactory;
-import js.tiny.store.Context;
 import js.tiny.store.util.Strings;
 
 class MavenClientImpl implements IMavenClient {
@@ -28,18 +28,23 @@ class MavenClientImpl implements IMavenClient {
 	private final HttpClientBuilder httpClientBuilder;
 	private final RequestConfig httpRequestConfig;
 
-	public MavenClientImpl(Context context) {
+	public MavenClientImpl(Properties properties) {
 		HttpClientBuilder httpClientBuilder = HttpClients.custom();
 		RequestConfig.Builder httpRequestConfigBuilder = RequestConfig.custom();
-		if (context.hasProxy()) {
-			HttpHost proxy = new HttpHost(context.getProxyHost(), context.getProxyPort(), context.getProxyProtocol());
+
+		String proxyHost = properties.getProperty("proxy.host");
+		if (proxyHost != null) {
+			int proxyPort = Integer.parseInt(properties.getProperty("proxy.port"));
+			HttpHost proxy = new HttpHost(proxyHost, proxyPort, properties.getProperty("proxy.protocol"));
 			httpRequestConfigBuilder.setProxy(proxy);
 		}
 		this.httpRequestConfig = httpRequestConfigBuilder.build();
 
-		if (context.isProxySecure()) {
+		String proxyUser = properties.getProperty("proxy.user");
+		if (proxyUser != null) {
+			int proxyPort = Integer.parseInt(properties.getProperty("proxy.port"));
 			CredentialsProvider credentials = new BasicCredentialsProvider();
-			credentials.setCredentials(new AuthScope(context.getProxyHost(), context.getProxyPort()), new UsernamePasswordCredentials(context.getProxyUser(), context.getProxyPassword()));
+			credentials.setCredentials(new AuthScope(proxyHost, proxyPort), new UsernamePasswordCredentials(proxyUser, properties.getProperty("proxy.password")));
 			httpClientBuilder = httpClientBuilder.setDefaultCredentialsProvider(credentials);
 		}
 		this.httpClientBuilder = httpClientBuilder;

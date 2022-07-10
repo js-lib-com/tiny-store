@@ -102,7 +102,7 @@ StorePage = class extends Page {
 	_onCreateDAO() {
 		const entity = this._entities[this._entitiesView.selectedIndex];
 		Workspace.createDaoService(entity, service => {
-			this._servicesView.addItem(service);
+			this._services.push(service);
 		});
 	}
 

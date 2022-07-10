@@ -31,7 +31,7 @@ public class WorkspaceTest {
 	@Before
 	public void beforeTest() throws Exception {
 		when(context.getMongoURL()).thenReturn("mongodb://10.138.44.35:27017");
-		when(context.getMongoDatabase()).thenReturn("tiny-store");
+		when(context.getMongoDatabaseName()).thenReturn("tiny-store");
 		when(context.getWorkspaceDir()).thenReturn(new File("D:/runtime/tiny-store/workspace/"));
 		when(context.getRuntimeDir()).thenReturn(new File("D:/runtime/tiny-store/"));
 		

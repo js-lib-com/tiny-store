@@ -55,6 +55,7 @@ import js.tiny.store.util.Classes;
 import js.tiny.store.util.Files;
 import js.tiny.store.util.Strings;
 import js.tiny.store.util.URLs;
+import js.util.Params;
 
 @ApplicationScoped
 @Remote
@@ -68,6 +69,7 @@ public class Workspace {
 
 	@Inject
 	public Workspace(Context context, Database db, IGitClient git) {
+		Params.notNull(context.getWorkspaceDir(), "Workspace directory");
 		this.context = context;
 		this.db = db;
 		this.git = git;

@@ -52,7 +52,7 @@ public class Project {
 		this.compiler = new CompilerImpl();
 		this.compiler.setVersion(ICompiler.Version.JAVA_8);
 
-		this.maven = new MavenClientImpl(context);
+		this.maven = new MavenClientImpl(context.getProperties());
 
 		generateProjectFiles();
 	}
