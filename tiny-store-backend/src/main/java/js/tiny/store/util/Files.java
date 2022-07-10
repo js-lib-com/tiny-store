@@ -13,7 +13,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
 public class Files extends js.util.Files {
-	private static final String PARENT_POM_FILE = "pom.xml";
+	private static final String PROJECT_POM_FILE = "pom.xml";
 	private static final String GIT_IGNORE_FILE = ".gitignore";
 	private static final String README_FILE = "README.md";
 
@@ -57,8 +57,8 @@ public class Files extends js.util.Files {
 		}
 	}
 
-	public static File parentPomFile(File projectDir) throws IOException {
-		return file(projectDir, PARENT_POM_FILE);
+	public static File projectPomFile(File projectDir) throws IOException {
+		return file(projectDir, PROJECT_POM_FILE);
 	}
 
 	public static File clientPomFile(File projectDir) throws IOException {

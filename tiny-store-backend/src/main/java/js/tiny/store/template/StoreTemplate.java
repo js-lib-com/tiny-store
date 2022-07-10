@@ -1,7 +1,9 @@
 package js.tiny.store.template;
 
 import js.tiny.store.meta.Store;
+import js.tiny.store.meta.Version;
 import js.tiny.store.util.Strings;
+import js.tiny.store.util.URLs;
 
 public class StoreTemplate {
 	private final Store store;
@@ -22,12 +24,24 @@ public class StoreTemplate {
 		return store.getDescription();
 	}
 
+	public Version getVersion() {
+		return store.getVersion();
+	}
+
 	public String getPackageName() {
 		return store.getPackageName();
 	}
 
 	public String getRestPath() {
 		return store.getRestPath();
+	}
+
+	public String getMavenServer() {
+		return store.getMavenServer();
+	}
+
+	public String getMavenRepositoryId() {
+		return URLs.host(store.getMavenServer());
 	}
 
 	public String getDatabaseURL() {

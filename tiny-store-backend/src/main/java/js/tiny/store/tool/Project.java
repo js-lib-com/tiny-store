@@ -68,7 +68,7 @@ public class Project {
 	}
 
 	private void generateProjectFiles() throws IOException {
-		generate("/parent-pom.xml.vtl", Files.parentPomFile(projectDir), store);
+		generate("/project-pom.xml.vtl", Files.projectPomFile(projectDir), store);
 		generate("/server-pom.xml.vtl", Files.serverPomFile(projectDir), store);
 		generate("/client-pom.xml.vtl", Files.clientPomFile(projectDir), store);
 		generate("/gitignore.vtl", Files.gitIgnoreFile(projectDir));
@@ -98,7 +98,6 @@ public class Project {
 
 		generate("/web.xml.vtl", Files.webDescriptorFile(projectDir), store);
 		generate("/app.xml.vtl", Files.appDescriptorFile(projectDir), store, services);
-		// TODO: hack on connection string ampersand escape
 		generate("/context.xml.vtl", Files.contextFile(projectDir), store);
 		generate("/persistence.xml.vtl", Files.persistenceFile(projectDir), store, entities);
 

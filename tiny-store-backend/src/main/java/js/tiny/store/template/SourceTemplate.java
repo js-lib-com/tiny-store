@@ -110,7 +110,7 @@ public class SourceTemplate {
 
 	private static final Map<String, ContextConfig> CONFIGS = new HashMap<>();
 	static {
-		CONFIGS.put("/parent-pom.xml.vtl", SourceTemplate::store);
+		CONFIGS.put("/project-pom.xml.vtl", SourceTemplate::store);
 		CONFIGS.put("/server-pom.xml.vtl", SourceTemplate::store);
 		CONFIGS.put("/client-pom.xml.vtl", SourceTemplate::store);
 		CONFIGS.put("/gitignore.vtl", SourceTemplate::empty);
