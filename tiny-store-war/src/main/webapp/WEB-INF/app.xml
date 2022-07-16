@@ -5,6 +5,7 @@
 	<binding bind="Validator" />
 	
 	<binding bind="ChangeLogListener" />
+	<binding bind="SourceCodeBuildListener" />
 
 	<binding bind="dao.Database" to="dao.DatabaseImpl" />
 	<binding bind="dao.MongoDB" />
@@ -12,5 +13,6 @@
 	<binding bind="dao.StoreEntityUpdateListener" />
 	<binding bind="dao.DataServiceUpdateListener" />
 
-	<binding bind="tool.IGitClient" to="tool.GitClientImpl" />
+	<binding bind="tool.IGitClient" to="tool.GitClient" />
+	<binding bind="tool.ISourceCompiler" to="tool.SourceCompiler" />
 </app>

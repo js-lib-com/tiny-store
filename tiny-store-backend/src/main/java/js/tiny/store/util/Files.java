@@ -109,12 +109,20 @@ public class Files extends js.util.Files {
 		return file(serverSourceDir(projectDir), className.replace('.', '/') + ".java");
 	}
 
-	public static File clientClassDir(File projectDir) throws IOException {
+	public static File clientClassesDir(File projectDir) throws IOException {
 		return dir(projectDir, CLIENT_CLASS_DIR);
 	}
 
-	public static File serverClassDir(File projectDir) throws IOException {
+	public static File clientClassFile(File projectDir, String className) throws IOException {
+		return file(clientClassesDir(projectDir), className.replace('.', '/') + ".class");
+	}
+
+	public static File serverClassesDir(File projectDir) throws IOException {
 		return dir(projectDir, SERVER_CLASS_DIR);
+	}
+
+	public static File serverClassFile(File projectDir, String className) throws IOException {
+		return file(serverClassesDir(projectDir), className.replace('.', '/') + ".class");
 	}
 
 	/**
@@ -261,5 +269,9 @@ public class Files extends js.util.Files {
 				archive.closeEntry();
 			}
 		}
+	}
+
+	public static File classFile(File classesDir, String className) {
+		return new File(classesDir, Strings.concat(className.replace('.', File.separatorChar), ".class"));
 	}
 }

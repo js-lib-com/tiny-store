@@ -19,6 +19,10 @@ public class TypeDef {
 		this(null, type.getCanonicalName());
 	}
 
+	public TypeDef(Class<?> collection, Class<?> type) {
+		this(collection.getCanonicalName(), type.getCanonicalName());
+	}
+
 	public TypeDef(String collection, String name) {
 		this.collection = collection;
 		this.name = name;

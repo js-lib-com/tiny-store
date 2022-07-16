@@ -3,13 +3,15 @@ package js.tiny.store.tool;
 import java.io.File;
 import java.io.IOException;
 
-public interface ICompiler {
+public interface ISourceCompiler {
 
 	void setVersion(Version version);
 
 	String compile(File sourceDir, File classDir) throws IOException;
 
 	String compile(File sourceDir, File classDir, File[] libraries) throws IOException;
+
+	File compile(File sourceFile, File[] libraries) throws IOException;
 
 	public static enum Version {
 		JAVA_8("1.8");
@@ -24,4 +26,5 @@ public interface ICompiler {
 			return value;
 		}
 	}
+
 }

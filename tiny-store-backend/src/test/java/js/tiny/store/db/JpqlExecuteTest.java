@@ -1,46 +1,160 @@
 package js.tiny.store.db;
 
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import jakarta.persistence.spi.PersistenceProvider;
+import jakarta.persistence.spi.PersistenceUnitInfo;
+import js.tiny.store.meta.DataOpcode;
+import js.tiny.store.meta.OperationParameter;
+import js.tiny.store.meta.OperationValue;
+import js.tiny.store.meta.ParameterFlag;
+import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
-import js.tiny.store.meta.StoreEntity;
+import js.tiny.store.meta.TypeDef;
+import js.tiny.store.tool.Project;
+import js.tiny.store.util.ProjectPersistenceUnitInfo;
+import js.util.Classes;
 
+@RunWith(MockitoJUnitRunner.class)
 public class JpqlExecuteTest {
-	private Store store = new Store();
-	private List<StoreEntity> entities = new ArrayList<>();
+	@Mock
+	private Store store;
+	@Mock
+	private Project project;
+
+	private List<String> entities = new ArrayList<>();
+
+	@Before
+	public void beforeTest() throws IOException {
+		when(store.getName()).thenReturn("test");
+		when(store.getDatabaseURL()).thenReturn("jdbc:mysql://localhost:3306/test");
+		when(store.getDatabaseUser()).thenReturn("test");
+		when(store.getDatabasePassword()).thenReturn("test");
+		
+		when(project.getStore()).thenReturn(store);
+		when(project.getServerClassesDir()).thenReturn(new File("D:\\runtime\\tiny-store\\workspace\\test\\server\\target\\classes"));
+	}
 
 	@Test
-	public void execute() {
-		/*
-		store.setName("test");
-		store.setDatabaseURL("jdbc:mysql://localhost:3306/test");
-		store.setDatabaseUser("test");
-		store.setDatabasePassword("test");
-		
-		entities.add(entity(Person.class));
+	public void execute() throws Exception {
+		ServiceOperation operation = new ServiceOperation();
+		operation.setName("read");
+		operation.setDataOpcode(DataOpcode.READ);
+		operation.setQuery("select p from Person p where p.id=?1");
+		operation.setValue(new OperationValue("com.jslib.test.Person"));
+		operation.setParameters(Arrays.asList(new OperationParameter(Integer.class, "id"), new OperationParameter(Integer.class, "max", ParameterFlag.MAX_RESULTS)));
 
-		PersistenceUnitInfo info = new PersistenceUnitInfoImpl(store, entities);
+		entities = Arrays.asList("com.jslib.test.Person");
 
-		PersistenceProvider provider = new org.eclipse.persistence.jpa.PersistenceProvider();
+		PersistenceUnitInfo info = new ProjectPersistenceUnitInfo(project, entities);
+		PersistenceProvider provider = Classes.loadService(PersistenceProvider.class);
 
 		Map<String, Object> configuration = new HashMap<>();
 		EntityManagerFactory factory = provider.createContainerEntityManagerFactory(info, configuration);
 
 		try (EntityManager em = factory.createEntityManager()) {
-			TypedQuery<Person> query = em.createQuery("select p from Person p", Person.class);
-			query.setMaxResults(1);
-			Person person = query.getSingleResult();
-			System.out.println(person);
+			EntityTransaction transaction = em.getTransaction();
+			transaction.begin();
+
+			try {
+				Query query = em.createQuery(operation.getQuery());
+
+				int position = 0;
+				if (operation.getParameters() != null) {
+					for (OperationParameter parameter : operation.getParameters()) {
+						if (parameter.getFlag() == ParameterFlag.FIRST_RESULT) {
+							query.setFirstResult(0);
+							continue;
+						}
+						if (parameter.getFlag() == ParameterFlag.MAX_RESULTS) {
+							query.setMaxResults(1);
+							continue;
+						}
+						query.setParameter(++position, parameter(parameter));
+					}
+				}
+
+				switch (operation.getDataOpcode()) {
+				case CREATE:
+					query.executeUpdate();
+					break;
+
+				case READ:
+					TypeDef valueType = operation.getValue().getType();
+					if (valueType.getCollection() != null) {
+						query.getResultList();
+					} else {
+						query.getSingleResult();
+					}
+					break;
+
+				case UPDATE:
+					query.executeUpdate();
+					break;
+
+				case DELETE:
+					query.executeUpdate();
+					break;
+
+				}
+
+			} finally {
+				transaction.rollback();
+			}
+		} catch (Throwable t) {
+			System.out.println(t.getMessage());
 		}
-		*/
 	}
-	
-	private static StoreEntity entity(Class<?> entityClass) {
-		StoreEntity entity = new StoreEntity();
-		entity.setClassName(entityClass.getCanonicalName());
-		return entity;
+
+	private static Object parameter(OperationParameter parameter) {
+		switch (parameter.getType().getName()) {
+		case "java.lang.String":
+			return "string";
+
+		case "java.lang.Boolean":
+			return true;
+
+		case "java.lang.Byte":
+		case "java.lang.Short":
+		case "java.lang.Integer":
+		case "java.lang.Long":
+			return 4;
+
+		case "java.lang.Float":
+		case "java.lang.Double":
+			return 1.0;
+
+		case "java.util.Date":
+			return new Date();
+
+		case "java.sql.Time":
+			return new Time(new Date().getTime());
+
+		case "java.sql.Timestamp":
+			return new Timestamp(new Date().getTime());
+		}
+
+		return new Object();
 	}
 }

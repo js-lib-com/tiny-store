@@ -8,6 +8,20 @@ public class OperationParameter {
 	private RestParameter restParameter;
 	private ParameterFlag flag;
 
+	public OperationParameter() {
+	}
+
+	public OperationParameter(Class<?> type, String name) {
+		this.type = new TypeDef(type);
+		this.name = name;
+	}
+
+	public OperationParameter(Class<?> type, String name, ParameterFlag flag) {
+		this.type = new TypeDef(type);
+		this.name = name;
+		this.flag = flag;
+	}
+
 	public TypeDef getType() {
 		return type;
 	}
@@ -54,5 +68,10 @@ public class OperationParameter {
 
 	public void setFlag(ParameterFlag flag) {
 		this.flag = flag;
+	}
+
+	@Override
+	public String toString() {
+		return "OperationParameter [type=" + type + ", name=" + name + ", description=" + description + ", restEnabled=" + restEnabled + ", restParameter=" + restParameter + ", flag=" + flag + "]";
 	}
 }

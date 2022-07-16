@@ -17,14 +17,14 @@ import js.log.Log;
 import js.log.LogFactory;
 import js.tiny.store.util.Files;
 
-public class CompilerImpl implements ICompiler {
-	private static final Log log = LogFactory.getLog(CompilerImpl.class);
+public class SourceCompiler implements ISourceCompiler {
+	private static final Log log = LogFactory.getLog(SourceCompiler.class);
 
 	private static final File[] EMPTY_LIBRARIES = new File[0];
 
 	private Version version;
 
-	public CompilerImpl() {
+	public SourceCompiler() {
 		version = Version.JAVA_8;
 	}
 
@@ -64,5 +64,39 @@ public class CompilerImpl implements ICompiler {
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public File compile(File sourceFile, File[] libraries) throws IOException {
+		StringBuilder diagnosticBuilder = new StringBuilder();
+		DiagnosticListener<JavaFileObject> diagnosticListener = diagnostic -> {
+			diagnosticBuilder.append(diagnostic);
+		};
+
+		List<File> sourceFiles = Arrays.asList(sourceFile); 
+		File classDirectory = java.nio.file.Files.createTempDirectory("class").toFile();
+
+		compile(sourceFiles, classDirectory, Arrays.asList(libraries), diagnosticListener);
+	
+		return null;
+	}
+
+	private boolean compile(List<File> sourceFiles, File classDirectory, List<File> libraries, DiagnosticListener<JavaFileObject> diagnosticListener) throws IOException {
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		List<String> options = Arrays.asList("-source", version.value(), "-target", version.value());
+		try (StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
+			if (!libraries.isEmpty()) {
+				fileManager.setLocation(StandardLocation.CLASS_PATH, libraries);
+			}
+			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(classDirectory));
+
+			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
+			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
+			if (result == null || !result) {
+				log.warn("Compilation error on client sources: %s", sourceFiles);
+				return false;
+			}
+		}
+		return true;
 	}
 }

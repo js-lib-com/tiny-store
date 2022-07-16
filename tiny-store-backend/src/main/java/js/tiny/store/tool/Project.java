@@ -32,7 +32,7 @@ public class Project {
 	private final File serverWarFile;
 	private final File clientJarFile;
 
-	private final ICompiler compiler;
+	private final ISourceCompiler compiler;
 	private final IMavenClient maven;
 
 	public Project(Context context, Store store, Database dao) throws IOException {
@@ -49,16 +49,24 @@ public class Project {
 		// client jar uses 'store' suffix: app-store-1.0.jar
 		this.clientJarFile = new File(Files.clientTargetDir(projectDir), Strings.concat(store.getName(), "-store-", store.getVersion(), ".jar"));
 
-		this.compiler = new CompilerImpl();
-		this.compiler.setVersion(ICompiler.Version.JAVA_8);
+		this.compiler = new SourceCompiler();
+		this.compiler.setVersion(ISourceCompiler.Version.JAVA_8);
 
 		this.maven = new MavenClientImpl(context.getProperties());
 
 		generateProjectFiles();
 	}
 
+	public Store getStore() {
+		return store;
+	}
+
 	public File getProjectDir() {
 		return projectDir;
+	}
+
+	public File getServerClassesDir() throws IOException {
+		return Files.serverClassesDir(projectDir);
 	}
 
 	public void clean() throws IOException {
@@ -111,6 +119,11 @@ public class Project {
 		}
 	}
 
+	public void generateSource(StoreEntity entity) throws IOException {
+		generate("/entity.java.vtl", Files.serverSourceFile(projectDir, entity.getClassName()), entity);
+		generate("/model.java.vtl", Files.clientSourceFile(projectDir, entity.getClassName()), entity);
+	}
+
 	// --------------------------------------------------------------------------------------------
 
 	public String compileServerSources() throws IOException {
@@ -123,7 +136,7 @@ public class Project {
 				new File(librariesDir, "js-jee-api-1.1.jar"), //
 				new File(librariesDir, "js-transaction-api-1.3.jar") //
 		};
-		return compiler.compile(Files.serverSourceDir(projectDir), Files.serverClassDir(projectDir), libraries);
+		return compiler.compile(Files.serverSourceDir(projectDir), Files.serverClassesDir(projectDir), libraries);
 	}
 
 	public void buildServerWar() throws IOException {
@@ -139,7 +152,7 @@ public class Project {
 		Files.copy(Files.persistenceFile(projectDir), Files.warPersistenceFile(warDir));
 		Files.copy(Files.webDescriptorFile(projectDir), Files.warWebDescriptorFile(warDir));
 		Files.copy(Files.contextFile(projectDir), Files.warContextFile(warDir));
-		Files.copyFiles(Files.serverClassDir(projectDir), Files.warClassDir(warDir));
+		Files.copyFiles(Files.serverClassesDir(projectDir), Files.warClassDir(warDir));
 
 		Files.createJavaArchive(manifest, warDir, serverWarFile);
 	}
@@ -159,18 +172,50 @@ public class Project {
 	}
 
 	public String compileClientSources() throws IOException {
-		return compiler.compile(Files.clientSourceDir(projectDir), Files.clientClassDir(projectDir));
+		return compiler.compile(Files.clientSourceDir(projectDir), Files.clientClassesDir(projectDir));
 	}
 
 	public void buildClientJar() throws IOException {
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().putValue("Manifest-Version", "1.0");
 		manifest.getMainAttributes().putValue("Created-By", "Tiny Store");
-		Files.createJavaArchive(manifest, Files.clientClassDir(projectDir), clientJarFile);
+		Files.createJavaArchive(manifest, Files.clientClassesDir(projectDir), clientJarFile);
 	}
 
 	public void deployClientJar() throws IOException {
 		IMavenClient.Coordinates coordinates = new Coordinates(store.getPackageName(), store.getName() + "-store", store.getVersion());
 		maven.deploy(store.getMavenServer(), coordinates, clientJarFile);
+	}
+
+	public void deleteSource(String className) throws IOException {
+		File file = Files.serverSourceFile(projectDir, className);
+		if (file.exists() && !file.delete()) {
+			throw new IOException("Fail to delete server source file " + file);
+		}
+
+		file = Files.clientSourceFile(projectDir, className);
+		if (file.exists() && !file.delete()) {
+			throw new IOException("Fail to delete client source file " + file);
+		}
+	}
+
+	public void deleteClass(String className) throws IOException {
+		File file = Files.serverClassFile(projectDir, className);
+		if (file.exists() && !file.delete()) {
+			throw new IOException("Fail to delete server class file " + file);
+		}
+
+		file = Files.clientClassFile(projectDir, className);
+		if (file.exists() && !file.delete()) {
+			throw new IOException("Fail to delete client class file " + file);
+		}
+	}
+
+	public String compileSources() throws IOException {
+		String errorMessage = compileServerSources();
+		if (errorMessage != null) {
+			return errorMessage;
+		}
+		return compileClientSources();
 	}
 }

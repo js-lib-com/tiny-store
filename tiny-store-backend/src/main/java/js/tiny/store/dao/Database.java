@@ -8,6 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import js.tiny.container.interceptor.Intercepted;
 import js.tiny.store.ChangeLog;
 import js.tiny.store.ChangeLogListener;
+import js.tiny.store.SourceCodeBuildListener;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.Server;
 import js.tiny.store.meta.ServerType;
@@ -34,13 +35,13 @@ public interface Database {
 
 	// --------------------------------------------------------------------------------------------
 
-	@Intercepted({ ChangeLogListener.class })
+	@Intercepted({ ChangeLogListener.class, SourceCodeBuildListener.class })
 	StoreEntity createStoreEntity(String storeId, StoreEntity entity);
 
-	@Intercepted({ StoreEntityUpdateListener.class, ChangeLogListener.class })
+	@Intercepted({ StoreEntityUpdateListener.class, ChangeLogListener.class, SourceCodeBuildListener.class })
 	void updateStoreEntity(StoreEntity entity);
 
-	@Intercepted(ChangeLogListener.class)
+	@Intercepted({ ChangeLogListener.class, SourceCodeBuildListener.class })
 	void deleteStoreEntity(StoreEntity entity);
 
 	StoreEntity getStoreEntity(String entityId);
@@ -93,11 +94,11 @@ public interface Database {
 	// --------------------------------------------------------------------------------------------
 
 	void createServer(Server server);
-	
+
 	void updateServer(Server server);
-	
+
 	void deleteServer(Server server);
-	
+
 	List<Server> getServers();
 
 	Server getServerByHostURL(String hostURL);

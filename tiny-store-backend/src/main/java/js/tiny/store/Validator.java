@@ -6,28 +6,43 @@ import static js.tiny.store.util.Strings.columnName;
 import static js.tiny.store.util.Strings.memberName;
 import static js.tiny.store.util.Strings.operationName;
 
+import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import jakarta.persistence.spi.PersistenceProvider;
 import js.tiny.store.dao.Database;
 import js.tiny.store.meta.DataService;
 import js.tiny.store.meta.EntityField;
 import js.tiny.store.meta.OperationParameter;
 import js.tiny.store.meta.OperationValue;
+import js.tiny.store.meta.ParameterFlag;
 import js.tiny.store.meta.Server;
 import js.tiny.store.meta.ServiceOperation;
 import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 import js.tiny.store.meta.TypeDef;
+import js.tiny.store.tool.Project;
 import js.tiny.store.tool.StoreDB;
 import js.tiny.store.util.Classes;
 import js.tiny.store.util.FinalInteger;
+import js.tiny.store.util.ProjectPersistenceUnitInfo;
 import js.tiny.store.util.Strings;
 import js.tiny.store.util.Types;
 import js.tiny.store.util.URLs;
@@ -36,21 +51,23 @@ import js.tiny.store.util.URLs;
 @Remote
 @PermitAll
 public class Validator {
-	private Database db;
+	private final Context context;
+	private final Database database;
 
 	@Inject
-	public Validator(Database db) {
-		this.db = db;
+	public Validator(Context context, Database database) {
+		this.context = context;
+		this.database = database;
 	}
 
 	public String assertCreateStore(Store store) {
 		String gitURL = store.getGitURL();
 		if (gitURL != null) {
-			if(!URLs.isValid(gitURL)) {
+			if (!URLs.isValid(gitURL)) {
 				return format("Invalid Git URL: %s", gitURL);
 			}
 			String hostURL = URLs.hostURL(gitURL);
-			Server server = db.getServerByHostURL(hostURL);
+			Server server = database.getServerByHostURL(hostURL);
 			if (server == null) {
 				return format("Not registered Git server %s. Please define it on external servers.", hostURL);
 			}
@@ -60,7 +77,7 @@ public class Validator {
 	}
 
 	public String assertCreateService(String storeId, DataService service) {
-		DataService existingService = db.getDataServiceByClassName(storeId, service.getClassName());
+		DataService existingService = database.getDataServiceByClassName(storeId, service.getClassName());
 		if (existingService != null) {
 			return format("Data service %s already existing.", service.getClassName());
 		}
@@ -69,7 +86,7 @@ public class Validator {
 	}
 
 	public String assertEditService(DataService model, DataService service) {
-		DataService existingService = db.getDataServiceByClassName(model.getStoreId(), service.getClassName());
+		DataService existingService = database.getDataServiceByClassName(model.getStoreId(), service.getClassName());
 		if (existingService != null) {
 			if (!existingService.id().equals(model.id())) {
 				return format("Data service %s already existing.", service.getClassName());
@@ -80,7 +97,7 @@ public class Validator {
 	}
 
 	public String assertCreateEntity(String storeId, StoreEntity entity) {
-		StoreEntity existingEntity = db.getStoreEntityByClassName(storeId, entity.getClassName());
+		StoreEntity existingEntity = database.getStoreEntityByClassName(storeId, entity.getClassName());
 		if (existingEntity != null) {
 			return format("Store entity %s already existing.", entity.getClassName());
 		}
@@ -95,7 +112,7 @@ public class Validator {
 	}
 
 	public String assertEditEntity(StoreEntity model, StoreEntity entity) {
-		StoreEntity existingEntity = db.getStoreEntityByClassName(model.getStoreId(), entity.getClassName());
+		StoreEntity existingEntity = database.getStoreEntityByClassName(model.getStoreId(), entity.getClassName());
 		if (existingEntity != null) {
 			// entity.id() is null for create operation
 			if (!existingEntity.id().equals(model.id())) {
@@ -113,7 +130,7 @@ public class Validator {
 	}
 
 	private void assertEntityTable(String storeId, StoreEntity entity) throws SQLException {
-		Store store = db.getStore(storeId);
+		Store store = database.getStore(storeId);
 		try (StoreDB storeDB = new StoreDB(store)) {
 			storeDB.sql(connection -> {
 				String tableName = Strings.tableName(entity);
@@ -127,8 +144,8 @@ public class Validator {
 	}
 
 	public String allowDeleteEntity(StoreEntity entity) {
-		for (DataService service : db.getStoreServices(entity.getStoreId())) {
-			for (ServiceOperation operation : db.getServiceOperations(service.id())) {
+		for (DataService service : database.getStoreServices(entity.getStoreId())) {
+			for (ServiceOperation operation : database.getServiceOperations(service.id())) {
 				if (entity.getClassName().equals(operation.getValue().getType().getName())) {
 					return String.format("Entity is used by service %s as operation return value.", service.getClassName());
 				}
@@ -177,7 +194,7 @@ public class Validator {
 	}
 
 	private void assertFieldColumn(StoreEntity entity, EntityField field) {
-		Store store = db.getStore(entity.getStoreId());
+		Store store = database.getStore(entity.getStoreId());
 		try (StoreDB storeDB = new StoreDB(store)) {
 			storeDB.sql(connection -> {
 				String tableName = Strings.tableName(entity);
@@ -211,17 +228,23 @@ public class Validator {
 		}
 	}
 
-	public String assertCreateOperation(DataService service, ServiceOperation operation) {
-		for (ServiceOperation existingOperation : db.getServiceOperations(service.id())) {
+	public String assertCreateOperation(DataService service, ServiceOperation operation) throws IOException {
+		operation.setServiceId(service.id());
+
+		for (ServiceOperation existingOperation : database.getServiceOperations(service.id())) {
 			if (existingOperation.getName().equals(operation.getName())) {
 				return format("Data service operation %s already existing.", operationName(existingOperation));
 			}
 		}
 
+		if (operation.getQuery() != null) {
+			return assertOperationQuery(operation);
+		}
+
 		return null;
 	}
 
-	public String assertEditOperation(ServiceOperation model, ServiceOperation operation) {
+	public String assertEditOperation(ServiceOperation model, ServiceOperation operation) throws IOException {
 		operation.setServiceId(model.getServiceId());
 		operation.setServiceClass(model.getServiceClass());
 		operation.setParameters(model.getParameters());
@@ -230,6 +253,10 @@ public class Validator {
 			assertOperation(operation);
 		} catch (Fail fail) {
 			return fail.message;
+		}
+
+		if (operation.getQuery() != null) {
+			return assertOperationQuery(operation);
 		}
 
 		return null;
@@ -274,7 +301,7 @@ public class Validator {
 	}
 
 	private void assertOperation(ServiceOperation operation) {
-		DataService service = db.getDataService(operation.getServiceId());
+		DataService service = database.getDataService(operation.getServiceId());
 
 		if (operation.getQuery() != null) {
 			int queryVariablesCount = charCount(operation.getQuery(), '?');
@@ -335,6 +362,108 @@ public class Validator {
 		}
 	}
 
+	private String assertOperationQuery(ServiceOperation operation) throws IOException {
+		DataService service = database.getDataService(operation.getServiceId());
+		Store store = database.getStore(service.getStoreId());
+
+		Project project = new Project(context, store, database);
+		List<StoreEntity> entities = database.getStoreEntities(store.id());
+		List<String> entitiesClasses = entities.stream().map(entity -> entity.getClassName()).collect(Collectors.toList());
+
+		PersistenceProvider provider = Classes.loadService(PersistenceProvider.class);
+		Map<String, Object> configuration = new HashMap<>();
+		
+		// it is critical to properly close entity manager and its factory
+		// otherwise entity mappings are cached and entity byte code is not reloaded
+		try ( //
+				ProjectPersistenceUnitInfo info = new ProjectPersistenceUnitInfo(project, entitiesClasses);
+				EntityManagerFactory factory = provider.createContainerEntityManagerFactory(info, configuration); //
+				EntityManager em = factory.createEntityManager(); //
+		) {
+			EntityTransaction transaction = em.getTransaction();
+			transaction.begin();
+
+			try {
+				Query query = em.createQuery(operation.getQuery());
+
+				int position = 0;
+				for (OperationParameter parameter : operation.getParameters()) {
+					if (parameter.getFlag() == ParameterFlag.FIRST_RESULT) {
+						query.setFirstResult(0);
+						continue;
+					}
+					if (parameter.getFlag() == ParameterFlag.MAX_RESULTS) {
+						query.setMaxResults(1);
+						continue;
+					}
+					query.setParameter(++position, parameter(parameter));
+				}
+
+				switch (operation.getDataOpcode()) {
+				case CREATE:
+					query.executeUpdate();
+					break;
+
+				case READ:
+					TypeDef valueType = operation.getValue().getType();
+					if (valueType.getCollection() != null) {
+						query.getResultList();
+					} else {
+						query.getSingleResult();
+					}
+					break;
+
+				case UPDATE:
+					query.executeUpdate();
+					break;
+
+				case DELETE:
+					query.executeUpdate();
+					break;
+
+				}
+
+			} finally {
+				transaction.rollback();
+			}
+		} catch (Throwable t) {
+			return t.getMessage();
+		}
+
+		return null;
+	}
+
+	private static Object parameter(OperationParameter parameter) {
+		switch (parameter.getType().getName()) {
+		case "java.lang.String":
+			return "string";
+
+		case "java.lang.Boolean":
+			return true;
+
+		case "java.lang.Byte":
+		case "java.lang.Short":
+		case "java.lang.Integer":
+		case "java.lang.Long":
+			return 1;
+
+		case "java.lang.Float":
+		case "java.lang.Double":
+			return 1.0;
+
+		case "java.util.Date":
+			return new Date();
+
+		case "java.sql.Time":
+			return new Time(new Date().getTime());
+
+		case "java.sql.Timestamp":
+			return new Timestamp(new Date().getTime());
+		}
+
+		return new Object();
+	}
+
 	private void assertUpdateParameters(String storeId, ServiceOperation operation) {
 		List<OperationParameter> parameters = operation.getParameters();
 		if (parameters == null) {
@@ -352,7 +481,7 @@ public class Validator {
 		}
 
 		String entityName = parameter.getType().getName();
-		StoreEntity entity = db.getStoreEntityByClassName(storeId, entityName);
+		StoreEntity entity = database.getStoreEntityByClassName(storeId, entityName);
 		if (entity == null) {
 			throw new Fail("Operation %s requires an entity. Provided parameter type '%s' does not designate a defined entity.", operationName(operation), parameter.getType().getName());
 		}
@@ -422,7 +551,7 @@ public class Validator {
 			throw new Fail("Operation %s does support only collection type '%s' as return value.", operationName(operation), List.class.getCanonicalName());
 		}
 
-		StoreEntity entity = db.getStoreEntityByClassName(storeId, valueType.getName());
+		StoreEntity entity = database.getStoreEntityByClassName(storeId, valueType.getName());
 		if (entity == null) {
 			throw new Fail("Operation %s should return an entity or a list of entities. Provided value type '%s' does not designate a defined entity.", operationName(operation), valueType.getName());
 		}
@@ -445,7 +574,7 @@ public class Validator {
 		}
 
 		String entityName = Strings.simpleName(parameter.getType().getName());
-		StoreEntity entity = db.getStoreEntityByClassName(storeId, entityName);
+		StoreEntity entity = database.getStoreEntityByClassName(storeId, entityName);
 		if (entity == null) {
 			throw new Fail("Operation %s requires an entity. Provided parameter type '%s' does not designate a defined entity.", operationName(operation), parameter.getType().getName());
 		}

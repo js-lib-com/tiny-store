@@ -144,6 +144,7 @@ public class Workspace {
 		return db.findStoresByOwner("irotaru");
 	}
 
+	@Intercepted({ ChangeLogListener.class, SourceCodeBuildListener.class })
 	public StoreEntity importStoreEntity(String storeId, StoreEntity entity) throws Exception {
 		if (entity.id() == null) {
 			db.createStoreEntity(storeId, entity);

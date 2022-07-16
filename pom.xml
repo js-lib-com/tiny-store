@@ -4,10 +4,10 @@
 	<artifactId>tiny-store</artifactId>
 	<version>${revision}</version>
 	<packaging>pom</packaging>
-	
+
 	<name>Tiny Store</name>
 	<description>On premise, no-code portal for persistence API.</description>
-	
+
 	<modules>
 		<module>tiny-store-backend</module>
 		<module>tiny-store-frontend</module>
@@ -16,9 +16,32 @@
 
 	<properties>
 		<revision>1.0.0</revision>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.10.1</version>
+					<configuration>
+						<release>11</release>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.3.0</version>
+				</plugin>
+				<plugin>
+					<groupId>com.js-lib</groupId>
+					<artifactId>wood-maven-plugin</artifactId>
+					<version>1.1.7</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
 </project>

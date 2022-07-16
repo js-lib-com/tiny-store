@@ -16,8 +16,8 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import js.log.Log;
 import js.log.LogFactory;
 
-class GitClientImpl implements IGitClient {
-	private static final Log log = LogFactory.getLog(GitClientImpl.class);
+class GitClient implements IGitClient {
+	private static final Log log = LogFactory.getLog(GitClient.class);
 
 	@Override
 	public void commit(File projectDir, String message) throws IOException {
