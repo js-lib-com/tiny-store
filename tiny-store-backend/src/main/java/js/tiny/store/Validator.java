@@ -527,10 +527,10 @@ public class Validator {
 				throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
 			}
 
-			parameterType = parameters.get(1).getType().getName();
-			if (!parameterType.equals(Object.class.getCanonicalName())) {
-				throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
-			}
+//			parameterType = parameters.get(1).getType().getName();
+//			if (!parameterType.equals(Object.class.getCanonicalName())) {
+//				throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
+//			}
 
 			return;
 		}

@@ -94,7 +94,7 @@ public class DatabaseImpl implements Database {
 
 	@Override
 	public void updateOperationsServiceClass(String serviceId, String serviceClass) {
-		// update Operation set serviceClass=$1 where serviceId=$2 
+		// update Operation set serviceClass=$1 where serviceId=$2
 		operationDAO.update("serviceClass", serviceClass, "serviceId", serviceId);
 	}
 
@@ -224,6 +224,11 @@ public class DatabaseImpl implements Database {
 	}
 
 	@Override
+	public void updateChangeLog(ChangeLog changeLog) {
+		changeLogDAO.update(changeLog);
+	}
+
+	@Override
 	public List<ChangeLog> getChangeLog(String storeId) {
 		return changeLogDAO.find("storeId", storeId);
 	}
@@ -231,5 +236,13 @@ public class DatabaseImpl implements Database {
 	@Override
 	public void deleteChangeLog(String storeId) {
 		changeLogDAO.delete("storeId", storeId);
+	}
+
+	@Override
+	public ChangeLog getChangeLogByText(String storeId, String text) {
+		Map<String, Object> filters = new HashMap<>();
+		filters.put("storeId", storeId);
+		filters.put("change", text);
+		return changeLogDAO.get(filters);
 	}
 }

@@ -91,7 +91,7 @@ public class SourceTemplate {
 		final Store store = (Store) arguments[0];
 		@SuppressWarnings("unchecked")
 		final List<DataService> services = (List<DataService>) arguments[1];
-		
+
 		context.put("store", store);
 		context.put("services", services.stream().map(service -> new DataServiceTemplate(store, service)).collect(Collectors.toList()));
 	}
@@ -108,6 +108,24 @@ public class SourceTemplate {
 		context.put("entities", entities);
 	}
 
+	@SuppressWarnings("unchecked")
+	private static void manual(VelocityContext context, Object... arguments) {
+		Params.EQ(arguments.length, 4, "Arguments length");
+		Params.isKindOf(arguments[0].getClass(), Store.class, "First argument");
+		Params.isKindOf(arguments[1].getClass(), new GType(List.class, ServiceOperation.class), "Second argument");
+		Params.isKindOf(arguments[2].getClass(), new GType(Map.class, String.class, new GType(List.class, ServiceOperation.class)), "Third argument");
+		Params.isKindOf(arguments[3].getClass(), new GType(List.class, StoreEntity.class), "Fourth argument");
+
+		final Store store = (Store) arguments[0];
+		final List<DataService> services = (List<DataService>) arguments[1];
+		final Map<String, List<ServiceOperation>> operations = (Map<String, List<ServiceOperation>>) arguments[2];
+		final List<StoreEntity> entities = ((List<StoreEntity>) arguments[3]);
+
+		context.put("store", store);
+		context.put("services", services.stream().map(service -> new DataServiceTemplate(store, service, operations.get(service.id()))).collect(Collectors.toList()));
+		context.put("entities", entities.stream().map(entity -> new StoreEntityTemplate(entity)).collect(Collectors.toList()));
+	}
+
 	private static final Map<String, ContextConfig> CONFIGS = new HashMap<>();
 	static {
 		CONFIGS.put("/project-pom.xml.vtl", SourceTemplate::store);
@@ -115,6 +133,7 @@ public class SourceTemplate {
 		CONFIGS.put("/client-pom.xml.vtl", SourceTemplate::store);
 		CONFIGS.put("/gitignore.vtl", SourceTemplate::empty);
 		CONFIGS.put("/README.md.vtl", SourceTemplate::store);
+		CONFIGS.put("/manual.md.vtl", SourceTemplate::manual);
 
 		CONFIGS.put("/entity.java.vtl", SourceTemplate::entity);
 		CONFIGS.put("/model.java.vtl", SourceTemplate::entity);

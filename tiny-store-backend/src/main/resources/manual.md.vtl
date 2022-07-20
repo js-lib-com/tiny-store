@@ -1,0 +1,87 @@
+#[[#]]# ${store.display} ${store.version.major}.${store.version.minor}
+${store.description}
+
+|              |                      |
+|:-------------|:---------------------|
+| Name         | ${store.name}        |
+#if(${store.restPath})
+| REST Path    | ${store.restPath}    |
+#end
+#if(${store.gitURL})
+| Git URL      | ${store.gitURL}      |
+#end
+| Maven Server | ${store.mavenServer} |
+| Package      | ${store.packageName} |
+
+#[[##]]# Data Services
+
+|       |             |
+|:------|:------------|
+#foreach($service in $services)
+| ${service.className} | ${service.description} |
+#end
+
+#[[##]]# Store Entities
+
+|       |             |
+|:------|:------------|
+#foreach($entity in $entities)
+| ${entity.className} | ${entity.description} |
+#end
+#foreach($service in $services)
+
+#[[##]]# ${service.className} Service
+#[[###]]# ${service.qualifiedClassName}
+
+${service.description}
+
+| Operation | Description                   |
+|:----------|:------------------------------|
+#foreach($operation in $service.operations)
+| ${operation.name} | ${operation.description} |
+#end
+#foreach($operation in $service.operations)
+
+#[[###]]# ${service.qualifiedClassName}#[[#]]#${operation.name} 
+${operation.description}
+
+#if($operation.restEnabled)
+#[[###]]# HTTP Request
+| Property | Value                   |
+|:---------|:------------------------|
+| Action   | ${operation.restMethod} |
+| URL      | {api-server}${store.restPath}${service.restPath}#if($operation.restPath)${operation.restPath}#end |
+#if($operation.entityParam)
+| Content-Type | application/json |
+| Content-Length | body length |
+| Body | JSON object |
+#else
+#foreach($parameter in $operation.parameters)
+| ${parameter.name} | ${parameter.description} |
+#end ## -- foreach($parameter in $operation.parameters)
+#end ## -- if($operation.entityParam)
+#if(!$operation.value.void)
+
+#[[####]]# HTTP Response
+| Property | Value                         |
+|:---------|:------------------------------|
+| Content-Type | application/json |
+| Content-Length | body length |
+| Body | JSON ${operation.value.type} |
+#end ## -- if(!$operation.value.void)
+#end ## -- if($operation.restEnabled)
+#end ## -- foreach($operation in $service.operations)
+#end ## -- foreach($service in $services)
+#foreach($entity in $entities)
+
+#[[##]]# ${entity.className} Entity
+#[[###]]# ${entity.qualifiedClassName}
+
+${entity.description}
+
+| Type | Name | Description                          |
+|:-----|:-----|:-------------------------------------|
+#foreach($field in $entity.fields)
+| ${field.type} | ${field.name} | ${field.description} |
+#end
+#end

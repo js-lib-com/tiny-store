@@ -15,6 +15,7 @@ public class DataServiceTemplate {
 	private final String repositoryName;
 	private final DataService service;
 
+	private final String className;
 	private final String implementationPackage;
 	private final String implementationName;
 	private final String interfacePackage;
@@ -26,11 +27,12 @@ public class DataServiceTemplate {
 	public DataServiceTemplate(Store store, DataService service) {
 		this(store, service, Collections.emptyList());
 	}
-	
+
 	public DataServiceTemplate(Store store, DataService service, List<ServiceOperation> operations) {
 		this.repositoryName = store.getName();
 		this.service = service;
 
+		this.className = Strings.simpleName(service.getClassName());
 		this.implementationPackage = Strings.packageName(service.getClassName());
 		this.implementationName = Strings.simpleName(service.getClassName());
 		this.interfacePackage = this.implementationPackage;
@@ -44,6 +46,14 @@ public class DataServiceTemplate {
 
 		String restPath = service.getRestPath();
 		this.restPath = restPath != null && !restPath.isEmpty() && restPath.charAt(0) == '/' ? restPath.substring(1) : restPath;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public String getQualifiedClassName() {
+		return Strings.concat(implementationPackage, '.', implementationName);
 	}
 
 	public String getRepositoryName() {

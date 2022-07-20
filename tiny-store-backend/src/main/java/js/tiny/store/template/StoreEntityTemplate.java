@@ -36,7 +36,7 @@ public class StoreEntityTemplate {
 			if (Strings.isPrimitive(type.getName())) {
 				continue;
 			}
-			if(type.getName().startsWith(packageName)) {
+			if (type.getName().startsWith(packageName)) {
 				continue;
 			}
 			imports.add(type.getName());
@@ -61,6 +61,10 @@ public class StoreEntityTemplate {
 
 	public String getClassName() {
 		return className;
+	}
+
+	public String getQualifiedClassName() {
+		return Strings.concat(packageName, '.', className);
 	}
 
 	public SortedSet<String> getImports() {

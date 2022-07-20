@@ -109,8 +109,12 @@ public interface Database {
 
 	void createChangeLog(ChangeLog changeLog);
 
+	void updateChangeLog(ChangeLog changeLog);
+
 	void deleteChangeLog(String storeId);
 
 	List<ChangeLog> getChangeLog(String storeId);
+	
+	ChangeLog getChangeLogByText(String storeId, String text);
 
 }

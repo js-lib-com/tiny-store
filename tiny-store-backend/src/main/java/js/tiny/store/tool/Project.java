@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.Manifest;
 
 import js.log.Log;
@@ -24,7 +26,7 @@ public class Project {
 	private static final Log log = LogFactory.getLog(Project.class);
 
 	private final Store store;
-	private final Database dao;
+	private final Database database;
 
 	private final File projectDir;
 	private final File runtimeDir;
@@ -35,9 +37,9 @@ public class Project {
 	private final ISourceCompiler compiler;
 	private final IMavenClient maven;
 
-	public Project(Context context, Store store, Database dao) throws IOException {
+	public Project(Context context, Store store, Database database) throws IOException {
 		this.store = store;
-		this.dao = dao;
+		this.database = database;
 
 		// by convention project name is the store name
 		this.projectDir = new File(context.getWorkspaceDir(), store.getName());
@@ -86,19 +88,21 @@ public class Project {
 	public boolean generateSources() throws IOException {
 		generateProjectFiles();
 
-		List<StoreEntity> entities = dao.getStoreEntities(store.id());
+		List<StoreEntity> entities = database.getStoreEntities(store.id());
 		for (StoreEntity entity : entities) {
 			String className = Strings.concat(store.getPackageName(), '.', Strings.simpleName(entity.getClassName()));
 			generate("/entity.java.vtl", Files.serverSourceFile(projectDir, className), entity);
 			generate("/model.java.vtl", Files.clientSourceFile(projectDir, className), entity);
 		}
 
-		List<DataService> services = dao.getStoreServices(store.id());
+		List<DataService> services = database.getStoreServices(store.id());
+		Map<String, List<ServiceOperation>> serviceOperations = new HashMap<>();
 		for (DataService service : services) {
 			String simpleClassName = Strings.simpleName(service.getClassName());
 			String interfaceName = Strings.concat(store.getPackageName(), '.', 'I', simpleClassName);
 			String className = Strings.concat(store.getPackageName(), '.', simpleClassName);
-			List<ServiceOperation> operations = dao.getServiceOperations(service.id());
+			List<ServiceOperation> operations = database.getServiceOperations(service.id());
+			serviceOperations.put(service.id(), operations);
 			generate("/service-server-interface.java.vtl", Files.serverSourceFile(projectDir, interfaceName), store, service, operations);
 			generate("/service-implementation.java.vtl", Files.serverSourceFile(projectDir, className), store, service, operations);
 			generate("/service-client-interface.java.vtl", Files.clientSourceFile(projectDir, interfaceName), store, service, operations);
@@ -108,6 +112,8 @@ public class Project {
 		generate("/app.xml.vtl", Files.appDescriptorFile(projectDir), store, services);
 		generate("/context.xml.vtl", Files.contextFile(projectDir), store);
 		generate("/persistence.xml.vtl", Files.persistenceFile(projectDir), store, entities);
+
+		generate("/manual.md.vtl", Files.manualFile(projectDir), store, services, serviceOperations, entities);
 
 		return !entities.isEmpty() || !services.isEmpty();
 	}

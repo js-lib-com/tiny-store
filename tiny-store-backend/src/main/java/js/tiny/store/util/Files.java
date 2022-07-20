@@ -16,6 +16,7 @@ public class Files extends js.util.Files {
 	private static final String PROJECT_POM_FILE = "pom.xml";
 	private static final String GIT_IGNORE_FILE = ".gitignore";
 	private static final String README_FILE = "README.md";
+	private static final String MANUAL_FILE = "manual.md";
 
 	private static final String CLIENT_MODULE_DIR = "client/";
 	private static final String CLIENT_POM_FILE = "client/pom.xml";
@@ -75,6 +76,10 @@ public class Files extends js.util.Files {
 
 	public static File readmeFile(File projectDir) throws IOException {
 		return file(projectDir, README_FILE);
+	}
+
+	public static File manualFile(File projectDir) throws IOException {
+		return file(projectDir, MANUAL_FILE);
 	}
 
 	public static File clientModuleDir(File projectDir) throws IOException {

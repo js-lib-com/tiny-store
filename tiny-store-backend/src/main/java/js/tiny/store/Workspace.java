@@ -222,6 +222,7 @@ public class Workspace {
 		variables.put("entity-name", Strings.simpleName(entity.getClassName()));
 		variables.put("entity-parameter", Strings.simpleName(entity.getClassName()).toLowerCase());
 		variables.put("entity-id-type", entity.getFields().get(0).getType().getName());
+		variables.put("rest-enabled", Boolean.toString(store.getRestPath() != null));
 		String operationsJson = Strings.injectVariables(Strings.load(Classes.getResourceAsReader("/dao-operations.json")), variables);
 
 		Json json = Classes.loadService(Json.class);

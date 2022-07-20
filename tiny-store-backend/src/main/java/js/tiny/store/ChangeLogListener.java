@@ -13,11 +13,11 @@ import js.tiny.store.meta.Store;
 import js.tiny.store.meta.StoreEntity;
 
 public class ChangeLogListener implements PostInvokeInterceptor {
-	private final Database dao;
+	private final Database database;
 
 	@Inject
-	public ChangeLogListener(Database dao) {
-		this.dao = dao;
+	public ChangeLogListener(Database database) {
+		this.database = database;
 	}
 
 	@Override
@@ -28,12 +28,20 @@ public class ChangeLogListener implements PostInvokeInterceptor {
 		String className = className(methodName, arguments, value);
 		String memberName = getMemberName(arguments);
 
-		ChangeLog changeLog = new ChangeLog();
-		changeLog.setStoreId(storeId);
-		changeLog.setTimestamp(Timestamp.from(Instant.now()));
-		changeLog.setChange(text(methodName, className, memberName));
+		String text = text(methodName, className, memberName);
+		ChangeLog changeLog = database.getChangeLogByText(storeId, text);
+		if (changeLog == null) {
+			changeLog = new ChangeLog();
+			changeLog.setStoreId(storeId);
+			changeLog.setChange(text);
+		}
 
-		dao.createChangeLog(changeLog);
+		changeLog.setTimestamp(Timestamp.from(Instant.now()));
+		if (changeLog.id() == null) {
+			database.createChangeLog(changeLog);
+		} else {
+			database.updateChangeLog(changeLog);
+		}
 	}
 
 	private String storeId(String methodName, Object[] arguments) {
@@ -58,7 +66,7 @@ public class ChangeLogListener implements PostInvokeInterceptor {
 
 		if (arguments[0] instanceof ServiceOperation) {
 			String serviceId = ((ServiceOperation) arguments[0]).getServiceId();
-			DataService service = dao.getDataService(serviceId);
+			DataService service = database.getDataService(serviceId);
 			return service.getStoreId();
 		}
 
@@ -96,7 +104,7 @@ public class ChangeLogListener implements PostInvokeInterceptor {
 		for (Object argument : arguments) {
 			if (argument instanceof ServiceOperation) {
 				String serviceId = ((ServiceOperation) argument).getServiceId();
-				return dao.getDataService(serviceId).getClassName();
+				return database.getDataService(serviceId).getClassName();
 			}
 		}
 

@@ -305,6 +305,15 @@ Database = {
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
 
+	 updateChangeLog: function(changeLog) {
+		var __callback__ = arguments[1];
+		var __scope__ = arguments[2] || window;
+		var url = "js/tiny/store/dao/Database/updateChangeLog.rmi";
+		var parameters = [changeLog];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
 	 deleteChangeLog: function(storeId) {
 		var __callback__ = arguments[1];
 		var __scope__ = arguments[2] || window;
@@ -319,6 +328,15 @@ Database = {
 		var __scope__ = arguments[2] || window;
 		var url = "js/tiny/store/dao/Database/getChangeLog.rmi";
 		var parameters = [storeId];
+
+		this.fetch(url, parameters, __callback__, __scope__);
+	},
+
+	 getChangeLogByText: function(storeId, text) {
+		var __callback__ = arguments[2];
+		var __scope__ = arguments[3] || window;
+		var url = "js/tiny/store/dao/Database/getChangeLogByText.rmi";
+		var parameters = [storeId, text];
 
 		this.fetch(url, parameters, __callback__, __scope__);
 	},
