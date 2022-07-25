@@ -25,7 +25,7 @@ public class SourceCompiler implements ISourceCompiler {
 	private Version version;
 
 	public SourceCompiler() {
-		version = Version.JAVA_8;
+		version = Version.JAVA_11;
 	}
 
 	@Override
@@ -60,6 +60,7 @@ public class SourceCompiler implements ISourceCompiler {
 			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
 			if (result == null || !result) {
 				log.warn("Compilation error on client sources: %s", sourceFiles);
+				log.error(diagnosticBuilder.toString());
 				return diagnosticBuilder.toString();
 			}
 			return null;

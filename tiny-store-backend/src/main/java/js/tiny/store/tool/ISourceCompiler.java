@@ -14,7 +14,7 @@ public interface ISourceCompiler {
 	File compile(File sourceFile, File[] libraries) throws IOException;
 
 	public static enum Version {
-		JAVA_8("1.8");
+		JAVA_8("1.8"), JAVA_11("11");
 
 		private String value;
 

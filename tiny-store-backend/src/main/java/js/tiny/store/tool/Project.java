@@ -52,7 +52,7 @@ public class Project {
 		this.clientJarFile = new File(Files.clientTargetDir(projectDir), Strings.concat(store.getName(), "-store-", store.getVersion(), ".jar"));
 
 		this.compiler = new SourceCompiler();
-		this.compiler.setVersion(ISourceCompiler.Version.JAVA_8);
+		this.compiler.setVersion(ISourceCompiler.Version.JAVA_11);
 
 		this.maven = new MavenClientImpl(context.getProperties());
 
@@ -139,7 +139,7 @@ public class Project {
 		}
 		File[] libraries = new File[] { //
 				new File(librariesDir, "js-commons-1.3.1.jar"), //
-				new File(librariesDir, "js-jee-api-1.1.jar"), //
+				new File(librariesDir, "jakarta.jakartaee-api-9.1.0.jar"), //
 				new File(librariesDir, "js-transaction-api-1.3.jar") //
 		};
 		return compiler.compile(Files.serverSourceDir(projectDir), Files.serverClassesDir(projectDir), libraries);
