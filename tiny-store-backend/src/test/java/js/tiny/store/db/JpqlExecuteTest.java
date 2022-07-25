@@ -73,7 +73,8 @@ public class JpqlExecuteTest {
 		Map<String, Object> configuration = new HashMap<>();
 		EntityManagerFactory factory = provider.createContainerEntityManagerFactory(info, configuration);
 
-		try (EntityManager em = factory.createEntityManager()) {
+		try  {
+			EntityManager em = factory.createEntityManager();
 			EntityTransaction transaction = em.getTransaction();
 			transaction.begin();
 
@@ -121,6 +122,7 @@ public class JpqlExecuteTest {
 
 			} finally {
 				transaction.rollback();
+				em.close();
 			}
 		} catch (Throwable t) {
 			System.out.println(t.getMessage());

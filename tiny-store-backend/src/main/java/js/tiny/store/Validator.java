@@ -372,14 +372,16 @@ public class Validator {
 
 		PersistenceProvider provider = Classes.loadService(PersistenceProvider.class);
 		Map<String, Object> configuration = new HashMap<>();
-		
+
 		// it is critical to properly close entity manager and its factory
 		// otherwise entity mappings are cached and entity byte code is not reloaded
+		EntityManagerFactory factory = null;
+		EntityManager em = null;
 		try ( //
-				ProjectPersistenceUnitInfo info = new ProjectPersistenceUnitInfo(project, entitiesClasses);
-				EntityManagerFactory factory = provider.createContainerEntityManagerFactory(info, configuration); //
-				EntityManager em = factory.createEntityManager(); //
-		) {
+				ProjectPersistenceUnitInfo info = new ProjectPersistenceUnitInfo(project, entitiesClasses);) {
+			factory = provider.createContainerEntityManagerFactory(info, configuration);
+			em = factory.createEntityManager();
+
 			EntityTransaction transaction = em.getTransaction();
 			transaction.begin();
 
@@ -425,6 +427,12 @@ public class Validator {
 
 			} finally {
 				transaction.rollback();
+				if (em != null) {
+					em.close();
+				}
+				if (factory != null) {
+					factory.close();
+				}
 			}
 		} catch (Throwable t) {
 			return t.getMessage();
@@ -527,10 +535,11 @@ public class Validator {
 				throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
 			}
 
-//			parameterType = parameters.get(1).getType().getName();
-//			if (!parameterType.equals(Object.class.getCanonicalName())) {
-//				throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation), String.class, Object.class);
-//			}
+			// parameterType = parameters.get(1).getType().getName();
+			// if (!parameterType.equals(Object.class.getCanonicalName())) {
+			// throw new Fail("If operation %s has two parameters they should be of types %s and %s.", operationName(operation),
+			// String.class, Object.class);
+			// }
 
 			return;
 		}
