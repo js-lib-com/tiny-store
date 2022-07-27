@@ -170,7 +170,7 @@
 						</goals>
 						<configuration>
 							<includeScope>provided</includeScope>
-							<excludeArtifactIds>js-servlet-api,tools-apt,tools-script-gen</excludeArtifactIds>
+							<excludeArtifactIds>tools-apt,tools-script-gen</excludeArtifactIds>
 						</configuration>
 					</execution>
 				</executions>

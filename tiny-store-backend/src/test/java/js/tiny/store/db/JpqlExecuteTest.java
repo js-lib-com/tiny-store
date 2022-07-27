@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -36,6 +37,7 @@ import js.tiny.store.tool.Project;
 import js.tiny.store.util.ProjectPersistenceUnitInfo;
 import js.util.Classes;
 
+@Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class JpqlExecuteTest {
 	@Mock
