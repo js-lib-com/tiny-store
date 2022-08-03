@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.*;
 
 import org.junit.Test;
 
-import js.tiny.store.util.URLs;
+import com.jslib.tiny.store.util.URLs;
 
 public class URLsTest {
 	@Test

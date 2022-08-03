@@ -12,11 +12,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import js.tiny.store.Context;
-import js.tiny.store.Workspace;
-import js.tiny.store.dao.Database;
-import js.tiny.store.dao.DatabaseImpl;
-import js.tiny.store.dao.MongoDB;
+import com.jslib.tiny.store.Context;
+import com.jslib.tiny.store.Workspace;
+import com.jslib.tiny.store.dao.Database;
+import com.jslib.tiny.store.dao.DatabaseImpl;
+import com.jslib.tiny.store.dao.MongoDB;
+import com.jslib.tiny.store.tool.IGitClient;
+import com.jslib.tiny.store.tool.Project;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceTest {

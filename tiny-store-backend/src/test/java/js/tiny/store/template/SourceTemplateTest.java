@@ -7,17 +7,18 @@ import java.util.List;
 
 import org.junit.Test;
 
-import js.tiny.store.meta.DataOpcode;
-import js.tiny.store.meta.DataService;
-import js.tiny.store.meta.EntityField;
-import js.tiny.store.meta.FieldFlag;
-import js.tiny.store.meta.OperationException;
-import js.tiny.store.meta.OperationParameter;
-import js.tiny.store.meta.OperationValue;
-import js.tiny.store.meta.ServiceOperation;
-import js.tiny.store.meta.Store;
-import js.tiny.store.meta.StoreEntity;
-import js.tiny.store.meta.TypeDef;
+import com.jslib.tiny.store.meta.DataOpcode;
+import com.jslib.tiny.store.meta.DataService;
+import com.jslib.tiny.store.meta.EntityField;
+import com.jslib.tiny.store.meta.FieldFlag;
+import com.jslib.tiny.store.meta.OperationException;
+import com.jslib.tiny.store.meta.OperationParameter;
+import com.jslib.tiny.store.meta.OperationValue;
+import com.jslib.tiny.store.meta.ServiceOperation;
+import com.jslib.tiny.store.meta.Store;
+import com.jslib.tiny.store.meta.StoreEntity;
+import com.jslib.tiny.store.meta.TypeDef;
+import com.jslib.tiny.store.template.SourceTemplate;
 
 public class SourceTemplateTest {
 	private SourceTemplate sourceTemplate;

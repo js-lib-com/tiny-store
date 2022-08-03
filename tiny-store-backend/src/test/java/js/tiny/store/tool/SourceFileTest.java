@@ -16,16 +16,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import js.tiny.store.meta.DataService;
-import js.tiny.store.meta.EntityField;
-import js.tiny.store.meta.OperationException;
-import js.tiny.store.meta.OperationParameter;
-import js.tiny.store.meta.OperationValue;
-import js.tiny.store.meta.RestMethod;
-import js.tiny.store.meta.RestParameter;
-import js.tiny.store.meta.ServiceOperation;
-import js.tiny.store.meta.StoreEntity;
-import js.tiny.store.meta.TypeDef;
+import com.jslib.tiny.store.meta.DataService;
+import com.jslib.tiny.store.meta.EntityField;
+import com.jslib.tiny.store.meta.OperationException;
+import com.jslib.tiny.store.meta.OperationParameter;
+import com.jslib.tiny.store.meta.OperationValue;
+import com.jslib.tiny.store.meta.RestMethod;
+import com.jslib.tiny.store.meta.RestParameter;
+import com.jslib.tiny.store.meta.ServiceOperation;
+import com.jslib.tiny.store.meta.StoreEntity;
+import com.jslib.tiny.store.meta.TypeDef;
+import com.jslib.tiny.store.tool.SourceFile;
 
 @Ignore
 @RunWith(MockitoJUnitRunner.class)

@@ -2,6 +2,6 @@
 	<title>Operation Page</title>
 	<description>Operation page description.</description>
 
-	<script src="gen/js/tiny/store/Workspace.js" />
+	<script src="gen/com/jslib/tiny/store/Workspace.js" />
     <script src="lib/format.js" />
 </page>

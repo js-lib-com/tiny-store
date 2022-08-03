@@ -1,4 +1,4 @@
-<app package="js.tiny.store">
+<app package="com.jslib.tiny.store">
 	<binding bind="Application" />
 	<binding bind="Context" />
 	<binding bind="Workspace" />

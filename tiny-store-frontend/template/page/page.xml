@@ -4,8 +4,8 @@
 	<description>Page template description.</description>
 
 	<head>
-		<script src="gen/js/tiny/store/dao/Database.js" />
-		<script src="gen/js/tiny/store/Validator.js" />
+		<script src="gen/com/jslib/tiny/store/dao/Database.js" />
+		<script src="gen/com/jslib/tiny/store/Validator.js" />
 		<script src="lib/select-edit.js"></script>
 		<script src="lib/opp.js"></script>
 		<script src="lib/object-view.js"></script>
