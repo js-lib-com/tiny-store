@@ -15,8 +15,8 @@ import javax.tools.ToolProvider;
 
 import com.jslib.tiny.store.util.Files;
 
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 
 public class SourceCompiler implements ISourceCompiler {
 	private static final Log log = LogFactory.getLog(SourceCompiler.class);

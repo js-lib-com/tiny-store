@@ -20,8 +20,8 @@ import com.jslib.tiny.store.tool.IMavenClient.Coordinates;
 import com.jslib.tiny.store.util.Files;
 import com.jslib.tiny.store.util.Strings;
 
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 
 public class Project {
 	private static final Log log = LogFactory.getLog(Project.class);

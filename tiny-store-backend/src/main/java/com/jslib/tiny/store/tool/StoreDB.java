@@ -6,8 +6,8 @@ import com.jslib.tiny.store.meta.Store;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 
 public class StoreDB implements AutoCloseable {
 	private static final Log log = LogFactory.getLog(StoreDB.class);

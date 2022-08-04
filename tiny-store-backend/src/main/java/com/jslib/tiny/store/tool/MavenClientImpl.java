@@ -20,8 +20,8 @@ import org.apache.http.impl.client.HttpClients;
 
 import com.jslib.tiny.store.util.Strings;
 
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 
 class MavenClientImpl implements IMavenClient {
 	private static final Log log = LogFactory.getLog(MavenClientImpl.class);

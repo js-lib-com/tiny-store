@@ -52,8 +52,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import js.json.Json;
 import js.lang.GType;
-import js.log.Log;
-import js.log.LogFactory;
+import com.jslib.api.log.Log;
+import com.jslib.api.log.LogFactory;
 import js.tiny.container.interceptor.Intercepted;
 import js.util.Params;
 
