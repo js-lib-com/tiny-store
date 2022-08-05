@@ -1,8 +1,8 @@
 package com.jslib.tiny.store.dao;
 
-import com.jslib.tiny.container.interceptor.PostInvokeInterceptor;
-import com.jslib.tiny.container.interceptor.PreInvokeInterceptor;
-import com.jslib.tiny.container.spi.IManagedMethod;
+import com.jslib.container.interceptor.PostInvokeInterceptor;
+import com.jslib.container.interceptor.PreInvokeInterceptor;
+import com.jslib.container.spi.IManagedMethod;
 import com.jslib.tiny.store.meta.DataService;
 import com.jslib.tiny.store.meta.OperationParameter;
 import com.jslib.tiny.store.meta.ServiceOperation;

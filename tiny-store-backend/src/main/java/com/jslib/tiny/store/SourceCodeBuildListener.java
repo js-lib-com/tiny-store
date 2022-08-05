@@ -2,8 +2,8 @@ package com.jslib.tiny.store;
 
 import java.io.IOException;
 
-import com.jslib.tiny.container.interceptor.PostInvokeInterceptor;
-import com.jslib.tiny.container.spi.IManagedMethod;
+import com.jslib.container.interceptor.PostInvokeInterceptor;
+import com.jslib.container.spi.IManagedMethod;
 import com.jslib.tiny.store.dao.Database;
 import com.jslib.tiny.store.meta.Store;
 import com.jslib.tiny.store.meta.StoreEntity;

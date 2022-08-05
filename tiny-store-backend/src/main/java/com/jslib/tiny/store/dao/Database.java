@@ -2,7 +2,7 @@ package com.jslib.tiny.store.dao;
 
 import java.util.List;
 
-import com.jslib.tiny.container.interceptor.Intercepted;
+import com.jslib.container.interceptor.Intercepted;
 import com.jslib.tiny.store.ChangeLog;
 import com.jslib.tiny.store.ChangeLogListener;
 import com.jslib.tiny.store.SourceCodeBuildListener;
