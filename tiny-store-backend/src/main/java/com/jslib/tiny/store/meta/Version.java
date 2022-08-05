@@ -1,6 +1,6 @@
 package com.jslib.tiny.store.meta;
 
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 public class Version {
 	private int major;

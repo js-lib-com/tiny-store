@@ -17,7 +17,7 @@ import com.mongodb.client.MongoDatabase;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import js.util.Params;
+import com.jslib.util.Params;
 
 @ApplicationScoped
 public class MongoDB {

@@ -220,7 +220,7 @@ public class Validator {
 				if (fieldType == null) {
 					throw new Fail("Class not found for entity field type %s.", field.getType());
 				}
-				if (!js.util.Types.isKindOf(columnType, fieldType)) {
+				if (!com.jslib.util.Types.isKindOf(columnType, fieldType)) {
 					throw new Fail("Incompatible type on table column %s. Table column type is %s while entity field type is %s.", columnName(tableName, columnName), columnType, fieldType);
 				}
 			});

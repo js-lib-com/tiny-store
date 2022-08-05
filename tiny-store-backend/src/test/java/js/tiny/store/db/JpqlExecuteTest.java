@@ -36,7 +36,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.spi.PersistenceProvider;
 import jakarta.persistence.spi.PersistenceUnitInfo;
-import js.util.Classes;
+import com.jslib.util.Classes;
 
 @Ignore
 @RunWith(MockitoJUnitRunner.class)

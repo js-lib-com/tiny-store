@@ -17,8 +17,8 @@ import com.jslib.tiny.store.meta.ServiceOperation;
 import com.jslib.tiny.store.meta.Store;
 import com.jslib.tiny.store.meta.StoreEntity;
 
-import js.lang.GType;
-import js.util.Params;
+import com.jslib.lang.GType;
+import com.jslib.util.Params;
 
 public class SourceTemplate {
 	private final String templateName;

@@ -7,7 +7,7 @@ import com.jslib.tiny.store.dao.ObjectIdConverter;
 import jakarta.annotation.Priority;
 import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
-import js.converter.ConverterRegistry;
+import com.jslib.converter.ConverterRegistry;
 
 @ApplicationScoped
 @Startup

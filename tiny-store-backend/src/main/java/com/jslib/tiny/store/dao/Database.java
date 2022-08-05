@@ -2,6 +2,7 @@ package com.jslib.tiny.store.dao;
 
 import java.util.List;
 
+import com.jslib.tiny.container.interceptor.Intercepted;
 import com.jslib.tiny.store.ChangeLog;
 import com.jslib.tiny.store.ChangeLogListener;
 import com.jslib.tiny.store.SourceCodeBuildListener;
@@ -15,7 +16,6 @@ import com.jslib.tiny.store.meta.StoreEntity;
 import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
-import js.tiny.container.interceptor.Intercepted;
 
 @ApplicationScoped
 @Remote

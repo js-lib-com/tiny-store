@@ -1,11 +1,11 @@
 package com.jslib.tiny.store.util;
 
-public class Types extends js.util.Types {
+public class Types extends com.jslib.util.Types {
 	public static boolean isPrimitiveLike(String type) {
-		return js.util.Types.isPrimitiveLike(Classes.forOptionalName(type));
+		return com.jslib.util.Types.isPrimitiveLike(Classes.forOptionalName(type));
 	}
 
 	public static boolean isNumber(String type) {
-		return js.util.Types.isNumber(Classes.forOptionalName(type));
+		return com.jslib.util.Types.isNumber(Classes.forOptionalName(type));
 	}
 }

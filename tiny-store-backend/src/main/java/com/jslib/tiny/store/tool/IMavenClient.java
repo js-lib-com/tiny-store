@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.jslib.tiny.store.meta.Version;
 
-import js.util.Strings;
+import com.jslib.util.Strings;
 
 public interface IMavenClient {
 

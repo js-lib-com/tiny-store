@@ -8,7 +8,7 @@ import com.jslib.tiny.store.meta.ServiceOperation;
 import com.jslib.tiny.store.meta.StoreEntity;
 import com.jslib.tiny.store.meta.TypeDef;
 
-public class Strings extends js.util.Strings {
+public class Strings extends com.jslib.util.Strings {
 	public static String packageName(String typeName) {
 		if (typeName == null) {
 			return null;

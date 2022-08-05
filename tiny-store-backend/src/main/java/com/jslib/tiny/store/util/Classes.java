@@ -7,11 +7,11 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Classes extends js.util.Classes {
+public class Classes extends com.jslib.util.Classes {
 	@SuppressWarnings("unchecked")
 	public static <T> Class<T> forOptionalName(String className) {
 		Class<?> type = PRIMITIVES.get(className);
-		return type != null ? (Class<T>) type : js.util.Classes.forOptionalName(className);
+		return type != null ? (Class<T>) type : com.jslib.util.Classes.forOptionalName(className);
 	}
 
 	private static final Map<String, Class<?>> PRIMITIVES = new HashMap<String, Class<?>>();

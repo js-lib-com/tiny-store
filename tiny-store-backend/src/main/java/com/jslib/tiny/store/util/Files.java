@@ -12,7 +12,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
-public class Files extends js.util.Files {
+public class Files extends com.jslib.util.Files {
 	private static final String PROJECT_POM_FILE = "pom.xml";
 	private static final String GIT_IGNORE_FILE = ".gitignore";
 	private static final String README_FILE = "README.md";

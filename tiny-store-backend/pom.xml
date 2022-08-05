@@ -104,7 +104,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<annotationProcessors>
-						<annotationProcessor>js.tools.apt.GenerateRmiScript</annotationProcessor>
+						<annotationProcessor>com.jslib.tools.apt.GenerateRmiScript</annotationProcessor>
 					</annotationProcessors>
 					<generatedSourcesDirectory>../tiny-store-frontend/gen</generatedSourcesDirectory>
 				</configuration>

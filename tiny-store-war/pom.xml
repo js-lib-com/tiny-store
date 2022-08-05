@@ -15,7 +15,7 @@
 			<artifactId>backend</artifactId>
 			<version>${revision}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.js-lib</groupId>
 			<artifactId>tiny-core</artifactId>
@@ -58,7 +58,7 @@
 			<version>1.3.3</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.js-lib</groupId>
 			<artifactId>js-injector</artifactId>
@@ -89,7 +89,7 @@
 			<version>5.13.0.202109080827-r</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -102,7 +102,13 @@
 			<version>4.5.12</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>com.js-lib</groupId>
+			<artifactId>js-eclipselink</artifactId>
+			<version>1.1.2</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
@@ -139,7 +145,7 @@
 			<version>4.6.0</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

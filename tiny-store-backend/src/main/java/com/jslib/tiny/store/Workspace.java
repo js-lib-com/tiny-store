@@ -24,6 +24,7 @@ import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
+import com.jslib.tiny.container.interceptor.Intercepted;
 import com.jslib.tiny.store.dao.Database;
 import com.jslib.tiny.store.dao.StoreUpdateListener;
 import com.jslib.tiny.store.meta.DataService;
@@ -50,12 +51,11 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.ejb.Remote;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import js.json.Json;
-import js.lang.GType;
+import com.jslib.api.json.Json;
+import com.jslib.lang.GType;
 import com.jslib.api.log.Log;
 import com.jslib.api.log.LogFactory;
-import js.tiny.container.interceptor.Intercepted;
-import js.util.Params;
+import com.jslib.util.Params;
 
 @ApplicationScoped
 @Remote

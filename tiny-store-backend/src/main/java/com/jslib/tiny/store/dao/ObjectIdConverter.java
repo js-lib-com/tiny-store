@@ -2,8 +2,8 @@ package com.jslib.tiny.store.dao;
 
 import org.bson.types.ObjectId;
 
-import js.converter.Converter;
-import js.converter.ConverterException;
+import com.jslib.converter.Converter;
+import com.jslib.converter.ConverterException;
 
 public class ObjectIdConverter implements Converter {
 	@SuppressWarnings("unchecked")

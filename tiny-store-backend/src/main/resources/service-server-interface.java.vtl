@@ -15,9 +15,9 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 #end
 
-import js.transaction.Immutable;
-import js.transaction.Mutable;
-import js.transaction.Transactional;
+import com.jslib.api.transaction.Immutable;
+import com.jslib.api.transaction.Mutable;
+import com.jslib.api.transaction.Transactional;
 #if(!$service.imports.empty)
 
 #foreach($import in $service.imports)

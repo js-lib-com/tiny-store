@@ -1,10 +1,10 @@
 package com.jslib.tiny.store.dao;
 
+import com.jslib.tiny.container.interceptor.PostInvokeInterceptor;
+import com.jslib.tiny.container.spi.IManagedMethod;
 import com.jslib.tiny.store.meta.DataService;
 
 import jakarta.inject.Inject;
-import js.tiny.container.interceptor.PostInvokeInterceptor;
-import js.tiny.container.spi.IManagedMethod;
 
 public class DataServiceUpdateListener implements PostInvokeInterceptor {
 	private final Database database;
