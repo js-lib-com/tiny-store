@@ -28,21 +28,21 @@ class GitClient implements IGitClient {
 			// missing: files in index, but not file system (e.g. what you get if you call 'rm ...' on a existing file)
 			for (String file : status.getMissing()) {
 				changed = true;
-				log.info("Missing file: %s.", file);
+				log.info("Missing file: {file_path}.", file);
 			}
 
 			// modified: files modified on disk relative to the index (e.g. what you get if you modify an existing file without
 			// adding it to the index)
 			for (String file : status.getModified()) {
 				changed = true;
-				log.info("Modified file: %s.", file);
+				log.info("Modified file: {file_path}.", file);
 			}
 
 			// untracked: files that are not ignored, and not in the index. (e.g. what you get if you create a new file without
 			// adding it to the index)
 			for (String file : status.getUntracked()) {
 				changed = true;
-				log.info("Untracked file: %s.", file);
+				log.info("Untracked file: {file_path}.", file);
 			}
 
 			if (!changed) {
@@ -67,6 +67,7 @@ class GitClient implements IGitClient {
 	public void push(File projectDir, String username, String password) throws IOException {
 		CredentialsProvider credentials = new UsernamePasswordCredentialsProvider(username, password);
 		try (Git git = Git.open(projectDir.getAbsoluteFile())) {
+			log.info("Push to remote Git repository {git_remote}", git.getRepository());
 			git.push().setCredentialsProvider(credentials).call();
 		} catch (RepositoryNotFoundException e) {
 			log.warn(e);

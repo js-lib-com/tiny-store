@@ -60,7 +60,7 @@ public class SourceCompiler implements ISourceCompiler {
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
 			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
 			if (result == null || !result) {
-				log.warn("Compilation error on client sources: %s", sourceFiles);
+				log.warn("Compilation error on client sources: {source_files}", sourceFiles);
 				log.error(diagnosticBuilder.toString());
 				return diagnosticBuilder.toString();
 			}
@@ -95,7 +95,7 @@ public class SourceCompiler implements ISourceCompiler {
 			Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(sourceFiles);
 			Boolean result = compiler.getTask(null, fileManager, diagnosticListener, options, null, compilationUnits).call();
 			if (result == null || !result) {
-				log.warn("Compilation error on client sources: %s", sourceFiles);
+				log.warn("Compilation error on client sources: {source_files}", sourceFiles);
 				return false;
 			}
 		}

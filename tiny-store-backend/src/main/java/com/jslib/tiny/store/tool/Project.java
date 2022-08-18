@@ -172,9 +172,9 @@ public class Project {
 	public void undeployServerWar() {
 		File webappsDir = new File(runtimeDir, "webapps");
 		File deployedWarFile = new File(webappsDir, serverWarFile.getName());
-		log.info("Undeploy WAR |%s|.", deployedWarFile);
+		log.info("Undeploy WAR |{file_path}|.", deployedWarFile);
 		if (!deployedWarFile.delete()) {
-			log.error("Fail to delete file |%s|.", deployedWarFile);
+			log.error("Fail to delete file |{file_path}|.", deployedWarFile);
 		}
 	}
 

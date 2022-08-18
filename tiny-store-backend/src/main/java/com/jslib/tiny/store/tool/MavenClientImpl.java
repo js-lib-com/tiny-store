@@ -54,7 +54,7 @@ class MavenClientImpl implements IMavenClient {
 	@Override
 	public void deploy(String serverURL, Coordinates coordinates, File archive) throws IOException {
 		String url = Strings.concat(serverURL, coordinates.getPath(), '/', archive.getName());
-		log.debug("Deploy archive to |%s|.", url);
+		log.debug("Deploy archive to |{uri}|.", url);
 
 		try (CloseableHttpClient client = httpClientBuilder.build()) {
 			HttpPost httpPost = new HttpPost(url);

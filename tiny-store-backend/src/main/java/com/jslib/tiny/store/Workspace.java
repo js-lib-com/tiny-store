@@ -86,11 +86,11 @@ public class Workspace {
 		if (!projectDir.exists() && !projectDir.mkdirs()) {
 			throw new IOException("Fail to create project directory " + projectDir);
 		}
-		log.debug("Create project directory |%s|.", projectDir);
+		log.debug("Create project directory |{file_path}|.", projectDir);
 
 		String gitURL = store.getGitURL();
 		if (gitURL != null) {
-			log.info("Clone store %s from Git repository %s.", store.getName(), gitURL);
+			log.info("Clone store {store_name} from Git repository {uri}.", store.getName(), gitURL);
 			Server server = db.getServerByHostURL(URLs.hostURL(gitURL));
 			assert server != null;
 			CredentialsProvider credentials = new UsernamePasswordCredentialsProvider(server.getUsername(), server.getPassword());
