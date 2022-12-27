@@ -1,4 +1,0 @@
-clean D:\java\do\bin *.jar
-clean D:\java\do\manual
-unzip com.jslib.docore.repo.LocalArtifact@544630b7 to D:\java\do with properties merge
-delete com.jslib.docore.repo.LocalArtifact@544630b7

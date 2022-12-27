@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <string>
-	<qwe>Index Page</qwe>
-	<section>Index Section</section>
+	<app-name>Application</app-name>
+	<app-description>@string/app-name description.</app-description>
 </string>
