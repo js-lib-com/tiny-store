@@ -4,3 +4,6 @@
 /.classpath
 /velocity.log
 /velocity.log.*
+/.apt_generated/
+/.apt_generated_tests/
+/.factorypath
