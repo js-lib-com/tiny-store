@@ -108,6 +108,10 @@ Validator = {
 	},
 
 	fetch: function(url, parameters, callback, scope) {
+		if(this.contextBaseUrl) {
+			url = this.contextBaseUrl + url;
+		}
+		
 		var responsePromise = fetch(url, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
