@@ -11,17 +11,16 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 
-import com.jslib.tiny.store.util.Strings;
-
 import com.jslib.api.log.Log;
 import com.jslib.api.log.LogFactory;
+import com.jslib.tiny.store.util.Strings;
 
 class MavenClientImpl implements IMavenClient {
 	private static final Log log = LogFactory.getLog(MavenClientImpl.class);
@@ -57,13 +56,13 @@ class MavenClientImpl implements IMavenClient {
 		log.debug("Deploy archive to |{uri}|.", url);
 
 		try (CloseableHttpClient client = httpClientBuilder.build()) {
-			HttpPost httpPost = new HttpPost(url);
-			httpPost.setConfig(httpRequestConfig);
-			httpPost.setHeader("Content-Type", "application/octet-stream");
-			httpPost.setEntity(new InputStreamEntity(new FileInputStream(archive)));
+			HttpPut httpPut = new HttpPut(url);
+			httpPut.setConfig(httpRequestConfig);
+			httpPut.setHeader("Content-Type", "application/octet-stream");
+			httpPut.setEntity(new InputStreamEntity(new FileInputStream(archive)));
 
-			try (CloseableHttpResponse response = client.execute(httpPost)) {
-				if (response.getStatusLine().getStatusCode() != 200) {
+			try (CloseableHttpResponse response = client.execute(httpPut)) {
+				if (response.getStatusLine().getStatusCode() != 201) {
 					throw new IOException(String.format("Fail to upload file %s", archive));
 				}
 			}
