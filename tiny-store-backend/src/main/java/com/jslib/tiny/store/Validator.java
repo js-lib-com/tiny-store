@@ -583,7 +583,7 @@ public class Validator {
 			throw new Fail("Operation %s does not support type '%s' as parameter.", operationName(operation), parameter.getType().getCollection());
 		}
 
-		String entityName = Strings.simpleName(parameter.getType().getName());
+		String entityName = parameter.getType().getName();
 		StoreEntity entity = database.getStoreEntityByClassName(storeId, entityName);
 		if (entity == null) {
 			throw new Fail("Operation %s requires an entity. Provided parameter type '%s' does not designate a defined entity.", operationName(operation), parameter.getType().getName());
